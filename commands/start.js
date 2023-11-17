@@ -31,8 +31,9 @@ export const start = async (interaction) => {
         .setTitle('Mafia Game')
         .setDescription('Hey! Somebody is looking for more players to start. Click the button below to join.')
         .addFields(
-            { name: 'Limit', value: '0/16', inline: true },
+            { name: '❕ Limit', value: '0/32', inline: true },
             { name: '👤 Players', value: 'None', inline: true },
+            { name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
         )
         .setImage('https://media.discordapp.net/attachments/978344813374083222/1174832681717071872/start.png?ex=65690732&is=65569232&hm=a03b9233f9b1e29f376630e9c3aff6aae8439b15ee50f32c7e956a510ea53cfe&=&width=1500&height=500')
         .setTimestamp()
@@ -65,8 +66,9 @@ export const start = async (interaction) => {
                     .setDescription('Hey! Somebody is looking for more players to start. Click the button below to join.')
                     .setImage('https://media.discordapp.net/attachments/978344813374083222/1174832681717071872/start.png?ex=65690732&is=65569232&hm=a03b9233f9b1e29f376630e9c3aff6aae8439b15ee50f32c7e956a510ea53cfe&=&width=1500&height=500')
                     .addFields(
-                        { name: 'Limit', value: `${playersLimit}/16`, inline: true },
-                        { name: '👤 Players', value: playersList, inline: true }
+                        { name: '❕ Limit', value: `${playersLimit}/32`, inline: true },
+                        { name: '👤 Players', value: playersList, inline: true },
+                        { name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                     )
                     .setTimestamp()
                     .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
