@@ -94,7 +94,13 @@ export const start = async (interaction, client) => {
 
         // 95 seconds timeout
         setTimeout(() => {
-            nextStage(interaction, gameId);
+            nextStage(interaction, gameId, (error, message) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log(message);
+                }
+            });
         }, 95000);
 
     }, 25000);

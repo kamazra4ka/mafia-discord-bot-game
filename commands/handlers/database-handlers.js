@@ -165,34 +165,49 @@ export const gameStarts = async (interaction, gameId) => {
 
 }
 
-export const nextStage = async (interaction, gameId) => {
-    // every 24 hours in-game have 2 stages: day and night. If the game is in the day stage (0), then make it go to the night (1) (gamestage) and if it's in the night stage (1), then start a new day (gameday)
+export const nextStage = (interaction, gameId, callback) => {
     const serverDiscordId = interaction.guildId;
 
-    try {
-        // Start a new connection using the pool
-        const [currentStage] = await pool.execute('SELECT gamestage, gameday FROM games WHERE gameid = ?', [gameId]);
-
-        if (currentStage.length === 0) {
-            throw new Error('Game not found.');
+    // Get the current stage of the game
+    pool.query('SELECT gamestage, gameday FROM games WHERE gameid = ?', [gameId], (error, results) => {
+        if (error) {
+            return callback(error, null);
         }
 
-        let { gamestage, gameday } = currentStage[0];
+        // If no game is found
+        if (results.length === 0) {
+            return callback(new Error('Game not found.'), null);
+        }
 
-        // Check the current stage and update accordingly
-        if (gamestage === 0) {
+        const currentStage = results[0];
+        let query = '';
+        let queryParams = [];
+
+        if (currentStage.gamestage === 0) {
             // It's currently day, switch to night
-            await pool.execute('UPDATE games SET gamestage = 1 WHERE gameid = ?', [gameId]);
-            console.log(`Game ${gameId} has changed to night.`);
+            query = 'UPDATE games SET gamestage = 1 WHERE gameid = ?';
+            queryParams = [gameId];
         } else {
             // It's currently night, increment day and switch to day
-            gameday++;
-            await pool.execute('UPDATE games SET gamestage = 0, gameday = ? WHERE gameid = ?', [gameday, gameId]);
-            console.log(`Game ${gameId} has changed to day ${gameday}.`);
+            query = 'UPDATE games SET gamestage = 0, gameday = gameday + 1 WHERE gameid = ?';
+            queryParams = [gameId];
         }
-    } catch (error) {
-        console.error('Failed to transition game stage:', error);
-        throw error; // Re-throw the error for further handling if necessary
-    }
 
-}
+        // Update the game stage
+        pool.query(query, queryParams, (error, results) => {
+            if (error) {
+                return callback(error, null);
+            }
+            callback(null, 'Stage updated successfully');
+        });
+    });
+};
+
+// Usage:
+// nextStage(interaction, gameId, (error, message) => {
+//     if (error) {
+//         console.error(error);
+//     } else {
+//         console.log(message);
+//     }
+// });
