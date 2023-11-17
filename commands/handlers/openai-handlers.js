@@ -12,7 +12,7 @@ const openai = new OpenAI({
 export const generateVoiceLine = async (topic) => {
     const systemMessage = {
         role: "system",
-        content: "Hello. Your task is to generate a voice line for a discord bot with Mafia (Werewolf) game. Respond ONLY with the voice line (text), without anything else. Your limit: 2 sentences and please mention the word Mafia in it. Topic: " + topic + "."
+        content: "Hello. Your task is to generate a voice line for a discord bot with Mafia (Werewolf) game. Respond ONLY with the voice line (text), without anything else. Your limit: 2 sentences (190 characters) and please mention the word Mafia in it. Topic: " + topic + "."
     };
 
     try {
