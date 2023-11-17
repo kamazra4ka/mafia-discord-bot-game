@@ -3,6 +3,7 @@ import fs from 'fs';
 import googleTTS from 'google-tts-api';
 import fetch from 'node-fetch';
 import {EmbedBuilder} from "discord.js";
+import {generateVoiceLine} from "./openai-handlers.js";
 
 export const joinVoice = async (interaction) => {
     // Check if the member is in a voice channel
@@ -31,7 +32,7 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
     if (connection && connection.joinConfig.channelId === channelId) {
         // Generate TTS
         const url = googleTTS.getAudioUrl(text, {
-            lang: 'en',
+            lang: 'ru',
             slow: false,
             host: 'https://translate.google.com',
         });
@@ -90,15 +91,17 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
         // make a switch case for each voice line id
         switch (voiceLine) {
             case '1':
+                const topic = 'Greeting in the beginning of the game.'
 
+                const voiceLineText = await generateVoiceLine(topic)
                 const embed = new EmbedBuilder()
                     .setColor('3a3a3a')
                     .setTitle('Mafia Game')
-                    .setDescription(`🎙 Bot: Hello, blyat, today we will play Mafia!`)
+                    .setDescription(`🎙 Bot: ${voiceLineText}`)
                     .setTimestamp()
                     .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
 
-                narrateAndPlay(guildId, channelId, 'Hello, blyat, today we will play Mafia!');
+                narrateAndPlay(guildId, channelId, voiceLineText);
                 client.channels.fetch(cId)
                     .then(channel => {
                         // Send a message to the channel

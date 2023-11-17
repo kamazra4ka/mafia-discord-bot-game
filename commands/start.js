@@ -90,5 +90,5 @@ export const start = async (interaction, client) => {
         button.setDisabled(true);
         const newRow = new ActionRowBuilder().addComponents(button);
         interaction.editReply({ content: 'Registration closed.', components: [newRow] });
-    }, 60000);
+    }, 25000);
 };
