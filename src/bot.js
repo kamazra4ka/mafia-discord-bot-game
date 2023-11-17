@@ -29,7 +29,7 @@ client.on('interactionCreate', async interaction => {
     }
 
     if (interaction.commandName === 'start') {
-        await start(interaction);
+        await start(interaction, client);
     }
 
     if (interaction.customId === 'join_game') {

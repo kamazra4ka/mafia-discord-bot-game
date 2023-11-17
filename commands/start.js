@@ -2,7 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'disc
 import { createGame } from './handlers/database-handlers.js';
 import mysql from 'mysql2';
 import { config } from 'dotenv';
-import {joinVoice, narrateAndPlay} from "./handlers/voice-handlers.js";
+import {joinVoice, narrateAndPlay, narrateAndPlayVoiceLine} from "./handlers/voice-handlers.js";
 
 await config();
 const mysqlPassword = process.env.MYSQL_PASSWORD;
@@ -17,7 +17,7 @@ const pool = mysql.createPool({
     queueLimit: 0,
 });
 
-export const start = async (interaction) => {
+export const start = async (interaction, client) => {
     const gameId = Math.floor(Math.random() * 10000);
 
     const button = new ButtonBuilder()
@@ -85,7 +85,7 @@ export const start = async (interaction) => {
     const intervalId = setInterval(updateEmbed, 1000);
 
     setTimeout(() => {
-        narrateAndPlay('1174666167227531345', '1174753582193590312', 'Hello, blyat, today we will play Mafia!');
+        narrateAndPlayVoiceLine(client, interaction.guildId, '1174753582193590312', '1');
         clearInterval(intervalId);
         button.setDisabled(true);
         const newRow = new ActionRowBuilder().addComponents(button);

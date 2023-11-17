@@ -2,6 +2,7 @@ import { getVoiceConnection, createAudioResource, AudioPlayer, VoiceConnectionSt
 import fs from 'fs';
 import googleTTS from 'google-tts-api';
 import fetch from 'node-fetch';
+import {EmbedBuilder} from "discord.js";
 
 export const joinVoice = async (interaction) => {
     // Check if the member is in a voice channel
@@ -82,11 +83,27 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
 
 
 // voice lines for the game + ai
-export const narrateAndPlayVoiceLine = async (guildId, channelId, voiceLine) => {
+export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceLine) => {
+
+    const cId = '1175130149516214472';
+
         // make a switch case for each voice line id
         switch (voiceLine) {
             case '1':
+
+                const embed = new EmbedBuilder()
+                    .setColor('3a3a3a')
+                    .setTitle('Mafia Game')
+                    .setDescription(`🎙 Bot: Hello, blyat, today we will play Mafia!`)
+                    .setTimestamp()
+                    .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+
                 narrateAndPlay(guildId, channelId, 'Hello, blyat, today we will play Mafia!');
+                client.channels.fetch(cId)
+                    .then(channel => {
+                        // Send a message to the channel
+                        channel.send({ embeds: [embed] });
+                    })
                 break;
             case '2':
                 narrateAndPlay(guildId, channelId, 'Hello, blyat, today we will play Mafia!');
