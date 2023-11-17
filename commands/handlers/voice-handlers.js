@@ -181,6 +181,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                             channel.send({ embeds: [embed] });
                         })
                 }, 85000);
+
                 break;
             case '2':
                 narrateAndPlay(guildId, channelId, 'Hello, blyat, today we will play Mafia!');

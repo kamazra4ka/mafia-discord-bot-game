@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
-import { createGame } from './handlers/database-handlers.js';
+import {createGame, gameStarts} from './handlers/database-handlers.js';
 import mysql from 'mysql2';
 import { config } from 'dotenv';
 import {joinVoice, narrateAndPlay, narrateAndPlayVoiceLine} from "./handlers/voice-handlers.js";
@@ -90,5 +90,6 @@ export const start = async (interaction, client) => {
         button.setDisabled(true);
         const newRow = new ActionRowBuilder().addComponents(button);
         interaction.editReply({ content: 'Registration closed.', components: [newRow] });
+        gameStarts(interaction, gameId);
     }, 25000);
 };
