@@ -3,6 +3,10 @@ import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
 import {
+    addUserToGame
+} from "../commands/handlers/database-handlers.js";
+
+import {
     ping
 } from '../commands/ping.js';
 
@@ -31,6 +35,9 @@ client.on('interactionCreate', async interaction => {
     if (interaction.customId === 'join_game') {
         console.log(`User ID: ${interaction.user.id} joined the game.`);
         await interaction.reply({ content: `You have joined the game!`, ephemeral: true });
+
+        await addUserToGame(interaction)
+
     }
 });
 
