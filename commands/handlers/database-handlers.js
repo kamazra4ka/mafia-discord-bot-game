@@ -183,15 +183,26 @@ export const assignStartRoles = async (gameId) => {
             }
 
             // Get the player IDs as an array
-            const playerIds = rows.map(player => player.userdiscordid.toString());
+            console.log(rows)
+            const playerIds = rows
+                .map(player => player.userdiscordid && player.userdiscordid.toString())
+                .filter(Boolean); // Filter out falsy values
+
 
             // Add each player to the game
             playerIds.forEach(playerId => {
-                console.log(playerId); // Log the playerId to check its value
-                if (!playerId) return;
-                if (gameState.getGame(gameId).roles[playerId]) return;
+                console.log('Adding player ID:', playerId);
+                if (!playerId) {
+                    console.error('Invalid player ID:', playerId);
+                    return;
+                }
+                if (gameState.getGame(gameId).roles[playerId]) {
+                    console.error('Player already added:', playerId);
+                    return;
+                }
                 gameState.addPlayer(gameId, playerId);
             });
+
 
 // Now call assignRoles to populate the roles
             gameState.assignRoles(gameId);

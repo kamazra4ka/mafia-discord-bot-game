@@ -46,17 +46,9 @@ export const start = async (interaction, client) => {
     await createGame(interaction, gameId);
 
     await joinVoice(interaction);
-    let playerIds;
 
-    const gameInfo = {
-        roles: {
 
-        }, // Initially empty, will be filled with roles
-        // ...other game-related info
-    };
 
-// Initialize the game with no roles assigned yet
-    gameState.setGame(gameId, gameInfo);
 
 
     const updateEmbed = async () => {

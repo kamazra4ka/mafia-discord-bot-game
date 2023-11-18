@@ -88,6 +88,7 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
 export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceLine) => {
 
     const cId = '1175130149516214472';
+    console.log(voiceLine + ' 132vfbfgdcbdfghdf')
 
         // make a switch case for each voice line id
         switch (voiceLine) {

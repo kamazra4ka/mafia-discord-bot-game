@@ -54,8 +54,19 @@ gameEvents.on('stageUpdate', async (data) => {
     console.log('blahblahbla4')
     // if the stage is 0 and the day is 0 then it is the start of the game
     if (stage === 1 && data.currentDay === 0) {
+        const gameInfo = {
+            roles: {
+
+            }, // Initially empty, will be filled with roles
+            // ...other game-related info
+        };
+        // Initialize the game with no roles assigned yet
+        await gameState.setGame(gameId, gameInfo);
+
+
         await assignStartRoles(gameId);
         console.log('blahblahblah')
+        console.log('blahblahblah -2343534535')
     }
 
 });

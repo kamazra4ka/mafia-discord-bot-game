@@ -6,28 +6,27 @@ class GameState {
 
     addPlayer(gameId, userId) {
         const game = this.getGame(gameId);
+
+        if (userId) {
+            game.roles[userId] = null;
+        } else {
+            console.error('Attempted to add invalid userId:', userId);
+            return; // Add this line to prevent adding undefined users
+        }
+
         if (!game) {
             throw new Error('Game not found.');
         }
-        // Initialize the player's role as null
-        game.roles[userId] = null;
     }
 
-    assignRoles(gameId) {
+
+    async assignRoles(gameId) {
         const game = this.getGame(gameId);
         if (!game) {
             throw new Error('Game not found.');
         }
 
-        // Get player IDs as an array
-        const players = Object.keys(game.roles).filter(key => key && game.roles[key]);
-
-        // if undefined remove it
-        players.forEach(playerId => {
-            if (!playerId) {
-                players.splice(players.indexOf(playerId), 1);
-            }
-        });
+        const players = Object.keys(game.roles).filter(playerId => playerId);
 
         // Shuffle and assign roles
         const roles = {
@@ -53,13 +52,21 @@ class GameState {
 
         const shuffledPlayers = players.sort(() => 0.5 - Math.random());
 
-        // Assign special roles
-        for (let i = 0; i < roles.mafia; i++) this.updateRole(gameId, shuffledPlayers.pop(), 'mafia');
-        for (let i = 0; i < roles.doctor; i++) this.updateRole(gameId, shuffledPlayers.pop(), 'doctor');
-        if (roles.detective) this.updateRole(gameId, shuffledPlayers.pop(), 'detective');
+        // Assign special roles using for...of loop
+        for (let i = 0; i < roles.mafia; i++) {
+            await this.updateRole(gameId, shuffledPlayers.pop(), 'mafia');
+        }
+        for (let i = 0; i < roles.doctor; i++) {
+            await this.updateRole(gameId, shuffledPlayers.pop(), 'doctor');
+        }
+        if (roles.detective > 0) {
+            await this.updateRole(gameId, shuffledPlayers.pop(), 'detective');
+        }
 
         // Assign civilian roles to the rest
-        shuffledPlayers.forEach(playerId => this.updateRole(gameId, playerId, 'civilian'));
+        for (const playerId of shuffledPlayers) {
+            await this.updateRole(gameId, playerId, 'civilian');
+        }
     }
 
     setGame(gameId, gameInfo) {
@@ -70,7 +77,7 @@ class GameState {
         return this.games.get(gameId);
     }
 
-    updateRole(gameId, userId, role) {
+    async updateRole(gameId, userId, role) {
         const game = this.getGame(gameId);
         if (game) {
             // Update role information for the user
