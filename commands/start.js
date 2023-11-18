@@ -3,6 +3,7 @@ import {createGame, gameStarts, nextStage} from './handlers/database-handlers.js
 import mysql from 'mysql2';
 import { config } from 'dotenv';
 import {joinVoice, narrateAndPlay, narrateAndPlayVoiceLine} from "./handlers/voice-handlers.js";
+import gameState from "../src/gameState.js";
 
 await config();
 const mysqlPassword = process.env.MYSQL_PASSWORD;
@@ -45,6 +46,17 @@ export const start = async (interaction, client) => {
     await createGame(interaction, gameId);
 
     await joinVoice(interaction);
+    let playerIds;
+
+    const gameInfo = {
+        roles: {
+
+        }, // Initially empty, will be filled with roles
+        // ...other game-related info
+    };
+
+// Initialize the game with no roles assigned yet
+    gameState.setGame(gameId, gameInfo);
 
 
     const updateEmbed = async () => {

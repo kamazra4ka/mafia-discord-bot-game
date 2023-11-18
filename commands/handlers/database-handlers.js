@@ -1,6 +1,7 @@
 import mysql from 'mysql2';
 import { config } from 'dotenv';
 import gameEvents from "../emitters/emitter.js";
+import gameState from "../../src/gameState.js";
 
 await config();
 const mysqlPassword = process.env.MYSQL_PASSWORD;
@@ -166,6 +167,43 @@ export const gameStarts = async (interaction, gameId) => {
 
 }
 
+// assignStartRoles
+export const assignStartRoles = async (gameId) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query('SELECT userdiscordid FROM users WHERE usercurrentgame = ?', [gameId], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
+
+            // Get the player IDs as an array
+            const playerIds = rows.map(player => player.userdiscordid.toString());
+
+            // Add each player to the game
+            playerIds.forEach(playerId => {
+                console.log(playerId); // Log the playerId to check its value
+                if (!playerId) return;
+                if (gameState.getGame(gameId).roles[playerId]) return;
+                gameState.addPlayer(gameId, playerId);
+            });
+
+// Now call assignRoles to populate the roles
+            gameState.assignRoles(gameId);
+
+            const updatedGameInfo = gameState.getGame(gameId);
+            console.log(updatedGameInfo.roles);
+        });
+
+    });
+}
+
+
 export const nextStage = (interaction, gameId, callback) => {
     const serverDiscordId = interaction.guildId;
 
@@ -188,12 +226,12 @@ export const nextStage = (interaction, gameId, callback) => {
             // It's currently day, switch to night
             query = 'UPDATE games SET gamestage = 1 WHERE gameid = ?';
             queryParams = [gameId];
-            gameEvents.emit('stageUpdate', { gameId, currentStage: 1 });
+            gameEvents.emit('stageUpdate', { gameId, currentStage: 1, currentDay: currentStage.gameday });
         } else {
             // It's currently night, increment day and switch to day
             query = 'UPDATE games SET gamestage = 0, gameday = gameday + 1 WHERE gameid = ?';
             queryParams = [gameId];
-            gameEvents.emit('stageUpdate', { gameId, currentStage: 0 });
+            gameEvents.emit('stageUpdate', { gameId, currentStage: 0, currentDay: currentStage.gameday + 1 });
             gameEvents.emit('dayUpdate', { gameId, currentDay: currentStage.gameday + 1 });
         }
 

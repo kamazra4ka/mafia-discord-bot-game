@@ -3,7 +3,7 @@ import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
 import {
-    addUserToGame
+    addUserToGame, assignStartRoles
 } from "../commands/handlers/database-handlers.js";
 
 import {
@@ -13,6 +13,8 @@ import {
 import {
     start
 } from '../commands/start.js';
+import gameEvents from "../commands/emitters/emitter.js";
+import gameState from "./gameState.js";
 
 // get the token from the .env file using dotenv
 config();
@@ -39,6 +41,29 @@ client.on('interactionCreate', async interaction => {
         await addUserToGame(interaction)
 
     }
+});
+
+// Listen for stage updates
+gameEvents.on('stageUpdate', async (data) => {
+    console.log(`Stage updated for game ${data.gameId} to ${data.currentStage}`);
+
+    const gameId = data.gameId;
+    const stage = data.currentStage;
+
+    console.log(data.currentDay)
+    console.log('blahblahbla4')
+    // if the stage is 0 and the day is 0 then it is the start of the game
+    if (stage === 1 && data.currentDay === 0) {
+        await assignStartRoles(gameId);
+        console.log('blahblahblah')
+    }
+
+});
+
+// Listen for day updates
+gameEvents.on('dayUpdate', (data) => {
+    console.log(`Day updated for game ${data.gameId} to ${data.currentDay}`);
+    // Handle the day update (e.g., notify players, update the database)
 });
 
 client.login(botToken);
