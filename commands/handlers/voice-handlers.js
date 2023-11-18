@@ -26,8 +26,10 @@ export const joinVoice = async (interaction) => {
 
 // This function generates TTS and plays it in a voice channel
 export const narrateAndPlay = async (guildId, channelId, text) => {
-    // Assuming the bot is already in the voice channel and you have the guildId and channelId
+    // Assuming the bot is already in the voice channel, and you have the guildId and channelId
     const connection = getVoiceConnection(guildId);
+
+    console.log('goofy ' + channelId)
 
     if (connection && connection.joinConfig.channelId === channelId) {
         // Generate TTS
@@ -190,14 +192,14 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
 
                 break;
             case '2':
-                topic = 'Greeting in the beginning of the game.'
+                topic = 'First night is coming. Tell everyone to brace.'
 
                 voiceLineText = await generateVoiceLine(topic)
                 embed = new EmbedBuilder()
                     .setColor('3a3a3a')
                     .setTitle('Mafia Game')
                     .setDescription(`🎙 Bot: ${voiceLineText}`)
-                    .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175153853440725123/introduction.png?ex=656a324f&is=6557bd4f&hm=dc9bfadab571050136b4ca51169c4ba85c161e6a10a5d5da02b805b6095bfa5c&=&width=1500&height=500')
+                    .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
                     .setTimestamp()
                     .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
 
