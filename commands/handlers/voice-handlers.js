@@ -119,7 +119,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setColor('3a3a3a')
                         .setTitle('Mafia Game')
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
-                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175156913827217468/roles.png?ex=656a3529&is=6557c029&hm=19683650656d6faa043263f43b67045a580ec477c8e3f35f17952f1c5be080d1&=&width=1207&height=905')
+                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175350035244912641/roles.png?ex=656ae905&is=65587405&hm=3d7c6c8d6ae69a62a4b1a54e1b141933e229722b241c4570d488ca6e8f28dc70&=&width=1207&height=905')
                         .setTimestamp()
                         .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
 
@@ -137,7 +137,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setColor('3a3a3a')
                         .setTitle('Mafia Game')
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
-                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175159008152268810/detective.png?ex=656a371c&is=6557c21c&hm=30348d795d2fde8aa8cd70fc4b57585b0bc7ea32b022dfb0314fa29a8dd38553&=&width=1207&height=905')
+                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175351078741626950/detective.png?ex=656ae9fe&is=655874fe&hm=9569b208089419b88b1364cbc0e62d23ea9266f5131d4d850c932065f7a1a804&=&width=1207&height=905')
                         .setTimestamp()
                         .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
 
@@ -155,7 +155,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setColor('3a3a3a')
                         .setTitle('Mafia Game')
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
-                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175159937303855154/civilian.png?ex=656a37fa&is=6557c2fa&hm=1f2b2e35b4f7a267fdacee9df6c338d26f648e8c617719ca6b90d7eab299027b&=&width=1207&height=905')
+                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175351853261803550/civilian.png?ex=656aeab6&is=655875b6&hm=035983a1fd77fc2a366f581dc3184aa7c7f43e9fbdc2090399b3d1299d6e948e&=&width=1207&height=905')
                         .setTimestamp()
                         .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
 
