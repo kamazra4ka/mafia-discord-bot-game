@@ -98,6 +98,15 @@ class GameState {
             return Object.keys(game.roles).filter(userId => game.roles[userId] === role);
         }
     }
+
+    // get alive players (all dead users have a role of 'dead')
+    async getAlivePlayersList(gameId) {
+        const game = this.getGame(gameId);
+        if (game) {
+            return Object.keys(game.roles).filter(userId => game.roles[userId] !== 'dead');
+        }
+    }
+
 }
 
 // Export a singleton instance

@@ -199,6 +199,10 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     .setColor('3a3a3a')
                     .setTitle('Mafia Game')
                     .setDescription(`🎙 Bot: ${voiceLineText}`)
+                    .addFields(
+                        { name: '🌇 Day', value: `${data.currentDay}`, inline: true },
+                        { name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
+                    )
                     .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
                     .setTimestamp()
                     .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
