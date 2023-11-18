@@ -1,5 +1,6 @@
 import mysql from 'mysql2';
 import { config } from 'dotenv';
+import gameEvents from "../emitters/emitter.js";
 
 await config();
 const mysqlPassword = process.env.MYSQL_PASSWORD;
@@ -187,10 +188,13 @@ export const nextStage = (interaction, gameId, callback) => {
             // It's currently day, switch to night
             query = 'UPDATE games SET gamestage = 1 WHERE gameid = ?';
             queryParams = [gameId];
+            gameEvents.emit('stageUpdate', { gameId, currentStage: 1 });
         } else {
             // It's currently night, increment day and switch to day
             query = 'UPDATE games SET gamestage = 0, gameday = gameday + 1 WHERE gameid = ?';
             queryParams = [gameId];
+            gameEvents.emit('stageUpdate', { gameId, currentStage: 0 });
+            gameEvents.emit('dayUpdate', { gameId, currentDay: currentStage.gameday + 1 });
         }
 
         // Update the game stage
