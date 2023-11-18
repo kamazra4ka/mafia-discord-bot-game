@@ -85,6 +85,19 @@ class GameState {
         }
     }
 
+    async getRole(gameId, userId) {
+        const game = this.getGame(gameId);
+        if (game) {
+            return game.roles[userId];
+        }
+    }
+
+    async getUsersByRole(gameId, role) {
+        const game = this.getGame(gameId);
+        if (game) {
+            return Object.keys(game.roles).filter(userId => game.roles[userId] === role);
+        }
+    }
 }
 
 // Export a singleton instance

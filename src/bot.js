@@ -16,6 +16,10 @@ import {
 import gameEvents from "../commands/emitters/emitter.js";
 import gameState from "./gameState.js";
 
+import {
+    createPrivateChannelForUsers
+} from "../commands/handlers/privateChannel-handlers.js";
+
 // get the token from the .env file using dotenv
 config();
 const botToken = process.env.DISCORD_TOKEN;
@@ -45,28 +49,28 @@ client.on('interactionCreate', async interaction => {
 
 // Listen for stage updates
 gameEvents.on('stageUpdate', async (data) => {
+    const guild = client.guilds.cache.get('1174666167227531345');
     console.log(`Stage updated for game ${data.gameId} to ${data.currentStage}`);
 
     const gameId = data.gameId;
     const stage = data.currentStage;
 
-    console.log(data.currentDay)
-    console.log('blahblahbla4')
     // if the stage is 0 and the day is 0 then it is the start of the game
     if (stage === 1 && data.currentDay === 0) {
         const gameInfo = {
             roles: {
 
-            }, // Initially empty, will be filled with roles
-            // ...other game-related info
+            },
         };
         // Initialize the game with no roles assigned yet
         await gameState.setGame(gameId, gameInfo);
-
-
         await assignStartRoles(gameId);
-        console.log('blahblahblah')
-        console.log('blahblahblah -2343534535')
+
+        const mafiaUserIds = await gameState.getUsersByRole(gameId, 'mafia');
+        const mafiaChannel = await createPrivateChannelForUsers(guild, '🔪⡇mafia-only', mafiaUserIds);
+
+     //  const detectiveChannel = await createPrivateChannelForUsers(guild, 'Detective Channel', [detectiveUserId]);
+     //  const doctorChannel = await createPrivateChannelForUsers(guild, 'Doctor Channel', [doctorUserId]);
     }
 
 });
