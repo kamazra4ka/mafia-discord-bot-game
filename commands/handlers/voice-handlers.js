@@ -88,15 +88,19 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
 export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceLine) => {
 
     const cId = '1175130149516214472';
+
+    let topic;
+    let voiceLineText;
+    let embed;
     console.log(voiceLine + ' 132vfbfgdcbdfghdf')
 
         // make a switch case for each voice line id
         switch (voiceLine) {
             case '1':
-                const topic = 'Greeting in the beginning of the game.'
+                topic = 'Greeting in the beginning of the game.'
 
-                const voiceLineText = await generateVoiceLine(topic)
-                const embed = new EmbedBuilder()
+                voiceLineText = await generateVoiceLine(topic)
+                embed = new EmbedBuilder()
                     .setColor('3a3a3a')
                     .setTitle('Mafia Game')
                     .setDescription(`🎙 Bot: ${voiceLineText}`)
@@ -186,7 +190,23 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
 
                 break;
             case '2':
-                narrateAndPlay(guildId, channelId, 'Hello, blyat, today we will play Mafia!');
+                topic = 'Greeting in the beginning of the game.'
+
+                voiceLineText = await generateVoiceLine(topic)
+                embed = new EmbedBuilder()
+                    .setColor('3a3a3a')
+                    .setTitle('Mafia Game')
+                    .setDescription(`🎙 Bot: ${voiceLineText}`)
+                    .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175153853440725123/introduction.png?ex=656a324f&is=6557bd4f&hm=dc9bfadab571050136b4ca51169c4ba85c161e6a10a5d5da02b805b6095bfa5c&=&width=1500&height=500')
+                    .setTimestamp()
+                    .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+
+                narrateAndPlay(guildId, channelId, voiceLineText);
+                client.channels.fetch(cId)
+                    .then(channel => {
+                        // Send a message to the channel
+                        channel.send({ embeds: [embed] });
+                    })
                 break;
         }
 }
