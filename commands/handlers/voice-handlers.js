@@ -31,10 +31,9 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
 
     if (connection && connection.joinConfig.channelId === channelId) {
         // Generate TTS
-         let lang = 'en';
 
         const url = googleTTS.getAudioUrl(text, {
-            lang,
+            lang: 'en',
             slow: false,
             host: 'https://translate.google.com',
         });
