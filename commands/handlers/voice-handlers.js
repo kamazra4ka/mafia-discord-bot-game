@@ -108,13 +108,16 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     .setDescription(`🎙 Bot: ${voiceLineText}`)
                     .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175153853440725123/introduction.png?ex=656a324f&is=6557bd4f&hm=dc9bfadab571050136b4ca51169c4ba85c161e6a10a5d5da02b805b6095bfa5c&=&width=1500&height=500')
                     .setTimestamp()
-                    .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+                    .setFooter({
+                        text: 'MafiaBot',
+                        iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                    });
 
                 narrateAndPlay(guildId, channelId, voiceLineText);
                 client.channels.fetch(cId)
                     .then(channel => {
                         // Send a message to the channel
-                        channel.send({ embeds: [embed] });
+                        channel.send({embeds: [embed]});
                     })
 
                 // wait 5 seconds and then play the next voice line
@@ -128,12 +131,15 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
                         .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175350035244912641/roles.png?ex=656ae905&is=65587405&hm=3d7c6c8d6ae69a62a4b1a54e1b141933e229722b241c4570d488ca6e8f28dc70&=&width=1207&height=905')
                         .setTimestamp()
-                        .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+                        .setFooter({
+                            text: 'MafiaBot',
+                            iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                        });
 
                     client.channels.fetch(cId)
                         .then(channel => {
                             // Send a message to the channel
-                            channel.send({ embeds: [embed] });
+                            channel.send({embeds: [embed]});
                         })
                 }, 15000);
                 await setTimeout(async () => {
@@ -146,12 +152,15 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
                         .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175351078741626950/detective.png?ex=656ae9fe&is=655874fe&hm=9569b208089419b88b1364cbc0e62d23ea9266f5131d4d850c932065f7a1a804&=&width=1207&height=905')
                         .setTimestamp()
-                        .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+                        .setFooter({
+                            text: 'MafiaBot',
+                            iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                        });
 
                     client.channels.fetch(cId)
                         .then(channel => {
                             // Send a message to the channel
-                            channel.send({ embeds: [embed] });
+                            channel.send({embeds: [embed]});
                         })
                 }, 38000);
                 await setTimeout(async () => {
@@ -164,12 +173,15 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
                         .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175351853261803550/civilian.png?ex=656aeab6&is=655875b6&hm=035983a1fd77fc2a366f581dc3184aa7c7f43e9fbdc2090399b3d1299d6e948e&=&width=1207&height=905')
                         .setTimestamp()
-                        .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+                        .setFooter({
+                            text: 'MafiaBot',
+                            iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                        });
 
                     client.channels.fetch(cId)
                         .then(channel => {
                             // Send a message to the channel
-                            channel.send({ embeds: [embed] });
+                            channel.send({embeds: [embed]});
                         })
                 }, 70000);
                 await setTimeout(async () => {
@@ -181,17 +193,21 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setTitle('Mafia Game')
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
                         .setTimestamp()
-                        .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+                        .setFooter({
+                            text: 'MafiaBot',
+                            iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                        });
 
                     client.channels.fetch(cId)
                         .then(channel => {
                             // Send a message to the channel
-                            channel.send({ embeds: [embed] });
+                            channel.send({embeds: [embed]});
                         })
                 }, 85000);
 
                 break;
             case '2':
+                await setTimeout(async () => {
                 topic = 'First night is coming. Tell everyone to brace.'
 
                 voiceLineText = await generateVoiceLine(topic)
@@ -200,18 +216,40 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     .setTitle('Mafia Game')
                     .setDescription(`🎙 Bot: ${voiceLineText}`)
                     .addFields(
-                        { name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
+                        {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                     )
                     .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
                     .setTimestamp()
-                    .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+                    .setFooter({
+                        text: 'MafiaBot',
+                        iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                    });
 
                 narrateAndPlay(guildId, channelId, voiceLineText);
                 client.channels.fetch(cId)
                     .then(channel => {
                         // Send a message to the channel
-                        channel.send({ embeds: [embed] });
+                        channel.send({embeds: [embed]});
                     })
+        }, 5000);
+                await setTimeout(async () => {
+                    const voiceLineText = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels.';
+                    narrateAndPlay(guildId, channelId, voiceLineText);
+
+                    const embed = new EmbedBuilder()
+                        .setColor('3a3a3a')
+                        .setTitle('Mafia Game')
+                        .setDescription(`🎙 Bot: ${voiceLineText}`)
+                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175725053258760223/channels.png?ex=656c4648&is=6559d148&hm=f3f2ac5e98d762a3b1a647412817f7d88d6f85a90d666bcec172670fe5d7bd53&=&width=1207&height=905')
+                        .setTimestamp()
+                        .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+
+                    client.channels.fetch(cId)
+                        .then(channel => {
+                            // Send a message to the channel
+                            channel.send({ embeds: [embed] });
+                        })
+                }, 15000);
                 break;
         }
 }

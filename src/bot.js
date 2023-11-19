@@ -71,7 +71,7 @@ gameEvents.on('stageUpdate', async (data) => {
         let detectiveChannelId;
 
         const mafiaUserIds = await gameState.getUsersByRole(gameId, 'mafia');
-        const mafiaChannel = await createPrivateChannelForUsers(guild, '🔪⡇mafia-only', mafiaUserIds).then(channel => {
+        const mafiaChannel = await createPrivateChannelForUsers(guild, '🔪⡇mafia-only-' + gameId, mafiaUserIds).then(channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle('Mafia Channel')
@@ -92,7 +92,7 @@ gameEvents.on('stageUpdate', async (data) => {
         })
 
         const doctorUserId = await gameState.getUsersByRole(gameId, 'doctor');
-        const doctorChannel = await createPrivateChannelForUsers(guild, '💊⡇doctor-only', doctorUserId).then(channel => {
+        const doctorChannel = await createPrivateChannelForUsers(guild, '💊⡇doctor-only-' + gameId, doctorUserId).then(channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle('Mafia Channel')
@@ -100,7 +100,7 @@ gameEvents.on('stageUpdate', async (data) => {
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                 )
-                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175544951380119653/doctor.png?ex=656b9e8c&is=6559298c&hm=5a49fe3895449cee708f94aa147398c2577bedb8c20f3e983764b2196ddf7b1d&=&width=1207&height=905')
+                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175723886621507656/doctor.png?ex=656c4532&is=6559d032&hm=61d2b6af9841b420c14998bb09512755d6bafa731efde73f11e453409dca69f4&=&width=1207&height=905')
                 .setTimestamp()
                 .setFooter({
                     text: 'MafiaBot',
@@ -112,7 +112,7 @@ gameEvents.on('stageUpdate', async (data) => {
         });
 
         const detectiveUserId = await gameState.getUsersByRole(gameId, 'detective');
-        const detectiveChannel = await createPrivateChannelForUsers(guild, '👮⡇detective-only', detectiveUserId).then(channel => {
+        const detectiveChannel = await createPrivateChannelForUsers(guild, '👮⡇detective-only-' + gameId, detectiveUserId).then(channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle('Mafia Channel')
@@ -130,7 +130,7 @@ gameEvents.on('stageUpdate', async (data) => {
             detectiveChannelId = channel.id;
         });
 
-        await sendChannelIdsToDatabase(gameId, mafiaChannelId, doctorChannelId, detectiveChannelId);
+        sendChannelIdsToDatabase(gameId, mafiaChannelId, doctorChannelId, detectiveChannelId);
 
         console.log('goofy mafia voice line played -1');
         await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '2');
