@@ -51,22 +51,26 @@ class GameState {
         }
 
         const shuffledPlayers = players.sort(() => 0.5 - Math.random());
+        const updatePromises = [];
 
-        // Assign special roles using for...of loop
+        // Assign special roles using for loop and store promises
         for (let i = 0; i < roles.mafia; i++) {
-            await this.updateRole(gameId, shuffledPlayers.pop(), 'mafia');
+            updatePromises.push(this.updateRole(gameId, shuffledPlayers.pop(), 'mafia'));
         }
         for (let i = 0; i < roles.doctor; i++) {
-            await this.updateRole(gameId, shuffledPlayers.pop(), 'doctor');
+            updatePromises.push(this.updateRole(gameId, shuffledPlayers.pop(), 'doctor'));
         }
         if (roles.detective > 0) {
-            await this.updateRole(gameId, shuffledPlayers.pop(), 'detective');
+            updatePromises.push(this.updateRole(gameId, shuffledPlayers.pop(), 'detective'));
         }
 
-        // Assign civilian roles to the rest
-        for (const playerId of shuffledPlayers) {
-            await this.updateRole(gameId, playerId, 'civilian');
-        }
+        // Assign civilian roles to the rest and store promises
+        shuffledPlayers.forEach(playerId => {
+            updatePromises.push(this.updateRole(gameId, playerId, 'civilian'));
+        });
+
+        // Wait for all role updates to complete
+        await Promise.all(updatePromises);
     }
 
     setGame(gameId, gameInfo) {

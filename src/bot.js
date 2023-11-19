@@ -111,7 +111,7 @@ gameEvents.on('stageUpdate', async (data) => {
           doctorChannelId = channel.id;
         });
 
-        const detectiveUserId = await gameState.getUsersByRole(gameId, 'doctor');
+        const detectiveUserId = await gameState.getUsersByRole(gameId, 'detective');
         const detectiveChannel = await createPrivateChannelForUsers(guild, '👮⡇detective-only', detectiveUserId).then(channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
