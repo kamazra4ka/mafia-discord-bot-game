@@ -17,7 +17,7 @@ import gameEvents from "../commands/emitters/emitter.js";
 import gameState from "./gameState.js";
 
 import {
-    createPrivateChannelForUsers
+    createPrivateChannelForUsers, sendMafiaVote
 } from "../commands/handlers/privateChannel-handlers.js";
 import {narrateAndPlayVoiceLine} from "../commands/handlers/voice-handlers.js";
 
@@ -71,7 +71,7 @@ gameEvents.on('stageUpdate', async (data) => {
         let detectiveChannelId;
 
         const mafiaUserIds = await gameState.getUsersByRole(gameId, 'mafia');
-        const mafiaChannel = await createPrivateChannelForUsers(guild, '🔪⡇mafia-only-' + gameId, mafiaUserIds).then(channel => {
+        const mafiaChannel = await createPrivateChannelForUsers(guild, '🔪⡇mafia-only-' + gameId, mafiaUserIds).then(async channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle('Mafia Channel')
@@ -85,14 +85,15 @@ gameEvents.on('stageUpdate', async (data) => {
                     text: 'MafiaBot',
                     iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
                 });
-            channel.send({embeds: [embed]});
+            await channel.send({embeds: [embed]});
+            await sendMafiaVote(channel, gameId);
 
             // save the id for later votes in the gamestate
             mafiaChannelId = channel.id;
         })
 
         const doctorUserId = await gameState.getUsersByRole(gameId, 'doctor');
-        const doctorChannel = await createPrivateChannelForUsers(guild, '💊⡇doctor-only-' + gameId, doctorUserId).then(channel => {
+        const doctorChannel = await createPrivateChannelForUsers(guild, '💊⡇doctor-only-' + gameId, doctorUserId).then(async channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle('Doctor Channel')
@@ -106,13 +107,13 @@ gameEvents.on('stageUpdate', async (data) => {
                     text: 'MafiaBot',
                     iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
                 });
-          channel.send({embeds: [embed]});
+            await channel.send({embeds: [embed]});
 
-          doctorChannelId = channel.id;
+            doctorChannelId = channel.id;
         });
 
         const detectiveUserId = await gameState.getUsersByRole(gameId, 'detective');
-        const detectiveChannel = await createPrivateChannelForUsers(guild, '👮⡇detective-only-' + gameId, detectiveUserId).then(channel => {
+        const detectiveChannel = await createPrivateChannelForUsers(guild, '👮⡇detective-only-' + gameId, detectiveUserId).then(async channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle('Detective Channel')
@@ -126,7 +127,7 @@ gameEvents.on('stageUpdate', async (data) => {
                     text: 'MafiaBot',
                     iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
                 });
-          channel.send({embeds: [embed]});
+            await channel.send({embeds: [embed]});
             detectiveChannelId = channel.id;
         });
 
@@ -138,8 +139,6 @@ gameEvents.on('stageUpdate', async (data) => {
 
     }
 });
-     //  const detectiveChannel = await createPrivateChannelForUsers(guild, 'Detective Channel', [detectiveUserId]);
-     //  const doctorChannel = await createPrivateChannelForUsers(guild, 'Doctor Channel', [doctorUserId]);
 
 
 // Listen for day updates

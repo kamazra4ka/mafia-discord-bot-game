@@ -207,6 +207,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
 
                 break;
             case '2':
+
                 await setTimeout(async () => {
                 topic = 'First night is coming. Tell everyone to brace.'
 
