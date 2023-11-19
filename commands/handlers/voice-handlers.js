@@ -249,7 +249,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                             // Send a message to the channel
                             channel.send({ embeds: [embed] });
                         })
-                }, 15000);
+                }, 25000);
                 break;
         }
 }
