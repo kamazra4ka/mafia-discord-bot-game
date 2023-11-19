@@ -95,7 +95,7 @@ gameEvents.on('stageUpdate', async (data) => {
         const doctorChannel = await createPrivateChannelForUsers(guild, '💊⡇doctor-only-' + gameId, doctorUserId).then(channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
-                .setTitle('Mafia Channel')
+                .setTitle('Doctor Channel')
                 .setDescription('Welcome to your personal channel! You are a Doctor and your goal is to prevent Mafia members from killing civilians. Every night from this channel you can choose who do you want to visit this night. Your visit prevents person from being killed.')
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
@@ -115,7 +115,7 @@ gameEvents.on('stageUpdate', async (data) => {
         const detectiveChannel = await createPrivateChannelForUsers(guild, '👮⡇detective-only-' + gameId, detectiveUserId).then(channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
-                .setTitle('Mafia Channel')
+                .setTitle('Detective Channel')
                 .setDescription('Welcome to your personal channel! You are a Detective and your goal is to find out who is the Mafia. Every night from this channel you can choose who do you investigate. This action will disclose their role to you, so if your target is Mafia - you will know this. But you still have to convince the majority to kick the Mafia out of the game.')
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
