@@ -92,7 +92,7 @@ gameEvents.on('stageUpdate', async (data) => {
         })
 
         const doctorUserId = await gameState.getUsersByRole(gameId, 'doctor');
-        const doctorChannel = await createPrivateChannelForUsers(guild, '🧑‍⚕️⡇doctor-only', doctorUserId).then(channel => {
+        const doctorChannel = await createPrivateChannelForUsers(guild, '💊⡇doctor-only', doctorUserId).then(channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle('Mafia Channel')

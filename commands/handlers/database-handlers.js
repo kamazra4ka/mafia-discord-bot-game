@@ -264,7 +264,7 @@ export const sendChannelIdsToDatabase = async (interaction, gameId, doctorChanne
             return;
         }
 
-        connection.query('UPDATE games SET doctorchannelid = ?, detectivechannelid = ?, mafiachannelid = ? WHERE gameid = ?', [doctorChannelId, detectiveChannelId, mafiaChannelId, gameId], async (err, rows) => {
+        connection.query('UPDATE games SET gamedoctorchid = ?, gamedetectivechid = ?, gamemafiachid = ? WHERE gameid = ?', [doctorChannelId, detectiveChannelId, mafiaChannelId, gameId], async (err, rows) => {
             connection.release();
             if (err) {
                 console.error(err);
