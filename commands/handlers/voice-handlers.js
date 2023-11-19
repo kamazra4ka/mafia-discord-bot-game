@@ -200,7 +200,6 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     .setTitle('Mafia Game')
                     .setDescription(`🎙 Bot: ${voiceLineText}`)
                     .addFields(
-                        { name: '🌇 Day', value: `${data.currentDay}`, inline: true },
                         { name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                     )
                     .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
