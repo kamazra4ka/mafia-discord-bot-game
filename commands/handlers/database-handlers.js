@@ -256,6 +256,44 @@ export const nextStage = (interaction, gameId, callback) => {
     });
 };
 
+// send doctorChannelId and other channel ids to the database to tables games
+export const sendChannelIdsToDatabase = async (interaction, gameId, doctorChannelId, detectiveChannelId, mafiaChannelId) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query('UPDATE games SET doctorchannelid = ?, detectivechannelid = ?, mafiachannelid = ? WHERE gameid = ?', [doctorChannelId, detectiveChannelId, mafiaChannelId, gameId], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
+        });
+    });
+}
+
+// get the channel ids from the database
+export const getChannelIdsFromDatabase = async (interaction, gameId) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query('SELECT doctorchannelid, detectivechannelid, mafiachannelid FROM games WHERE gameid = ?', [gameId], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(rows);
+            return rows;
+        });
+    });
+}
+
 // Usage:
 // nextStage(interaction, gameId, (error, message) => {
 //     if (error) {
