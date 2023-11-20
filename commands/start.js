@@ -88,16 +88,17 @@ export const start = async (interaction, client) => {
 
     const intervalId = setInterval(updateEmbed, 1000);
 
-    setTimeout(() => {
-        narrateAndPlayVoiceLine(client, interaction.guildId, '1174753582193590312', '1');
-        clearInterval(intervalId);
+    setTimeout(async () => {
+
+        await narrateAndPlayVoiceLine(client, interaction.guildId, '1174753582193590312', '1');
+        await clearInterval(intervalId);
         button.setDisabled(true);
         const newRow = new ActionRowBuilder().addComponents(button);
-        interaction.editReply({ content: 'Registration closed.', components: [newRow] });
-        gameStarts(interaction, gameId);
+        await interaction.editReply({content: 'Registration closed.', components: [newRow]});
+        await gameStarts(interaction, gameId);
 
         // 95 seconds timeout
-        setTimeout(() => {
+        await setTimeout(() => {
             nextStage(interaction, gameId, (error, message) => {
                 if (error) {
                     console.error(error);
