@@ -14,6 +14,8 @@ export const createPrivateChannelForUsers = async (guild, channelName, userIds) 
             })),
         ];
 
+        console.log('Perms: ', permissionOverwrites);
+
         const channel = await guild.channels.create({
             name: channelName,
             type: ChannelType.GuildText,
@@ -49,7 +51,7 @@ export const sendMafiaVote = async (channel, gameId) => {
         const messages = await Promise.all(players.map(async userId => {
             const user = await channel.guild.members.fetch(userId);
             const mafiaVoteMessage = {
-                content: "Mafia, vote for your target.",
+                content: `Do you want to kill this person?`,
                 components: [
                     {
                         type: 1,
@@ -73,5 +75,15 @@ export const sendMafiaVote = async (channel, gameId) => {
 
     } catch (error) {
         console.error('Error sending mafia vote message:', error);
+    }
+}
+
+// disable all mafia vote buttons
+export const disableMafiaVoteButtons = async (interaction) => {
+    try {
+        const channel = interaction.channel;
+        const messages = await channel.messages.fetch();
+    } catch (error) {
+        console.error('Error disabling mafia vote buttons:', error);
     }
 }

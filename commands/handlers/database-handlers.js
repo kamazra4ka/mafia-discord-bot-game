@@ -264,6 +264,8 @@ export const sendChannelIdsToDatabase = async (interaction, gameId, doctorChanne
             return;
         }
 
+        console.log('blah blah blah')
+
         connection.query('UPDATE games SET gamedoctorchid = ?, gamedetectivechid = ?, gamemafiachid = ? WHERE gameid = ?', [doctorChannelId, detectiveChannelId, mafiaChannelId, gameId], async (err, rows) => {
             connection.release();
             if (err) {
@@ -290,6 +292,24 @@ export const getChannelIdsFromDatabase = async (interaction, gameId) => {
             }
             console.log(rows);
             return rows;
+        });
+    });
+}
+
+// night_actions table row creation with gameid and gameday
+export const createNightActionsRow = async (gameId, gameDay) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query('INSERT night_actions SET gameid = ?, gameday = ?', [gameId, gameDay], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
         });
     });
 }

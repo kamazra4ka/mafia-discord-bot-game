@@ -3,7 +3,7 @@ import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
 import {
-    addUserToGame, assignStartRoles, sendChannelIdsToDatabase
+    addUserToGame, assignStartRoles, createNightActionsRow, sendChannelIdsToDatabase
 } from "../commands/handlers/database-handlers.js";
 
 import {
@@ -17,7 +17,7 @@ import gameEvents from "../commands/emitters/emitter.js";
 import gameState from "./gameState.js";
 
 import {
-    createPrivateChannelForUsers, sendMafiaVote
+    createPrivateChannelForUsers, disableMafiaVoteButtons, sendMafiaVote
 } from "../commands/handlers/privateChannel-handlers.js";
 import {narrateAndPlayVoiceLine} from "../commands/handlers/voice-handlers.js";
 
@@ -39,13 +39,23 @@ client.on('interactionCreate', async interaction => {
         await start(interaction, client);
     }
 
-    if (interaction.customId === 'join_game') {
-        console.log(`User ID: ${interaction.user.id} joined the game.`);
-        await interaction.reply({ content: `You have joined the game!`, ephemeral: true });
+    if (interaction.isButton()) {
+        if (interaction.customId === 'join_game') {
+            console.log(`User ID: ${interaction.user.id} joined the game.`);
+            await interaction.reply({ content: `You have joined the game!`, ephemeral: true });
 
-        await addUserToGame(interaction)
+            await addUserToGame(interaction)
 
+        }
+
+        // if starts from mafia_vote_(userid) get the userid from the name
+        if (interaction.customId.startsWith('mafia_vote_')) {
+            const userId = interaction.customId.split('_')[2];
+            console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
+            await interaction.reply({ content: `You have voted for ${userId}!`, ephemeral: true });
+        }
     }
+
 });
 
 // Listen for stage updates
@@ -70,12 +80,15 @@ gameEvents.on('stageUpdate', async (data) => {
         let doctorChannelId;
         let detectiveChannelId;
 
+        // create a row for actions
+        await createNightActionsRow(data.gameId, data.currentDay);
+
         const mafiaUserIds = await gameState.getUsersByRole(gameId, 'mafia');
         const mafiaChannel = await createPrivateChannelForUsers(guild, '🔪⡇mafia-only-' + gameId, mafiaUserIds).then(async channel => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle('Mafia Channel')
-                .setDescription('Welcome to the Mafia Channel! You can talk with your fellow mafia members here.')
+                .setDescription('Welcome to the Mafia Channel! You can talk with your fellow mafia members here.\n\n In matches with multiple mafias every mafia can choose a target, but only one target will be killed. Please, discuss your target with other mafia members. Have fun!')
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                 )
@@ -142,9 +155,10 @@ gameEvents.on('stageUpdate', async (data) => {
 
 
 // Listen for day updates
-gameEvents.on('dayUpdate', (data) => {
+gameEvents.on('dayUpdate', async (data) => {
     console.log(`Day updated for game ${data.gameId} to ${data.currentDay}`);
-    // Handle the day update (e.g., notify players, update the database)
+
+
 });
 
 client.login(botToken);
