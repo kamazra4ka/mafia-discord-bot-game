@@ -92,7 +92,7 @@ gameEvents.on('stageUpdate', async (data) => {
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                 )
-                .setImage('https://media.discordapp.net/attachments/978344813374083222/1174832681717071872/start.png?ex=65690732&is=65569232&hm=a03b9233f9b1e29f376630e9c3aff6aae8439b15ee50f32c7e956a510ea53cfe&=&width=1500&height=500')
+                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1176101942678794271/mafia.png?ex=656da54a&is=655b304a&hm=47205392d44c7620b987c443770d63f37581215b4db5ef51b772fe243c74da77&=&width=896&height=671')
                 .setTimestamp()
                 .setFooter({
                     text: 'MafiaBot',

@@ -150,7 +150,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setColor('3a3a3a')
                         .setTitle('Mafia Game')
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
-                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175351078741626950/detective.png?ex=656ae9fe&is=655874fe&hm=9569b208089419b88b1364cbc0e62d23ea9266f5131d4d850c932065f7a1a804&=&width=1207&height=905')
+                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1176101942678794271/mafia.png?ex=656da54a&is=655b304a&hm=47205392d44c7620b987c443770d63f37581215b4db5ef51b772fe243c74da77&=&width=896&height=671')
                         .setTimestamp()
                         .setFooter({
                             text: 'MafiaBot',
