@@ -314,6 +314,24 @@ export const createNightActionsRow = async (gameId, gameDay) => {
     });
 }
 
+// add mafia vote to the database where gameday and gameid is
+export const addMafiaVoteToDatabase = async (gameId, gameDay, votedUserId) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query('UPDATE night_actions SET gamemafiatarget = ? WHERE gameid = ? AND gameday = ?', [votedUserId, gameId, gameDay], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
+        });
+    });
+}
+
 // Usage:
 // nextStage(interaction, gameId, (error, message) => {
 //     if (error) {
