@@ -168,7 +168,76 @@ export const sendDoctorVote = async (channel, gameId) => {
     } catch (error) {
         console.error('Error sending doctor vote message:', error);
         }
+ }
+
+// send a detective's vote.
+export const sendDetectiveVote = async (channel, gameId) => {
+    try {
+
+        const players = await gameState.getUsersByRole(gameId, 'civilian');
+
+        // add detectives and doctors to the list
+        const doctors = await gameState.getUsersByRole(gameId, 'doctor');
+        players.push(...doctors);
+
+        // add mafias to the list
+        const mafias = await gameState.getUsersByRole(gameId, 'mafia');
+        players.push(...mafias);
+
+        // get users nicknames by userid
+        const messages = await Promise.all(players.map(async userId => {
+            const user = await channel.guild.members.fetch(userId);
+
+            // get user's avatar
+            const avatar = user.user.avatarURL();
+
+            const embed = new EmbedBuilder()
+                .setColor('3a3a3a')
+                .setTitle(`${user.nickname || user.user.username}`)
+                .setDescription('Do you want to visit and heal this person? Click the button below to confirm.')
+                .setImage(avatar)
+                .setTimestamp()
+                .setFooter({
+                    text: 'MafiaBot',
+                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                });
+
+            const doctorVoteMessage = {
+                embeds: [embed],
+                components: [
+                    {
+                        type: 1,
+                        components: [
+                            {
+                                type: 2,
+                                label: `${user.nickname || user.user.username}`,
+                                // 1 is blue
+                                // 2 is gray
+                                // 3 is green
+                                // 4 is red
+                                style: 3,
+                                custom_id: `doctor_vote_${userId}`,
+                            },
+                        ],
+                    },
+                ],
+            };
+            const message = await channel.send(doctorVoteMessage).then(message => {
+                // delete after 30 seconds
+                setTimeout(() => {
+                    message.delete();
+                }, 30000);
+            });
+            console.log(`Sent doctor vote message: ${message.content}`);
+
+            return message;
+        }));
+
+    } catch (error) {
+        console.error('Error sending doctor vote message:', error);
     }
+}
+
 
 // disable all mafia vote buttons
 export const disableMafiaVoteButtons = async (interaction) => {
