@@ -74,7 +74,11 @@ export const sendMafiaVote = async (channel, gameId) => {
                             {
                                 type: 2,
                                 label: `${user.nickname || user.user.username}`,
-                                style: 2,
+                                // 1 is blue
+                                // 2 is gray
+                                // 3 is green
+                                // 4 is red
+                                style: 4,
                                 custom_id: `mafia_vote_${userId}`,
                             },
                         ],
