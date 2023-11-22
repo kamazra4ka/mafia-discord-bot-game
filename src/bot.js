@@ -3,7 +3,7 @@ import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
 import {
-    addMafiaVoteToDatabase, addTargetToDatabase,
+    addTargetToDatabase,
     addUserToGame, assignStartRoles, createNightActionsRow, getGameDay, getGameId, sendChannelIdsToDatabase
 } from "../commands/handlers/database-handlers.js";
 
