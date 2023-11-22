@@ -107,7 +107,7 @@ client.on('interactionCreate', async interaction => {
             try {
                 const userId = interaction.customId.split('_')[2];
                 console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
-                await interaction.reply({ content: `You have voted for <@${userId}>!`, ephemeral: false });
+                await interaction.reply({ content: `You have voted for checking the <@${userId}>\'s role! You will receive a message in the morning with results of your check. `, ephemeral: false });
 
                 if (currentGame) {
                     const gameId = currentGame.id;

@@ -215,7 +215,7 @@ export const sendDetectiveVote = async (channel, gameId) => {
                                 // 3 is green
                                 // 4 is red
                                 style: 2,
-                                custom_id: `doctor_vote_${userId}`,
+                                custom_id: `detective_vote_${userId}`,
                             },
                         ],
                     },
