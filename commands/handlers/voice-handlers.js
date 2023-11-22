@@ -300,11 +300,11 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     .setColor('8e0922')
                     .setTitle('Mafia Game: A player has been found dead.')
                     .setDescription(`🎙 Bot: ${voiceLineText}`)
-                    .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175153853440725123/introduction.png?ex=656a324f&is=6557bd4f&hm=dc9bfadab571050136b4ca51169c4ba85c161e6a10a5d5da02b805b6095bfa5c&=&width=1500&height=500')
+                    .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177013332201443428/mafia_success.png?ex=6570f616&is=655e8116&hm=b7c2a029a7f1e8358aadc552b76e8a301d7fdc63a12cc17eee5a3fe2fdbc8a84&=&format=webp&width=1500&height=500')
                     .setTimestamp()
                     .addFields(
                         {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                        {name: '👤 Dead player', value: `<@${additionalData}>`, inline: true}
+                        {name: '👤 Dead player', value: `${additionalData}`, inline: true}
                     )
                     .setFooter({
                         text: 'MafiaBot',
@@ -326,11 +326,11 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     .setColor('006400')
                     .setTitle('Mafia Game: An attempt of a murder was found.')
                     .setDescription(`🎙 Bot: ${voiceLineText}`)
-                    .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175153853440725123/introduction.png?ex=656a324f&is=6557bd4f&hm=dc9bfadab571050136b4ca51169c4ba85c161e6a10a5d5da02b805b6095bfa5c&=&width=1500&height=500')
+                    .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177013332482465903/doctor_success.png?ex=6570f616&is=655e8116&hm=68bea818f11053eaf07219fd4f9dc8a25e6e75b94ff20620e4b68dfe92edc4e3&=&format=webp&width=1500&height=500')
                     .setTimestamp()
                     .addFields(
                         {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                        {name: '👤 Dead player', value: `<@${additionalData}>`, inline: true}
+                        {name: '👤 Saved player', value: `${additionalData}`, inline: true}
                     )
                     .setFooter({
                         text: 'MafiaBot',
