@@ -3,7 +3,7 @@ import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
 import {
-    addMafiaVoteToDatabase,
+    addMafiaVoteToDatabase, addTargetToDatabase,
     addUserToGame, assignStartRoles, createNightActionsRow, getGameDay, getGameId, sendChannelIdsToDatabase
 } from "../commands/handlers/database-handlers.js";
 
@@ -41,6 +41,7 @@ client.on('interactionCreate', async interaction => {
     }
 
     if (interaction.isButton()) {
+        const currentGame = await gameState.getCurrentGame();
         if (interaction.customId === 'join_game') {
             console.log(`User ID: ${interaction.user.id} joined the game.`);
             await interaction.reply({ content: `You have joined the game!`, ephemeral: true });
@@ -51,49 +52,80 @@ client.on('interactionCreate', async interaction => {
 
         // if starts from mafia_vote_(userid) get the userid from the name
         if (interaction.customId.startsWith('mafia_vote_')) {
-            const userId = interaction.customId.split('_')[2];
-            console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
-            await interaction.reply({ content: `Mafia ${interaction.user.username} has voted for <@${userId}>!`, ephemeral: false });
+            try {
+                const userId = interaction.customId.split('_')[2];
+                console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
+                await interaction.reply({ content: `Mafia ${interaction.user.username} has voted for <@${userId}>!`, ephemeral: false });
 
-            // writing mafias vote to the database
-            const currentGame = await gameState.getCurrentGame();
+                if (currentGame) {
+                    const gameId = currentGame.id;
+                    console.log('game id is ' + gameId)
+                    console.log(currentGame)
+                    const gameday = await getGameDay(interaction, gameId)
+                    console.log('zero try game day is ' + gameday)
 
-            if (currentGame) {
-                const gameId = currentGame.id;
-                console.log('game id is ' + gameId)
-                console.log(currentGame)
-                const gameDay = getGameDay(interaction, gameId).then(async gameday => {
                     console.log('game day is ' + gameday)
-                    await addMafiaVoteToDatabase(gameday, gameId, interaction.user.id)
-                    console.log(gameId + ' ' + gameday + ' ' + userId + ' ' + interaction.user.id)
+                    await addTargetToDatabase(gameday, gameId, 'gamemafiatarget', interaction.user.id)
                     console.log('nuh uh')
-                });
-            } else {
-                // send message to the interaction channel
-                await interaction.channel.send('Something went wrong. Please, try again.');
+                } else {
+                    // send message to the interaction channel
+                    await interaction.channel.send('Something went wrong. Please, try again.');
+                }
+            } catch (error) {
+                interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
             }
-
-         //   const gameDay = await getGameDay(interaction, gameId).then(async gameDay => {
-         //       await addMafiaVoteToDatabase(gameDay, userId, interaction.user.id)
-        //
-         //       console.log(gameId + ' ' + gameDay + ' ' + userId + ' ' + interaction.user.id)
-         //       console.log('nuh uh')
-         //   });
-
         }
 
         // if starts from doctor_vote_(userid) get the userid from the name
         if (interaction.customId.startsWith('doctor_vote_')) {
-            const userId = interaction.customId.split('_')[2];
-            console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
-            await interaction.reply({ content: `You have voted for <@${userId}>!`, ephemeral: true });
+            try {
+                const userId = interaction.customId.split('_')[2];
+                console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
+                await interaction.reply({ content: `You have voted for <@${userId}>!`, ephemeral: false });
+
+                if (currentGame) {
+                    const gameId = currentGame.id;
+                    console.log('game id is ' + gameId)
+                    console.log(currentGame)
+                    const gameday = await getGameDay(interaction, gameId)
+                    console.log('zero try game day is ' + gameday)
+
+                    console.log('game day is ' + gameday)
+                    await addTargetToDatabase(gameday, gameId, 'gamedoctortarget', interaction.user.id)
+                    console.log('nuh uh doctor')
+                } else {
+                    // send message to the interaction channel
+                    await interaction.channel.send('Something went wrong. Please, try again.');
+                }
+            } catch (error) {
+                interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
+            }
         }
 
         // if starts from detective_vote_(userid) get the userid from the name
         if (interaction.customId.startsWith('detective_vote_')) {
-            const userId = interaction.customId.split('_')[2];
-            console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
-            await interaction.reply({ content: `You have voted for <@${userId}>!`, ephemeral: true });
+            try {
+                const userId = interaction.customId.split('_')[2];
+                console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
+                await interaction.reply({ content: `You have voted for <@${userId}>!`, ephemeral: false });
+
+                if (currentGame) {
+                    const gameId = currentGame.id;
+                    console.log('game id is ' + gameId)
+                    console.log(currentGame)
+                    const gameday = await getGameDay(interaction, gameId)
+                    console.log('zero try game day is ' + gameday)
+
+                    console.log('game day is ' + gameday)
+                    await addTargetToDatabase(gameday, gameId, 'gamedetectivetarget', interaction.user.id)
+                    console.log('nuh uh detective')
+                } else {
+                    // send message to the interaction channel
+                    await interaction.channel.send('Something went wrong. Please, try again.');
+                }
+            } catch (error) {
+                interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
+            }
         }
     }
  } catch (error) {
