@@ -21,6 +21,16 @@ export const joinVoice = async (interaction) => {
         console.log(`Joined the voice channel: ${channel.name}`);
     } else {
         console.log('Oops!')
+
+        // join the voice channel with id
+        const channel = interaction.guild.channels.cache.get('1174753582193590312');
+
+        const connection = joinVoiceChannel({
+            channelId: channel.id,
+            guildId: channel.guild.id,
+            adapterCreator: channel.guild.voiceAdapterCreator,
+        });
+
     }
 };
 
