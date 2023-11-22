@@ -258,23 +258,27 @@ export const nextStage = (interaction, gameId, callback) => {
 
 // get gameday
 export const getGameDay = async (interaction, gameId) => {
-    pool.getConnection((err, connection) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-
-        connection.query('SELECT gameday FROM games WHERE gameid = ?', [gameId], async (err, rows) => {
-            connection.release();
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
             if (err) {
                 console.error(err);
+                reject(err);
                 return;
             }
-            console.log(rows[0].gameday)
-            return rows[0].gameday;
+
+            connection.query('SELECT gameday FROM games WHERE gameid = ?', [gameId], (err, rows) => {
+                connection.release();
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                    return;
+                }
+                console.log(rows[0].gameday);
+                resolve(rows[0].gameday);
+            });
         });
     });
-}
+};
 
 // get gameid from the servers table (sort by date the newest + limit 1)
 export const getGameId = async (interaction) => {
@@ -356,23 +360,35 @@ export const createNightActionsRow = async (gameId, gameDay) => {
     });
 }
 
-// add mafia vote to the database where gameday and gameid is
-export const addMafiaVoteToDatabase = async (gameId, gameDay, votedUserId) => {
-    pool.getConnection((err, connection) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-
-        connection.query('UPDATE night_actions SET gamemafiatarget = ? WHERE gameid = ? AND gameday = ?', [votedUserId, gameId, gameDay], async (err, rows) => {
-            connection.release();
+export const addTargetToDatabase = async (gameDay, gameId, targetColumn, targetUserId) => {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
             if (err) {
-                console.error(err);
+                console.error('Connection Error:', err);
+                reject(err);
                 return;
             }
+
+            const query = `
+                INSERT INTO night_actions (gameid, gameday, ${connection.escapeId(targetColumn)}) 
+                VALUES (?, ?, ?) 
+                ON DUPLICATE KEY UPDATE ${connection.escapeId(targetColumn)} = ?;
+            `;
+            connection.query(query, [gameId, gameDay, targetUserId, targetUserId], (err, rows) => {
+                if (err) {
+                    console.error('Query Error:', err);
+                    reject(err);
+                    return;
+                }
+                console.log('Query Success:', rows);
+                resolve(rows);
+                connection.release();
+            });
         });
     });
-}
+};
+
+
 
 // Usage:
 // nextStage(interaction, gameId, (error, message) => {
