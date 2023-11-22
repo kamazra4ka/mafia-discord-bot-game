@@ -238,10 +238,11 @@ gameEvents.on('stageUpdate', async (data) => {
                 await channel.send(`Detective: ${detectiveUserId}`)
 
                 await channel.send({embeds: [embed]});
+                await sendDetectiveVote(channel, gameId);
                 detectiveChannelId = channel.id;
             });
 
-            sendChannelIdsToDatabase(gameId, mafiaChannelId, doctorChannelId, detectiveChannelId);
+            await sendChannelIdsToDatabase(gameId, mafiaChannelId, doctorChannelId, detectiveChannelId);
 
             console.log('goofy mafia voice line played -1');
             await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '2');
