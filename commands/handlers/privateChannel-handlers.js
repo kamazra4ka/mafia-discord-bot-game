@@ -74,7 +74,7 @@ export const sendMafiaVote = async (channel, gameId) => {
                             {
                                 type: 2,
                                 label: `${user.nickname || user.user.username}`,
-                                style: 1,
+                                style: 2,
                                 custom_id: `mafia_vote_${userId}`,
                             },
                         ],
