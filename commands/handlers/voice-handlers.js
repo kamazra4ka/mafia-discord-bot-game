@@ -127,7 +127,12 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                 client.channels.fetch(cId)
                     .then(channel => {
                         // Send a message to the channel
-                        channel.send({embeds: [embed]});
+                        channel.send({embeds: [embed]}).then(message => {
+                            // delete after 30 seconds
+                            setTimeout(() => {
+                                message.delete();
+                            }, 30000);
+                        });;
                     })
 
                 // wait 5 seconds and then play the next voice line
@@ -149,7 +154,12 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     client.channels.fetch(cId)
                         .then(channel => {
                             // Send a message to the channel
-                            channel.send({embeds: [embed]});
+                            channel.send({embeds: [embed]}).then(message => {
+                                // delete after 30 seconds
+                                setTimeout(() => {
+                                    message.delete();
+                                }, 30000);
+                            });
                         })
                 }, 15000);
                 await setTimeout(async () => {
@@ -170,7 +180,12 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     client.channels.fetch(cId)
                         .then(channel => {
                             // Send a message to the channel
-                            channel.send({embeds: [embed]});
+                            channel.send({embeds: [embed]}).then(message => {
+                                // delete after 30 seconds
+                                setTimeout(() => {
+                                    message.delete();
+                                }, 30000);
+                            });
                         })
                 }, 38000);
                 await setTimeout(async () => {
@@ -191,7 +206,12 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     client.channels.fetch(cId)
                         .then(channel => {
                             // Send a message to the channel
-                            channel.send({embeds: [embed]});
+                            channel.send({embeds: [embed]}).then(message => {
+                                // delete after 30 seconds
+                                setTimeout(() => {
+                                    message.delete();
+                                }, 30000);
+                            });
                         })
                 }, 70000);
                 await setTimeout(async () => {
@@ -211,7 +231,12 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     client.channels.fetch(cId)
                         .then(channel => {
                             // Send a message to the channel
-                            channel.send({embeds: [embed]});
+                            channel.send({embeds: [embed]}).then(message => {
+                                // delete after 30 seconds
+                                setTimeout(() => {
+                                    message.delete();
+                                }, 30000);
+                            });
                         })
                 }, 85000);
 
