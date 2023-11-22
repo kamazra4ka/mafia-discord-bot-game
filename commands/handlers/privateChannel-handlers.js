@@ -130,7 +130,7 @@ export const sendDoctorVote = async (channel, gameId) => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle(`${user.nickname || user.user.username}`)
-                .setDescription('Do you want to kill this person? Click the button below to confirm.')
+                .setDescription('Do you want to visit and heal this person? Click the button below to confirm.')
                 .setImage(avatar)
                 .setTimestamp()
                 .setFooter({
@@ -151,8 +151,8 @@ export const sendDoctorVote = async (channel, gameId) => {
                                 // 2 is gray
                                 // 3 is green
                                 // 4 is red
-                                style: 4,
-                                custom_id: `mafia_vote_${userId}`,
+                                style: 3,
+                                custom_id: `doctor_vote_${userId}`,
                             },
                         ],
                     },
