@@ -90,7 +90,7 @@ export const sendMafiaVote = async (channel, gameId) => {
                 // delete after 30 seconds
                 setTimeout(() => {
                     message.delete();
-                }, 30000);
+                }, 60000);
             });
             console.log(`Sent mafia vote message: ${message.content}`);
 
@@ -158,7 +158,7 @@ export const sendDoctorVote = async (channel, gameId) => {
                 // delete after 30 seconds
                 setTimeout(() => {
                     message.delete();
-                }, 30000);
+                }, 60000);
             });
 
             return message;
@@ -225,7 +225,7 @@ export const sendDetectiveVote = async (channel, gameId) => {
                 // delete after 30 seconds
                 setTimeout(() => {
                     message.delete();
-                }, 30000);
+                }, 60000);
             });
 
             return message;
