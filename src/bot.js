@@ -18,7 +18,7 @@ import gameEvents from "../commands/emitters/emitter.js";
 import gameState from "./gameState.js";
 
 import {
-    createPrivateChannelForUsers, disableMafiaVoteButtons, sendDoctorVote, sendMafiaVote
+    createPrivateChannelForUsers, disableMafiaVoteButtons, sendDetectiveVote, sendDoctorVote, sendMafiaVote
 } from "../commands/handlers/privateChannel-handlers.js";
 import {narrateAndPlayVoiceLine} from "../commands/handlers/voice-handlers.js";
 
