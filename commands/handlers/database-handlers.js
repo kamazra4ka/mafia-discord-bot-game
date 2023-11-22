@@ -256,6 +256,48 @@ export const nextStage = (interaction, gameId, callback) => {
     });
 };
 
+// get gameday
+export const getGameDay = async (interaction, gameId) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query('SELECT gameday FROM games WHERE gameid = ?', [gameId], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(rows[0].gameday)
+            return rows[0].gameday;
+        });
+    });
+}
+
+// get gameid from the servers table (sort by date the newest + limit 1)
+export const getGameId = async (interaction) => {
+    const serverDiscordId = interaction.guildId;
+    console.log(`${serverDiscordId} 123 discord server id getGameId`);
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query('SELECT serverstartgameid FROM servers WHERE serverdiscordid = ? ORDER BY servers.serverstartdate DESC LIMIT 1;', [serverDiscordId], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(rows);
+            return rows;
+        });
+    });
+}
+
 // send doctorChannelId and other channel ids to the database to tables games
 export const sendChannelIdsToDatabase = async (interaction, gameId, doctorChannelId, detectiveChannelId, mafiaChannelId) => {
     pool.getConnection((err, connection) => {

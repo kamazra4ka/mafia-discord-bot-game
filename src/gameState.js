@@ -81,6 +81,14 @@ class GameState {
         return this.games.get(gameId);
     }
 
+    // get the game without any identifying information
+    getCurrentGame() {
+        for (const game of this.games.values()) {
+            return game; // Returns the first game instance
+        }
+        return null; // Return null if no games are found
+    }
+
     async updateRole(gameId, userId, role) {
         const game = this.getGame(gameId);
         if (game) {

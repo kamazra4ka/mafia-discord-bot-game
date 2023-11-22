@@ -3,7 +3,8 @@ import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
 import {
-    addUserToGame, assignStartRoles, createNightActionsRow, sendChannelIdsToDatabase
+    addMafiaVoteToDatabase,
+    addUserToGame, assignStartRoles, createNightActionsRow, getGameDay, getGameId, sendChannelIdsToDatabase
 } from "../commands/handlers/database-handlers.js";
 
 import {
@@ -30,7 +31,7 @@ client.on('ready', () => {
 });
 
 client.on('interactionCreate', async interaction => {
-
+  try {
     if (interaction.commandName === 'ping') {
         await ping(interaction);
     }
@@ -53,6 +54,32 @@ client.on('interactionCreate', async interaction => {
             const userId = interaction.customId.split('_')[2];
             console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
             await interaction.reply({ content: `Mafia ${interaction.user.username} has voted for <@${userId}>!`, ephemeral: false });
+
+            // writing mafias vote to the database
+            const currentGame = await gameState.getCurrentGame();
+
+            if (currentGame) {
+                const gameId = currentGame.id;
+                console.log('game id is ' + gameId)
+                console.log(currentGame)
+                const gameDay = getGameDay(interaction, gameId).then(async gameday => {
+                    console.log('game day is ' + gameday)
+                    await addMafiaVoteToDatabase(gameday, gameId, interaction.user.id)
+                    console.log(gameId + ' ' + gameday + ' ' + userId + ' ' + interaction.user.id)
+                    console.log('nuh uh')
+                });
+            } else {
+                // send message to the interaction channel
+                await interaction.channel.send('Something went wrong. Please, try again.');
+            }
+
+         //   const gameDay = await getGameDay(interaction, gameId).then(async gameDay => {
+         //       await addMafiaVoteToDatabase(gameDay, userId, interaction.user.id)
+        //
+         //       console.log(gameId + ' ' + gameDay + ' ' + userId + ' ' + interaction.user.id)
+         //       console.log('nuh uh')
+         //   });
+
         }
 
         // if starts from doctor_vote_(userid) get the userid from the name
@@ -69,7 +96,9 @@ client.on('interactionCreate', async interaction => {
             await interaction.reply({ content: `You have voted for <@${userId}>!`, ephemeral: true });
         }
     }
-
+ } catch (error) {
+     interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
+ }
 });
 
 // Listen for stage updates
@@ -85,6 +114,7 @@ gameEvents.on('stageUpdate', async (data) => {
     if (stage === 1 && data.currentDay === 0) {
         const gameInfo = {
             roles: {},
+            id: gameId
         };
         // Initialize the game with no roles assigned yet
         await gameState.setGame(gameId, gameInfo);
