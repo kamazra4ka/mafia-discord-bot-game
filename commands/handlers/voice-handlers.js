@@ -97,13 +97,18 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
 
 
 // voice lines for the game + ai
-export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceLine) => {
+export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceLine, additionalData) => {
 
     const cId = '1175130149516214472';
 
     let topic;
     let voiceLineText;
     let embed;
+
+    if (!additionalData) {
+        additionalData = 'nothing important';
+    }
+
     console.log(voiceLine + ' 132vfbfgdcbdfghdf')
 
         // make a switch case for each voice line id
@@ -132,7 +137,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                             setTimeout(() => {
                                 message.delete();
                             }, 30000);
-                        });;
+                        });
                     })
 
                 // wait 5 seconds and then play the next voice line
@@ -269,7 +274,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     })
         }, 5000);
                 await setTimeout(async () => {
-                    const voiceLineText = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels.';
+                    const voiceLineText = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels.\n\nThe night will end in 60 seconds.';
                     narrateAndPlay(guildId, channelId, voiceLineText);
 
                     const embed = new EmbedBuilder()
@@ -286,6 +291,58 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                             channel.send({ embeds: [embed] });
                         })
                 }, 25000);
+                break;
+            case '3':
+                topic = `Player ${additionalData} has been killed by Mafia. Doctor didn't save him.`
+
+                voiceLineText = await generateVoiceLine(topic)
+                embed = new EmbedBuilder()
+                    .setColor('8e0922')
+                    .setTitle('Mafia Game: A player has been found dead.')
+                    .setDescription(`🎙 Bot: ${voiceLineText}`)
+                    .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175153853440725123/introduction.png?ex=656a324f&is=6557bd4f&hm=dc9bfadab571050136b4ca51169c4ba85c161e6a10a5d5da02b805b6095bfa5c&=&width=1500&height=500')
+                    .setTimestamp()
+                    .addFields(
+                        {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
+                        {name: '👤 Dead player', value: `<@${additionalData}>`, inline: true}
+                    )
+                    .setFooter({
+                        text: 'MafiaBot',
+                        iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                    });
+
+                narrateAndPlay(guildId, channelId, voiceLineText);
+                client.channels.fetch(cId)
+                    .then(channel => {
+                        // Send a message to the channel
+                        channel.send({embeds: [embed]})
+                    })
+                break;
+            case '4':
+                topic = `Mafia tried to kill the player ${additionalData}. Doctor saved him.`
+
+                voiceLineText = await generateVoiceLine(topic)
+                embed = new EmbedBuilder()
+                    .setColor('006400')
+                    .setTitle('Mafia Game: An attempt of a murder was found.')
+                    .setDescription(`🎙 Bot: ${voiceLineText}`)
+                    .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175153853440725123/introduction.png?ex=656a324f&is=6557bd4f&hm=dc9bfadab571050136b4ca51169c4ba85c161e6a10a5d5da02b805b6095bfa5c&=&width=1500&height=500')
+                    .setTimestamp()
+                    .addFields(
+                        {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
+                        {name: '👤 Dead player', value: `<@${additionalData}>`, inline: true}
+                    )
+                    .setFooter({
+                        text: 'MafiaBot',
+                        iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                    });
+
+                narrateAndPlay(guildId, channelId, voiceLineText);
+                client.channels.fetch(cId)
+                    .then(channel => {
+                        // Send a message to the channel
+                        channel.send({embeds: [embed]})
+                    })
                 break;
         }
 }
