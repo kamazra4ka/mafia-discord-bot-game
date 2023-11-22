@@ -160,7 +160,6 @@ export const sendDoctorVote = async (channel, gameId) => {
                     message.delete();
                 }, 30000);
             });
-            console.log(`Sent doctor vote message: ${message.content}`);
 
             return message;
         }));
@@ -194,7 +193,7 @@ export const sendDetectiveVote = async (channel, gameId) => {
             const embed = new EmbedBuilder()
                 .setColor('3a3a3a')
                 .setTitle(`${user.nickname || user.user.username}`)
-                .setDescription('Do you want to visit and heal this person? Click the button below to confirm.')
+                .setDescription('Do you want to visit and check the role of this person? Click the button below to confirm.')
                 .setImage(avatar)
                 .setTimestamp()
                 .setFooter({
@@ -215,7 +214,7 @@ export const sendDetectiveVote = async (channel, gameId) => {
                                 // 2 is gray
                                 // 3 is green
                                 // 4 is red
-                                style: 3,
+                                style: 2,
                                 custom_id: `doctor_vote_${userId}`,
                             },
                         ],
@@ -228,7 +227,6 @@ export const sendDetectiveVote = async (channel, gameId) => {
                     message.delete();
                 }, 30000);
             });
-            console.log(`Sent doctor vote message: ${message.content}`);
 
             return message;
         }));
