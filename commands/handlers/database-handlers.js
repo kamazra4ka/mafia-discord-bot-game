@@ -303,7 +303,7 @@ export const getGameId = async (interaction) => {
 }
 
 // send doctorChannelId and other channel ids to the database to tables games
-export const sendChannelIdsToDatabase = async (interaction, gameId, doctorChannelId, detectiveChannelId, mafiaChannelId) => {
+export const sendChannelIdsToDatabase = async (gameId, mafiaChannelId, doctorChannelId, detectiveChannelId) => {
     pool.getConnection((err, connection) => {
         if (err) {
             console.error(err);
