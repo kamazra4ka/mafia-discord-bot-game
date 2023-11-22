@@ -18,7 +18,7 @@ import gameEvents from "../commands/emitters/emitter.js";
 import gameState from "./gameState.js";
 
 import {
-    createPrivateChannelForUsers, disableMafiaVoteButtons, sendMafiaVote
+    createPrivateChannelForUsers, disableMafiaVoteButtons, sendDoctorVote, sendMafiaVote
 } from "../commands/handlers/privateChannel-handlers.js";
 import {narrateAndPlayVoiceLine} from "../commands/handlers/voice-handlers.js";
 
@@ -213,6 +213,7 @@ gameEvents.on('stageUpdate', async (data) => {
                 await channel.send(`Doctor: <@${doctorUserId}>`)
 
                 await channel.send({embeds: [embed]});
+                await sendDoctorVote(channel, gameId);
 
                 doctorChannelId = channel.id;
             });

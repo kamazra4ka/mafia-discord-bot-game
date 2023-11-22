@@ -86,7 +86,12 @@ export const sendMafiaVote = async (channel, gameId) => {
                 ],
             };
 
-            const message = await channel.send(mafiaVoteMessage);
+            const message = await channel.send(mafiaVoteMessage).then(message => {
+                // delete after 30 seconds
+                setTimeout(() => {
+                    message.delete();
+                }, 30000);
+            });
             console.log(`Sent mafia vote message: ${message.content}`);
 
             return message;
@@ -111,7 +116,6 @@ export const sendDoctorVote = async (channel, gameId) => {
         const mafias = await gameState.getUsersByRole(gameId, 'mafia');
         players.push(...mafias);
 
-
         // get users nicknames by userid
         const messages = await Promise.all(players.map(async userId => {
             const user = await channel.guild.members.fetch(userId);
@@ -130,7 +134,7 @@ export const sendDoctorVote = async (channel, gameId) => {
                     iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
                 });
 
-            const mafiaVoteMessage = {
+            const doctorVoteMessage = {
                 embeds: [embed],
                 components: [
                     {
@@ -150,6 +154,15 @@ export const sendDoctorVote = async (channel, gameId) => {
                     },
                 ],
             };
+            const message = await channel.send(doctorVoteMessage).then(message => {
+                // delete after 30 seconds
+                setTimeout(() => {
+                    message.delete();
+                }, 30000);
+            });
+            console.log(`Sent doctor vote message: ${message.content}`);
+
+            return message;
         }));
 
     } catch (error) {
