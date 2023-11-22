@@ -84,12 +84,7 @@ export const sendMafiaVote = async (channel, gameId) => {
                         ],
                     },
                 ],
-            }.then(message => {
-                // delete the message after 30 seconds
-                setTimeout(() => {
-                    message.delete();
-                }, 30000);
-            });
+            };
 
             const message = await channel.send(mafiaVoteMessage);
             console.log(`Sent mafia vote message: ${message.content}`);
@@ -111,9 +106,6 @@ export const sendDoctorVote = async (channel, gameId) => {
         // add detectives and doctors to the list
         const detectives = await gameState.getUsersByRole(gameId, 'detective');
         players.push(...detectives);
-
-        const doctors = await gameState.getUsersByRole(gameId, 'doctor');
-        players.push(...doctors);
 
         // add mafias to the list
         const mafias = await gameState.getUsersByRole(gameId, 'mafia');
@@ -157,12 +149,7 @@ export const sendDoctorVote = async (channel, gameId) => {
                         ],
                     },
                 ],
-            }.then(message => {
-                // delete the message after 30 seconds
-                setTimeout(() => {
-                    message.delete();
-                }, 30000);
-            });
+            };
         }));
 
     } catch (error) {
