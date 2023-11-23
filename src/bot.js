@@ -256,7 +256,7 @@ gameEvents.on('stageUpdate', async (data) => {
             console.log('goofy mafia voice line played');
 
             // 60 seconds interval
-            await setInterval(async () => {
+            await setTimeout(async () => {
                 try {
                     const {
                         mafiaActionResult,
