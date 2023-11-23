@@ -45,9 +45,9 @@ export const morningHandler = async (gameId, playersLeft, playersCount, currentD
                             channel.send({embeds: [embed]});
                             setTimeout(async () => {
                                 await startDailyVote(gameId, playersLeft, playersCount, currentDay, client);
-                            }, 8000);
+                            }, 15000);
                         })
-            }, 10000);
+            }, 18000);
 
 
             });
