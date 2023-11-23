@@ -215,7 +215,7 @@ export const assignStartRoles = async (gameId) => {
 }
 
 
-export const nextStage = (interaction, gameId, callback) => {
+export const nextStage = (interaction, gameId, client, callback) => {
     const serverDiscordId = interaction.guildId;
 
     // Get the current stage of the game
@@ -243,7 +243,7 @@ export const nextStage = (interaction, gameId, callback) => {
             query = 'UPDATE games SET gamestage = 0, gameday = gameday + 1 WHERE gameid = ?';
             queryParams = [gameId];
             gameEvents.emit('stageUpdate', { gameId, currentStage: 0, currentDay: currentStage.gameday + 1 });
-            gameEvents.emit('dayUpdate', { gameId, currentDay: currentStage.gameday + 1 });
+            gameEvents.emit('dayUpdate', { gameId, currentDay: currentStage.gameday + 1, client: client });
         }
 
         // Update the game stage

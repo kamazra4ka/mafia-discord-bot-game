@@ -8,7 +8,7 @@ import {
     assignStartRoles,
     createNightActionsRow,
     getGameDay,
-    getGameId,
+    getGameId, nextStage,
     processNightActions,
     sendChannelIdsToDatabase
 } from "../commands/handlers/database-handlers.js";
@@ -27,6 +27,7 @@ import {
     createPrivateChannelForUsers, disableMafiaVoteButtons, sendDetectiveVote, sendDoctorVote, sendMafiaVote
 } from "../commands/handlers/privateChannel-handlers.js";
 import {narrateAndPlayVoiceLine} from "../commands/handlers/voice-handlers.js";
+import {morningHandler} from "../commands/handlers/daynight-handlers.js";
 
 // get the token from the .env file using dotenv
 config();
@@ -71,7 +72,7 @@ client.on('interactionCreate', async interaction => {
                     console.log('zero try game day is ' + gameday)
 
                     console.log('game day is ' + gameday)
-                    await addTargetToDatabase(gameday, gameId, 'gamemafiatarget', interaction.user.id)
+                    await addTargetToDatabase(gameday, gameId, 'gamemafiatarget', userId)
                     console.log('nuh uh')
                 } else {
                     // send message to the interaction channel
@@ -97,7 +98,7 @@ client.on('interactionCreate', async interaction => {
                     console.log('zero try game day is ' + gameday)
 
                     console.log('game day is ' + gameday)
-                    await addTargetToDatabase(gameday, gameId, 'gamedoctortarget', interaction.user.id)
+                    await addTargetToDatabase(gameday, gameId, 'gamedoctortarget', userId)
                     console.log('nuh uh doctor')
                 } else {
                     // send message to the interaction channel
@@ -123,7 +124,7 @@ client.on('interactionCreate', async interaction => {
                     console.log('zero try game day is ' + gameday)
 
                     console.log('game day is ' + gameday)
-                    await addTargetToDatabase(gameday, gameId, 'gamedetectivetarget', interaction.user.id)
+                    await addTargetToDatabase(gameday, gameId, 'gamedetectivetarget', userId)
                     console.log('nuh uh detective')
                 } else {
                     // send message to the interaction channel
@@ -264,6 +265,9 @@ gameEvents.on('stageUpdate', async (data) => {
                         detectiveChannelId
                     } = await processNightActions(gameId);
 
+                    console.log('mafia action result is ' + mafiaActionResult)
+                    console.log('doctor action result is ' + doctorActionResult)
+
                     // get username from the mafiaActionResult.target (discord id)
                     const targetMafia = await client.users.fetch(mafiaActionResult.target);
 
@@ -295,6 +299,22 @@ gameEvents.on('stageUpdate', async (data) => {
                         await detectiveChannel.send({ embeds: [detectiveActionEmbed] });
                     }
 
+                    await setTimeout(() => {
+                        nextStage(0, gameId, client, (error, message) => {
+                            if (error) {
+                                console.error(error);
+                            } else {
+                                console.log(message);
+                            }
+                        });
+                    }, 2500);
+                    console.log('NEW DAY TEST TEST TEST')
+                    console.log('NEW DAY TEST TEST TEST')
+                    console.log('NEW DAY TEST TEST TEST')
+
+                    // stop the interval
+                    clearInterval(this);
+
                 } catch (error) {
                     console.error('Error processing night actions:', error);
                 }
@@ -309,6 +329,16 @@ gameEvents.on('stageUpdate', async (data) => {
 // Listen for day updates
 gameEvents.on('dayUpdate', async (data) => {
     console.log(`Day updated for game ${data.gameId} to ${data.currentDay}`);
+
+    const gameId = data.gameId;
+    const currentDay = data.currentDay;
+
+    // get amount of players left (role not dead)
+    const playersLeft = await gameState.getPlayersList(gameId);
+    const playersCount = playersLeft.length;
+
+    // call morning handler
+    await morningHandler(gameId, playersLeft, playersCount, currentDay, data.client);
 
 
 });

@@ -100,7 +100,7 @@ export const start = async (interaction, client) => {
 
         // 95 seconds timeout
         await setTimeout(() => {
-            nextStage(interaction, gameId, (error, message) => {
+            nextStage(interaction, gameId, client, (error, message) => {
                 if (error) {
                     console.error(error);
                 } else {
