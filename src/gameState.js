@@ -104,6 +104,14 @@ class GameState {
         }
     }
 
+    // get players left (every role except 'dead')
+    async getPlayersList(gameId) {
+        const game = this.getGame(gameId);
+        if (game) {
+            return Object.keys(game.roles).filter(userId => game.roles[userId] !== 'dead');
+        }
+    }
+
     async getUsersByRole(gameId, role) {
         const game = this.getGame(gameId);
         if (game) {
