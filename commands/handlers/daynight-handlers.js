@@ -29,7 +29,7 @@ export const morningHandler = async (gameId, playersLeft, playersCount, currentD
                         {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
                         {name: '👤 Alive players', value: `${players}`, inline: true}
                     )
-                    .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177326765287411734/sunrise.gif?ex=657219fe&is=655fa4fe&hm=5df6b929b782c0801162800f13b93cae68c9ce56387495ec2fa89e58942c1528&=&width=837&height=295')
+                    .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177345660689858670/sunrise_1.gif?ex=65722b97&is=655fb697&hm=2f82ca69a4b5a4967d410192847d915aea85b6230c7a13160581f51be2f8b3d2&=&width=837&height=295')
                     .setTimestamp()
                     .setFooter({
                         text: 'MafiaBot',
