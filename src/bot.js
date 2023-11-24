@@ -405,7 +405,11 @@ gameEvents.on('dayUpdate', async (data) => {
     const playersCount = playersLeft.length;
 
     // call morning handler
-    await morningHandler(gameId, playersLeft, playersCount, currentDay, data.client);
+    setTimeout(async () => {
+        await morningHandler(gameId, playersLeft, playersCount, currentDay, data.client);
+    }, 20000);
+
+
 
 
 });
