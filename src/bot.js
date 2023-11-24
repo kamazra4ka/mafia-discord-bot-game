@@ -1,8 +1,10 @@
 import { config } from 'dotenv';
 import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
+let embed;
 
 import {
+    addDailyVoteToDatabase,
     addTargetToDatabase,
     addUserToGame,
     assignStartRoles,
@@ -27,7 +29,7 @@ import {
     createPrivateChannelForUsers, disableMafiaVoteButtons, sendDetectiveVote, sendDoctorVote, sendMafiaVote
 } from "../commands/handlers/privateChannel-handlers.js";
 import {narrateAndPlayVoiceLine} from "../commands/handlers/voice-handlers.js";
-import {morningHandler} from "../commands/handlers/daynight-handlers.js";
+import {morningHandler, startDailyVote} from "../commands/handlers/daynight-handlers.js";
 
 // get the token from the .env file using dotenv
 config();
@@ -139,11 +141,42 @@ client.on('interactionCreate', async interaction => {
         if (interaction.customId.startsWith('daily_vote_')) {
             // get the userid of target and userid of voter (daily_vote_userid_voterid)
             const userId = interaction.customId.split('_')[2];
-            const voterId = interaction.customId.split('_')[3];
+            const voterId = interaction.user.id;
+
+            const cId = '1175130149516214472';
 
             try {
+                if (currentGame) {
+                    const gameId = currentGame.id;
+                    const gameDay = await getGameDay(interaction, gameId)
+                    addDailyVoteToDatabase(gameDay, gameId, voterId, userId)
 
+                    const userUsername = client.users.cache.get(userId).username;
+                    const targetUsername = client.users.cache.get(voterId).username;
 
+                    embed = new EmbedBuilder()
+                        .setColor('3a3a3a')
+                        .setTitle('Mafia Game: Daily vote')
+                        .setDescription(`**${userUsername}** has voted to execute **${targetUsername}**!`)
+                        .addFields(
+                            {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
+                        )
+                        .setTimestamp()
+                        .setFooter({
+                            text: 'MafiaBot',
+                            iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                        });
+
+                    client.channels.fetch(cId)
+                        .then(channel => {
+                            // Send a message to the channel
+                            channel.send({embeds: [embed]});
+                            setTimeout(async () => {
+                                await addDailyVoteToDatabase(gameDay, gameId, voterId, userId);
+                            }, 15000);
+                        })
+
+                }
             } catch (error) {
                 interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
             }

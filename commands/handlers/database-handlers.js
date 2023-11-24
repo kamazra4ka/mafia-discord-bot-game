@@ -388,6 +388,7 @@ export const addTargetToDatabase = async (gameDay, gameId, targetColumn, targetU
     });
 };
 
+// night actions table update
 export const processNightActions = async (gameId) => {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, connection) => {
@@ -450,6 +451,38 @@ export const processNightActions = async (gameId) => {
         });
     });
 };
+
+// daily vote table
+export const addDailyVoteToDatabase = async (gameDay, gameId, voterUserId, targetUserId) => {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.error('Connection Error:', err);
+                reject(err);
+                return;
+            }
+
+            // Assuming the table for daily voting is called 'day_votes'
+            // and there is a 'voterid' column to store the ID of the user who is voting.
+            const query = `
+                INSERT INTO daily_vote (gameid, gameday, voterid, targetid) 
+                VALUES (?, ?, ?, ?) 
+                ON DUPLICATE KEY UPDATE targetid = ?;
+            `;
+            connection.query(query, [gameId, gameDay, voterUserId, targetUserId, targetUserId], (err, rows) => {
+                if (err) {
+                    console.error('Query Error:', err);
+                    reject(err);
+                    return;
+                }
+                console.log('Query Success:', rows);
+                resolve(rows);
+                connection.release();
+            });
+        });
+    });
+};
+
 
 
 // Usage:
