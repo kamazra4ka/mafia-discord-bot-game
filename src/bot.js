@@ -277,6 +277,9 @@ gameEvents.on('stageUpdate', async (data) => {
                     // if mafiaActionResult.success is true, then the target was killed and call the voice line 3 with additional data being player's nickname
                     if (mafiaActionResult.success) {
                         await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '3', targetMafia.username);
+
+                        // changing the role of the target to dead
+                        await gameState.updateRole(gameId, mafiaActionResult.target, 'dead');
                         console.log('goofy mafia killed somebody voice line played');
                     } else {
                         await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '4', targetDoctor.username);
