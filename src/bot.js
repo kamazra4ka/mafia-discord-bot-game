@@ -147,43 +147,49 @@ client.on('interactionCreate', async interaction => {
 
             try {
                 if (currentGame) {
-                    const gameId = currentGame.id;
-                    const gameDay = await getGameDay(interaction, gameId)
-                    addDailyVoteToDatabase(gameDay, gameId, voterId, userId)
 
-                    let userUsername = client.users.cache.get(userId).username;
-                    let targetUsername = client.users.cache.get(voterId).username;
+                    // if the user's game role is dead, then don't allow to vote
+                    const userRole = await gameState.getRole(currentGame.id, voterId);
+                    if (userRole === 'dead') {
+                        await interaction.reply({ content: `You are dead. You can't vote.`, ephemeral: true });
+                    } else {
+                        const gameId = currentGame.id;
+                        const gameDay = await getGameDay(interaction, gameId)
+                        addDailyVoteToDatabase(gameDay, gameId, voterId, userId)
 
-                    // capitalizing the first letter
-                    userUsername = userUsername.charAt(0).toUpperCase() + userUsername.slice(1);
-                    targetUsername = targetUsername.charAt(0).toUpperCase() + targetUsername.slice(1);
+                        interaction.reply({ content: `You have voted for <@${userId}>! If you want to change your mind just click on somebody's else button.`, ephemeral: false });
 
-                    embed = new EmbedBuilder()
-                        .setColor('3a3a3a')
-                        .setTitle('Mafia Game: Daily vote')
-                        .setDescription(`**${userUsername}** has voted to execute **${targetUsername}**!`)
-                        .addFields(
-                            {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                        )
-                        .setTimestamp()
-                        .setFooter({
-                            text: 'MafiaBot',
-                            iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
-                        });
+                        let userUsername = client.users.cache.get(userId).username;
+                        let targetUsername = client.users.cache.get(voterId).username;
 
-                    client.channels.fetch(cId)
-                        .then(channel => {
-                            // Send a message to the channel
-                            channel.send({embeds: [embed]}).then(message => {
-                                // delete message after 60 sec
-                                setTimeout(() => {
-                                    message.delete();
-                                }, 60000);
+                        // capitalizing the first letter
+                        userUsername = userUsername.charAt(0).toUpperCase() + userUsername.slice(1);
+                        targetUsername = targetUsername.charAt(0).toUpperCase() + targetUsername.slice(1);
+
+                        embed = new EmbedBuilder()
+                            .setColor('3a3a3a')
+                            .setTitle('Mafia Game: Daily vote')
+                            .setDescription(`**${targetUsername}** has voted to execute **${userUsername}**`)
+                            .setTimestamp()
+                            .setFooter({
+                                text: 'MafiaBot',
+                                iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
                             });
-                            setTimeout(async () => {
-                                await addDailyVoteToDatabase(gameDay, gameId, voterId, userId);
-                            }, 15000);
-                        })
+
+                        client.channels.fetch(cId)
+                            .then(channel => {
+                                // Send a message to the channel
+                                channel.send({embeds: [embed]}).then(message => {
+                                    // delete message after 60 sec
+                                    setTimeout(() => {
+                                        message.delete();
+                                    }, 60000);
+                                });
+                                setTimeout(async () => {
+                                    await addDailyVoteToDatabase(gameDay, gameId, voterId, userId);
+                                }, 15000);
+                            })
+                    }
 
                 }
             } catch (error) {
