@@ -126,16 +126,22 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
 
     try {
 
-    const executedPlayer = await processDailyVote(gameId, currentDay);
-    const executedPlayerNickname = client.users.cache.get(executedPlayer).username;
-
-    // changing executed player's role to dead
+    const executedPlayer = await processDailyVote(gameId, currentDay).then(async executedPlayer => {
+        console.log('executedPlayer:', executedPlayer)
+        const executedPlayerNickname = client.users.cache.get(executedPlayer.mostVotedTargetId).username;
+        console.log('executedPlayerNickname:', executedPlayerNickname)
+        // changing executed player's role to dead
         await gameState.updateRole(gameId, executedPlayer, 'dead');
 
-        const topic = `Daily vote has ended. Player ${executedPlayerNickname} will be executed. ${playersCount} players are still alive. \n\nYou have 20 seconds to discuss everything.`
+        const playersAfterVote = playersCount - 1;
+
+        const topic = `Civilian daily vote has ended. Player ${executedPlayerNickname} will be executed, ${executedPlayer.mostVotes} players voted against him. ${playersAfterVote} players are still alive. \n\nYou have 20 seconds to discuss everything.`
         const voiceLine = generateVoiceLine(topic).then(voiceLine => {
             // play the voice line
             narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
+
+            // put all player's mentions in a variable players
+            const players = playersLeft.map(player => `<@${player}>`).join(', ');
 
             embed = new EmbedBuilder()
                 .setColor('3a3a3a')
@@ -143,7 +149,7 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
                 .setDescription(`🎙 Bot: ${voiceLine}`)
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                    {name: '👤 Alive players', value: `${playersLeft}`, inline: true},
+                    {name: '👤 Alive players', value: `${players}`, inline: true},
                     {name: '🔪 Executed player', value: `${executedPlayerNickname}`, inline: true}
                 )
                 .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177346474233839737/daily_vote.png?ex=65722c59&is=655fb759&hm=3274e81b50f58d372674b9245388e335ea64013123a53bf28656cdc812d5a8f4&=&format=webp&width=1500&height=500')
@@ -159,6 +165,7 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
                     channel.send({embeds: [embed]})
                 });
         });
+    });
     } catch (error) {
         console.error('Error in endDailyVote:', error);
     }
