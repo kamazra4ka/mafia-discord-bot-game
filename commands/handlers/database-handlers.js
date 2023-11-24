@@ -483,6 +483,67 @@ export const addDailyVoteToDatabase = async (gameDay, gameId, voterUserId, targe
     });
 };
 
+// process daily vote (which target id is the most popular and return it (one))
+export const processDailyVote = async (gameId, gameday) => {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.error('Connection Error:', err);
+                reject(err);
+                return;
+            }
+
+            // Query to get daily votes for the game
+            connection.query('SELECT * FROM daily_vote WHERE gameid = ?, gameday = ?', [gameId, gameday], async (err, rows) => {
+                if (err) {
+                    console.error('Query Error:', err);
+                    connection.release();
+                    reject(err);
+                    return;
+                }
+
+                if (rows.length === 0) {
+                    console.log('No daily votes found for gameId:', gameId);
+                    connection.release();
+                    resolve({});
+                    return;
+                }
+
+                const dailyVotes = rows;
+                connection.release();
+
+                // Initialize results variables
+                let mostVotedTargetId = null;
+                let mostVotes = 0;
+
+                // Process daily votes
+                dailyVotes.forEach(vote => {
+                    const targetId = vote.targetid;
+                    if (targetId) {
+                        if (!mostVotedTargetId) {
+                            // First vote
+                            mostVotedTargetId = targetId;
+                            mostVotes = 1;
+                        } else if (mostVotedTargetId === targetId) {
+                            // Another vote for the same target
+                            mostVotes++;
+                        } else {
+                            // A vote for a different target
+                            mostVotes--;
+                        }
+                    }
+                });
+
+                // Resolve the promise with the results
+                resolve({
+                    mostVotedTargetId,
+                    mostVotes,
+                });
+            });
+        });
+    });
+}
+
 
 
 // Usage:
