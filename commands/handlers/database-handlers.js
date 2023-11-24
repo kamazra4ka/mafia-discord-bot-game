@@ -494,7 +494,7 @@ export const processDailyVote = async (gameId, gameday) => {
             }
 
             // Query to get daily votes for the game
-            connection.query('SELECT * FROM daily_vote WHERE gameid = ?, gameday = ?', [gameId, gameday], async (err, rows) => {
+            connection.query('SELECT * FROM daily_vote WHERE gameid = ? AND gameday = ?', [gameId, gameday], async (err, rows) => {
                 if (err) {
                     console.error('Query Error:', err);
                     connection.release();

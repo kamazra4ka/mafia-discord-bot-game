@@ -157,7 +157,7 @@ client.on('interactionCreate', async interaction => {
                         const gameDay = await getGameDay(interaction, gameId)
                         addDailyVoteToDatabase(gameDay, gameId, voterId, userId)
 
-                        interaction.reply({ content: `You have voted for <@${userId}>! If you want to change your mind just click on somebody's else button.`, ephemeral: false });
+                        interaction.reply({ content: `You have voted for <@${userId}>! If you want to change your mind just click on somebody's else button.`, ephemeral: true });
 
                         let userUsername = client.users.cache.get(userId).username;
                         let targetUsername = client.users.cache.get(voterId).username;

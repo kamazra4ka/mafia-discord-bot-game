@@ -21,7 +21,7 @@ export const morningHandler = async (gameId, playersLeft, playersCount, currentD
             // call the voice line generator
             topic = `Night ${currentDay} has ended, it's morning now. ${playersCount} players are still alive.`
 
-            setTimeout(() => {
+            await setTimeout(() => {
                 const voiceLine = generateVoiceLine(topic).then(voiceLine => {
                     // play the voice line
                     narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
@@ -49,7 +49,7 @@ export const morningHandler = async (gameId, playersLeft, playersCount, currentD
                                 await startDailyVote(gameId, playersLeft, playersCount, currentDay, client);
                             }, 15000);
                         })
-            }, 25000);
+            }, 35000);
 
 
             });
