@@ -47,7 +47,7 @@ export const morningHandler = async (gameId, playersLeft, playersCount, currentD
                                 await startDailyVote(gameId, playersLeft, playersCount, currentDay, client);
                             }, 15000);
                         })
-            }, 18000);
+            }, 25000);
 
 
             });
