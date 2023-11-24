@@ -96,7 +96,7 @@ export const startDailyVote = async (gameId, playersLeft, playersCount, currentD
 
         playersLeftUserNames.forEach(player => {
             const button = new ButtonBuilder()
-                .setCustomId(player.id) // assuming each player has a unique ID
+                .setCustomId(`daily_vote_${player.id}`) // assuming each player has a unique ID
                 .setLabel(player.nickname) // using the player's nickname as the button label
                 .setStyle(ButtonStyle.Primary); // setting the button style
 

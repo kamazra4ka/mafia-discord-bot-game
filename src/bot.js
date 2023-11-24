@@ -134,6 +134,22 @@ client.on('interactionCreate', async interaction => {
                 interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
             }
         }
+
+        // daily vote buttons
+        if (interaction.customId.startsWith('daily_vote_')) {
+            // get the userid of target and userid of voter (daily_vote_userid_voterid)
+            const userId = interaction.customId.split('_')[2];
+            const voterId = interaction.customId.split('_')[3];
+
+            try {
+
+
+            } catch (error) {
+                interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
+            }
+
+
+        }
     }
  } catch (error) {
      interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
@@ -143,7 +159,7 @@ client.on('interactionCreate', async interaction => {
 // Listen for stage updates
 gameEvents.on('stageUpdate', async (data) => {
     const guild = client.guilds.cache.get('1174666167227531345');
-    const guildId = 1174666167227531345
+    const guildId = 1174666167227531345, cId = '1175130149516214472';
     console.log(`Stage updated for game ${data.gameId} to ${data.currentStage}`);
 
     const gameId = data.gameId;
