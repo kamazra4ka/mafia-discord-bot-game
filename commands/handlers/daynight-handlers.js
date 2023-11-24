@@ -106,7 +106,11 @@ export const startDailyVote = async (gameId, playersLeft, playersCount, currentD
         client.channels.fetch(cId)
             .then(channel => {
                 // Send a message to the channel
-                channel.send({embeds: [embed], components: [row]});
+                channel.send({embeds: [embed], components: [row]}).then(message => {
+                    setTimeout(() => {
+                        message.delete();
+                    }, 60000);
+                });
             })
     } catch (error) {
         console.error('Error in startDailyVote:', error);
