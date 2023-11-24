@@ -151,8 +151,12 @@ client.on('interactionCreate', async interaction => {
                     const gameDay = await getGameDay(interaction, gameId)
                     addDailyVoteToDatabase(gameDay, gameId, voterId, userId)
 
-                    const userUsername = client.users.cache.get(userId).username;
-                    const targetUsername = client.users.cache.get(voterId).username;
+                    let userUsername = client.users.cache.get(userId).username;
+                    let targetUsername = client.users.cache.get(voterId).username;
+
+                    // capitalizing the first letter
+                    userUsername = userUsername.charAt(0).toUpperCase() + userUsername.slice(1);
+                    targetUsername = targetUsername.charAt(0).toUpperCase() + targetUsername.slice(1);
 
                     embed = new EmbedBuilder()
                         .setColor('3a3a3a')
@@ -170,7 +174,12 @@ client.on('interactionCreate', async interaction => {
                     client.channels.fetch(cId)
                         .then(channel => {
                             // Send a message to the channel
-                            channel.send({embeds: [embed]});
+                            channel.send({embeds: [embed]}).then(message => {
+                                // delete message after 60 sec
+                                setTimeout(() => {
+                                    message.delete();
+                                }, 60000);
+                            });
                             setTimeout(async () => {
                                 await addDailyVoteToDatabase(gameDay, gameId, voterId, userId);
                             }, 15000);
