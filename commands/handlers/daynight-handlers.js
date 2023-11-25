@@ -2,7 +2,7 @@ import {generateVoiceLine} from "./openai-handlers.js";
 import {narrateAndPlay, narrateAndPlayVoiceLine} from "./voice-handlers.js";
 import {EmbedBuilder} from "discord.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import {getChannelIdsFromDatabase, nextStage, processDailyVote} from "./database-handlers.js";
+import {createNightActionsRow, getChannelIdsFromDatabase, nextStage, processDailyVote} from "./database-handlers.js";
 import gameState from "../../src/gameState.js";
 import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./privateChannel-handlers.js";
 
@@ -201,6 +201,9 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
 
         let embed, cId = '1175130149516214472';
         let day = currentDay + 1;
+
+        // create a row for actions
+        await createNightActionsRow(gameId, day);
 
         const topic = `Night number ${day} is coming. Tell everybody to brace.`
         const voiceLine = generateVoiceLine(topic).then(voiceLine => {

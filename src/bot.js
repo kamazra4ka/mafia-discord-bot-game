@@ -394,10 +394,21 @@ gameEvents.on('dayUpdate', async (data) => {
                 console.log('doctor action result is ' + doctorActionResult.target)
 
                 // get username from the mafiaActionResult.target (discord id)
-                const targetMafia = await client.users.fetch(mafiaActionResult.target);
+                let targetMafia
+                if (mafiaActionResult.target) {
+                    targetMafia = await client.users.fetch(mafiaActionResult.target);
+                } else {
+                    targetMafia.username = 'nobody'
+                }
+
 
                 // get username from the doctorActionResult.saved (discord id)
-                const targetDoctor = await client.users.fetch(doctorActionResult.saved);
+                let targetDoctor
+                if (doctorActionResult.saved) {
+                    targetDoctor = await client.users.fetch(doctorActionResult.saved);
+                } else {
+                    targetDoctor.username = 'nobody'
+                }
 
                 // if mafiaActionResult.success is true, then the target was killed and call the voice line 3 with additional data being player's nickname
                 if (mafiaActionResult.success) {
