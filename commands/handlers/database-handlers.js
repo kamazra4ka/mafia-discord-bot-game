@@ -396,15 +396,17 @@ export const addTargetToDatabase = async (gameDay, gameId, targetColumn, targetU
 // night actions table update
 export const processNightActions = async (gameId) => {
     return new Promise((resolve, reject) => {
-        pool.getConnection((err, connection) => {
+        pool.getConnection(async (err, connection) => {
             if (err) {
                 console.error('Connection Error:', err);
                 reject(err);
                 return;
             }
 
+            const gameday = await getGameDay(gameId);
+
             // Query to get night actions for the game
-            connection.query('SELECT * FROM night_actions WHERE gameid = ?', [gameId], async (err, rows) => {
+            connection.query('SELECT * FROM night_actions WHERE gameid = ? AND gameday = ?', [gameId, gameday], async (err, rows) => {
                 if (err) {
                     console.error('Query Error:', err);
                     connection.release();
@@ -430,19 +432,22 @@ export const processNightActions = async (gameId) => {
                 // Process Mafia action
                 if (nightActions.gamemafiatarget !== nightActions.gamedoctortarget) {
                     // Mafia's target was not saved by the doctor
-                    mafiaActionResult = { success: true, target: nightActions.gamemafiatarget };
+                    mafiaActionResult = {success: true, target: nightActions.gamemafiatarget};
                 } else {
                     // Mafia's target was saved by the doctor
-                    mafiaActionResult = { success: false, target: nightActions.gamemafiatarget };
+                    mafiaActionResult = {success: false, target: nightActions.gamemafiatarget};
                 }
 
                 // Process Doctor action
-                doctorActionResult = { saved: nightActions.gamedoctortarget };
+                doctorActionResult = {saved: nightActions.gamedoctortarget};
 
                 // Process Detective action (you will need to fetch the actual role from the database)
                 if (nightActions.gamedetectivetarget) {
                     const detectiveTargetRole = await gameState.getRole(gameId, nightActions.gamedetectivetarget);
-                    detectiveActionResult = { checked: nightActions.gamedetectivetarget, role: `${detectiveTargetRole}` || 'An error occurred' };
+                    detectiveActionResult = {
+                        checked: nightActions.gamedetectivetarget,
+                        role: `${detectiveTargetRole}` || 'An error occurred'
+                    };
                 }
 
                 // Resolve the promise with the results
