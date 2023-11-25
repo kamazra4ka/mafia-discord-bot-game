@@ -7,41 +7,46 @@ import {narrateAndPlay} from "./voice-handlers.js";
 
 export const checkVictory = async (gameId, client) => {
 
+    console.log('checking victory')
+
     if (gameId) {
 
-        // get the game day
-        const gameDay = getGameDay(gameId).then(async gameDay => {
-            if (gameDay === 0) {
+        console.log('bruh')
 
-            } else {
                 // get alive players
                 const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
-                // get mafias
-                const mafias = await gameState.getUsersByRole(gameId, 'mafia');
+                if (!alivePlayers) {
 
-                // get civilians + detectives + doctors
-                const civilians = await gameState.getUsersByRole(gameId, 'civilian');
-                const detectives = await gameState.getUsersByRole(gameId, 'detective');
-                const doctors = await gameState.getUsersByRole(gameId, 'doctor');
+                } else {
+                    // get mafias
+                    const mafias = await gameState.getUsersByRole(gameId, 'mafia');
 
-                const peacefuls = [...civilians, ...detectives, ...doctors];
+                    // get civilians + detectives + doctors
+                    const civilians = await gameState.getUsersByRole(gameId, 'civilian');
+                    const detectives = await gameState.getUsersByRole(gameId, 'detective');
+                    const doctors = await gameState.getUsersByRole(gameId, 'doctor');
 
-                // if all mafias are dead, civilians win
-                if (mafias.every(mafia => !alivePlayers.includes(mafia))) {
-                    await victoryHandler(gameId, 'civilian', client);
-                    return true;
+                    if (mafias.length === 0) {
+                        await victoryHandler(gameId, 'civilian', client);
+                        return true;
+                    }
+
+                    const peacefuls = [...civilians, ...detectives, ...doctors];
+
+                    // if all mafias are dead, civilians win
+                    if (mafias.every(mafia => !alivePlayers.includes(mafia))) {
+                        await victoryHandler(gameId, 'civilian', client);
+                        return true;
+                    }
+
+                    // if all peacefuls are dead, mafias win
+                    if (peacefuls.every(peaceful => !alivePlayers.includes(peaceful))) {
+                        await victoryHandler(gameId, 'mafia', client);
+                        return true;
+                    }
                 }
-
-                // if all peacefuls are dead, mafias win
-                if (peacefuls.every(peaceful => !alivePlayers.includes(peaceful))) {
-                    await victoryHandler(gameId, 'mafia', client);
-                    return true;
-                }
-            }
-        });
-    }
-
+        }
 }
 
 export const victoryHandler = async (gameId, type, client) => {
@@ -103,7 +108,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const embed = new EmbedBuilder()
                 .setColor('90EE90')
                 .setTitle('Mafia Game: Civilian Victory!')
-                .setDescription(`🎙 Bot: ${voiceLine}\n\n🏆 Winners: ${alivePLayersRolesMentions}`)
+                .setDescription(`🎙 Bot: ${voiceLine}\n\n🏆  Winners: ${alivePLayersRolesMentions}`)
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
                     {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
@@ -139,7 +144,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`);
 
             // convert them into mentions + their game roles (mention: role)
-            const alivePLayersRolesMentions = alivePlayers.map(async player => {
+            const alivePlayersRolesMentions = alivePlayers.map(async player => {
                 let role = await gameState.getRole(gameId, player);
 
                 // add emojis to the roles + capitalise the first letter
@@ -161,7 +166,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const embed = new EmbedBuilder()
                 .setColor('FF7F7F')
                 .setTitle('Mafia Game: Mafia Victory!')
-                .setDescription(`🎙 Bot: ${voiceLine}\n\n🏆 Winners: ${alivePLayersRolesMentions}`)
+                .setDescription(`🎙 Bot: ${voiceLine}\n\n🏆  Winners: ${alivePlayersRolesMentions}`)
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
                     {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},

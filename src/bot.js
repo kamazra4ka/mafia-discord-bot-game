@@ -372,8 +372,8 @@ gameEvents.on('dayUpdate', async (data) => {
     const currentDay = data.currentDay;
 
     // get amount of players left (role not dead)
-    const playersLeft = await gameState.getPlayersList(gameId);
-    const playersCount = playersLeft.length;
+    let playersLeft;
+    let playersCount;
 
     // conducting a victory check
     if (await checkVictory(gameId, client)) {
@@ -410,6 +410,9 @@ gameEvents.on('dayUpdate', async (data) => {
                     await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '4', targetDoctor.username);
                     console.log('goofy mafia failed to kill somebody voice line played');
                 }
+
+                playersLeft = await gameState.getPlayersList(gameId);
+                playersCount = playersLeft.length;
 
                 // Only construct the detective embed if there was a detective action
                 let detectiveActionEmbed;
