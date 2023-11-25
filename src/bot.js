@@ -31,6 +31,7 @@ import {
 } from "../commands/handlers/privateChannel-handlers.js";
 import {narrateAndPlayVoiceLine} from "../commands/handlers/voice-handlers.js";
 import {morningHandler, startDailyVote} from "../commands/handlers/daynight-handlers.js";
+import {checkVictory} from "../commands/handlers/victory-handlers.js";
 
 // get the token from the .env file using dotenv
 config();
@@ -410,13 +411,15 @@ gameEvents.on('dayUpdate', async (data) => {
     const playersLeft = await gameState.getPlayersList(gameId);
     const playersCount = playersLeft.length;
 
-    // call morning handler
-    setTimeout(async () => {
-        await morningHandler(gameId, playersLeft, playersCount, currentDay, data.client);
-    }, 20000);
-
-
-
+    // conducting a victory check
+    if (await checkVictory(gameId, client)) {
+        // blah blah blah
+    } else {
+        // call morning handler
+        setTimeout(async () => {
+            await morningHandler(gameId, playersLeft, playersCount, currentDay, data.client);
+        }, 20000);
+    }
 
 });
 

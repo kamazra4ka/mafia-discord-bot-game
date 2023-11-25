@@ -20,11 +20,13 @@ export const checkVictory = async (gameId, client) => {
     // if all mafias are dead, civilians win
     if (mafias.every(mafia => !alivePlayers.includes(mafia))) {
         await victoryHandler(gameId, 'civilian', client);
+        return true;
     }
 
     // if all peacefuls are dead, mafias win
     if (peacefuls.every(peaceful => !alivePlayers.includes(peaceful))) {
         await victoryHandler(gameId, 'mafia', client);
+        return true;
     }
 
 }
