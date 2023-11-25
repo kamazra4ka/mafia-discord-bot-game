@@ -1,6 +1,9 @@
 import gameState from "../../src/gameState.js";
 import {getChannelIdsFromDatabase} from "./database-handlers.js";
 import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./privateChannel-handlers.js";
+import {EmbedBuilder} from "discord.js";
+import {generateVoiceLine} from "./openai-handlers.js";
+import {narrateAndPlay} from "./voice-handlers.js";
 
 export const checkVictory = async (gameId, client) => {
 
@@ -52,9 +55,121 @@ export const victoryHandler = async (gameId, type, client) => {
     });
 
     if (type === 'civilian') {
-        console.log('Civilians win!');
+
+        // fetching the channel
+        const channel = await client.channels.fetch('1175130149516214472');
+
+        const topic = `Civilian players won the game!`
+        const voiceLine = generateVoiceLine(topic).then(async voiceLine => {
+            // play the voice line
+            narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
+
+            // get alive players
+            const alivePlayers = await gameState.getAlivePlayersList(gameId);
+
+            // convert them into mentions
+            const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`);
+
+            // convert them into mentions + their game roles (mention: role)
+            const alivePLayersRolesMentions = alivePlayers.map(async player => {
+                let role = await gameState.getRole(gameId, player);
+
+                // add emojis to the roles + capitalise the first letter
+                if (role === 'mafia') {
+                    role = '🔪 Mafia';
+                } else if (role === 'detective') {
+                    role = '🕵️‍♂️ Detective';
+                } else if (role === 'doctor') {
+                    role = '🧑‍⚕️ Doctor';
+                } else if (role === 'civilian') {
+                    role = '👤 Civilian';
+                } else {
+                    role = '🔴 Error';
+                }
+
+                return `<@${player}> : **${role}**`;
+            });
+
+            const embed = new EmbedBuilder()
+                .setColor('90EE90')
+                .setTitle('Mafia Game: Civilian Victory!')
+                .setDescription(`🎙 Bot: ${voiceLine}\n\n🏆 Winners: ${alivePLayersRolesMentions}`)
+                .addFields(
+                    {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
+                    {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
+                )
+                .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177965568716980234/civ_won.png?ex=65746ced&is=6561f7ed&hm=8e9fcd4bd4f246943bafba82b00814a8cd03113ebf8ef668f7ad621b58310357&=&format=webp&width=1500&height=500')
+                .setTimestamp()
+                .setFooter({
+                    text: 'MafiaBot',
+                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                });
+
+            // sending the results
+            await channel.send({embeds: [embed]});
+
+            // restart the bot
+            process.exit();
+        });
+
     } else if (type === 'mafia') {
-        console.log('Mafias win!');
-    }
+
+        // fetching the channel
+        const channel = await client.channels.fetch('1175130149516214472');
+
+        const topic = `Mafia players won the game!`
+        const voiceLine = generateVoiceLine(topic).then(async voiceLine => {
+            // play the voice line
+            narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
+
+            // get alive players
+            const alivePlayers = await gameState.getAlivePlayersList(gameId);
+
+            // convert them into mentions
+            const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`);
+
+            // convert them into mentions + their game roles (mention: role)
+            const alivePLayersRolesMentions = alivePlayers.map(async player => {
+                let role = await gameState.getRole(gameId, player);
+
+                // add emojis to the roles + capitalise the first letter
+                if (role === 'mafia') {
+                    role = '🔪 Mafia';
+                } else if (role === 'detective') {
+                    role = '🕵️‍♂️ Detective';
+                } else if (role === 'doctor') {
+                    role = '🧑‍⚕️ Doctor';
+                } else if (role === 'civilian') {
+                    role = '👤 Civilian';
+                } else {
+                    role = '🔴 Error';
+                }
+
+                return `<@${player}> : **${role}**`;
+            });
+
+            const embed = new EmbedBuilder()
+                .setColor('FF7F7F')
+                .setTitle('Mafia Game: Mafia Victory!')
+                .setDescription(`🎙 Bot: ${voiceLine}\n\n🏆 Winners: ${alivePLayersRolesMentions}`)
+                .addFields(
+                    {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
+                    {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
+                )
+                .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177965568402411661/mafia_won.png?ex=65746ced&is=6561f7ed&hm=a3d5ed1e78b1a8241478699a4eb523c2cae6d43477e7602fd8467215f98238c6&=&format=webp&width=1500&height=500')
+                .setTimestamp()
+                .setFooter({
+                    text: 'MafiaBot',
+                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                });
+
+            // sending the results
+            await channel.send({embeds: [embed]});
+
+            // restart the bot
+            process.exit();
+
+        });
+        }
 
 }
