@@ -149,6 +149,10 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
             // play the voice line
             narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
 
+            // remove executed player from PlayersLeft
+            const playersLeft = playersLeft.filter(player => player !== executedPlayer.mostVotedTargetId);
+            const playersCount = playersLeft.length;
+
             // put all player's mentions in a variable players
             const players = playersLeft.map(player => `<@${player}>`).join(', ');
 
