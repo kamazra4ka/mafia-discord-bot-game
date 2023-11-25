@@ -7,29 +7,31 @@ import {narrateAndPlay} from "./voice-handlers.js";
 
 export const checkVictory = async (gameId, client) => {
 
-    // get alive players
-    const alivePlayers = await gameState.getAlivePlayersList(gameId);
+    if (gameId) {
+        // get alive players
+        const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
-    // get mafias
-    const mafias = await gameState.getUsersByRole(gameId, 'mafia');
+        // get mafias
+        const mafias = await gameState.getUsersByRole(gameId, 'mafia');
 
-    // get civilians + detectives + doctors
-    const civilians = await gameState.getUsersByRole(gameId, 'civilian');
-    const detectives = await gameState.getUsersByRole(gameId, 'detective');
-    const doctors = await gameState.getUsersByRole(gameId, 'doctor');
+        // get civilians + detectives + doctors
+        const civilians = await gameState.getUsersByRole(gameId, 'civilian');
+        const detectives = await gameState.getUsersByRole(gameId, 'detective');
+        const doctors = await gameState.getUsersByRole(gameId, 'doctor');
 
-    const peacefuls = [...civilians, ...detectives, ...doctors];
+        const peacefuls = [...civilians, ...detectives, ...doctors];
 
-    // if all mafias are dead, civilians win
-    if (mafias.every(mafia => !alivePlayers.includes(mafia))) {
-        await victoryHandler(gameId, 'civilian', client);
-        return true;
-    }
+        // if all mafias are dead, civilians win
+        if (mafias.every(mafia => !alivePlayers.includes(mafia))) {
+            await victoryHandler(gameId, 'civilian', client);
+            return true;
+        }
 
-    // if all peacefuls are dead, mafias win
-    if (peacefuls.every(peaceful => !alivePlayers.includes(peaceful))) {
-        await victoryHandler(gameId, 'mafia', client);
-        return true;
+        // if all peacefuls are dead, mafias win
+        if (peacefuls.every(peaceful => !alivePlayers.includes(peaceful))) {
+            await victoryHandler(gameId, 'mafia', client);
+            return true;
+        }
     }
 
 }
