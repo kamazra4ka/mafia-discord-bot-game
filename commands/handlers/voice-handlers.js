@@ -4,6 +4,8 @@ import googleTTS from 'google-tts-api';
 import fetch from 'node-fetch';
 import {EmbedBuilder} from "discord.js";
 import {generateVoiceLine} from "./openai-handlers.js";
+import gameState from "../../src/gameState.js";
+import {getGameDay} from "./database-handlers.js";
 
 export const joinVoice = async (interaction) => {
     // Check if the member is in a voice channel
@@ -248,31 +250,32 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                 break;
             case '2':
 
-                await setTimeout(async () => {
-                topic = 'First night is coming. Tell everyone to brace.'
+                        await setTimeout(async () => {
+                            topic = 'First night is coming. Tell everyone to brace.'
 
-                voiceLineText = await generateVoiceLine(topic)
-                embed = new EmbedBuilder()
-                    .setColor('3a3a3a')
-                    .setTitle('Mafia Game: Night')
-                    .setDescription(`🎙 Bot: ${voiceLineText}`)
-                    .addFields(
-                        {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
-                    )
-                    .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
-                    .setTimestamp()
-                    .setFooter({
-                        text: 'MafiaBot',
-                        iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
-                    });
+                            voiceLineText = await generateVoiceLine(topic)
+                            embed = new EmbedBuilder()
+                                .setColor('3a3a3a')
+                                .setTitle('Mafia Game: Night')
+                                .setDescription(`🎙 Bot: ${voiceLineText}`)
+                                .addFields(
+                                    {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
+                                )
+                                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
+                                .setTimestamp()
+                                .setFooter({
+                                    text: 'MafiaBot',
+                                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                                });
 
-                narrateAndPlay(guildId, channelId, voiceLineText);
-                client.channels.fetch(cId)
-                    .then(channel => {
-                        // Send a message to the channel
-                        channel.send({embeds: [embed]});
-                    })
-        }, 5000);
+                            narrateAndPlay(guildId, channelId, voiceLineText);
+                            client.channels.fetch(cId)
+                                .then(channel => {
+                                    // Send a message to the channel
+                                    channel.send({embeds: [embed]});
+                                })
+                        }, 5000);
+
                 await setTimeout(async () => {
                     const voiceLineText = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels.\n\nThe night will end in 60 seconds.';
                     narrateAndPlay(guildId, channelId, voiceLineText);
@@ -345,6 +348,9 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     })
                 break;
             case '5':
+
+                // CODE BELOW IS NOT USED ANYMORE, WILL BE DELETED SOON
+
                     if (additionalData.nightNumber && additionalData.countPlayers && additionalData.players) {
                         topic = `Night ${additionalData.nightNumber} has ended, it's morning now. ${additionalData.countPlayers} players are still alive.`
                     } else {

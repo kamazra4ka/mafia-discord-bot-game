@@ -135,7 +135,7 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
 
         const playersAfterVote = playersCount - 1;
 
-        const topic = `Civilian daily vote has ended. Player ${executedPlayerNickname} will be executed, ${executedPlayer.mostVotes} players voted against him. ${playersAfterVote} players are still alive. \n\nYou have 20 seconds to discuss everything.`
+        const topic = `Civilian daily vote has ended. Other players think, that ${executedPlayerNickname} is a mafia and he should be executed, ${executedPlayer.mostVotes} players voted against him. ${playersAfterVote} players are still alive. We don't know was he mafia or not. Tell players, that they have 20 seconds to discuss everything.`
         const voiceLine = generateVoiceLine(topic).then(voiceLine => {
             // play the voice line
             narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
@@ -163,10 +163,67 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
                 .then(channel => {
                     // Send a message to the channel
                     channel.send({embeds: [embed]})
+                    // timeout for 35 seconds
+                    setTimeout(async () => {
+                        await nightHandler(gameId, playersLeft, playersCount, currentDay, client);
+                    }, 35000);
                 });
         });
     });
     } catch (error) {
         console.error('Error in endDailyVote:', error);
     }
+}
+
+// night handler
+export const nightHandler = async (gameId, playersLeft, playersCount, currentDay, client) => {
+
+    let embed, cId = '1175130149516214472';
+
+    const topic = `Night number ${currentDay} is coming. Tell everybody to brace.`
+    const voiceLine = generateVoiceLine(topic).then(voiceLine => {
+        // play the voice line
+        narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
+
+        embed = new EmbedBuilder()
+            .setColor('3a3a3a')
+            .setTitle('Mafia Game: Night')
+            .setDescription(`🎙 Bot: ${voiceLine}`)
+            .addFields(
+                {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
+            )
+            .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
+            .setTimestamp()
+            .setFooter({
+                text: 'MafiaBot',
+                iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+            });
+
+        client.channels.fetch(cId)
+            .then(channel => {
+                // Send a message to the channel
+                channel.send({embeds: [embed]})
+            });
+    });
+
+
+
+    await setTimeout(async () => {
+        const voiceLine = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels.\n\nThe night will end in 60 seconds.';
+        narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
+
+        const embed = new EmbedBuilder()
+            .setColor('3a3a3a')
+            .setTitle('Mafia Game')
+            .setDescription(`🎙 Bot: ${voiceLine}`)
+            .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175725053258760223/channels.png?ex=656c4648&is=6559d148&hm=f3f2ac5e98d762a3b1a647412817f7d88d6f85a90d666bcec172670fe5d7bd53&=&width=1207&height=905')
+            .setTimestamp()
+            .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+
+        client.channels.fetch(cId)
+            .then(channel => {
+                // Send a message to the channel
+                channel.send({ embeds: [embed] });
+            })
+    }, 25000);
 }
