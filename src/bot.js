@@ -233,6 +233,12 @@ gameEvents.on('stageUpdate', async (data) => {
             await gameState.setGame(gameId, gameInfo);
             await assignStartRoles(gameId);
 
+            // if there are 3 or less players, then don't start the game
+            const playersCount = await gameState.getAlivePlayersList(gameId);
+            if (playersCount.length <= 3) {
+                await interaction.reply({ content: `There are not enough players to start the game.`, ephemeral: true });
+            } else {
+
             let mafiaChannelId;
             let doctorChannelId;
             let detectiveChannelId;
@@ -356,6 +362,7 @@ gameEvents.on('stageUpdate', async (data) => {
 
             }, 5000);
 
+            }
         }
     }
 

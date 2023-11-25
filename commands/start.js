@@ -91,30 +91,23 @@ export const start = async (interaction, client) => {
 
     setTimeout(async () => {
 
-        // if there are less than 3 people in the game, cancel the game
-        const players = await gameState.getPlayersList(gameId);
-        if (players.length < 3) {
-            await clearInterval(intervalId);
-            await interaction.editReply({ content: 'Not enough players to start the game. Game cancelled.', components: [] });
-        } else {
-            await narrateAndPlayVoiceLine(client, interaction.guildId, '1174753582193590312', '1');
-            await clearInterval(intervalId);
-            button.setDisabled(true);
-            const newRow = new ActionRowBuilder().addComponents(button);
-            await interaction.editReply({content: 'Registration closed.', components: [newRow]});
-            await gameStarts(interaction, gameId);
+        await narrateAndPlayVoiceLine(client, interaction.guildId, '1174753582193590312', '1');
+        await clearInterval(intervalId);
+        button.setDisabled(true);
+        const newRow = new ActionRowBuilder().addComponents(button);
+        await interaction.editReply({content: 'Registration closed.', components: [newRow]});
+        await gameStarts(interaction, gameId);
 
-            // 95 seconds timeout
-            await setTimeout(() => {
-                nextStage(interaction, gameId, client, (error, message) => {
-                    if (error) {
-                        console.error(error);
-                    } else {
-                        console.log(message);
-                    }
-                });
-            }, 95000);
-        }
+        // 95 seconds timeout
+        await setTimeout(() => {
+            nextStage(interaction, gameId, client, (error, message) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log(message);
+                }
+            });
+        }, 95000);
 
     }, 25000);
 };
