@@ -246,3 +246,17 @@ export const disableMafiaVoteButtons = async (interaction) => {
         console.error('Error disabling mafia vote buttons:', error);
     }
 }
+
+export const checkIfDead = async (userId, gameId) => {
+    try {
+        // if user's role is dead then return true
+        const user = await gameState.getRole(userId);
+        if (user === 'dead') {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error('Error checking if dead:', error);
+    }
+}

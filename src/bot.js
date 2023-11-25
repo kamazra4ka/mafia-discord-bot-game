@@ -26,6 +26,7 @@ import gameEvents from "../commands/emitters/emitter.js";
 import gameState from "./gameState.js";
 
 import {
+    checkIfDead,
     createPrivateChannelForUsers, disableMafiaVoteButtons, sendDetectiveVote, sendDoctorVote, sendMafiaVote
 } from "../commands/handlers/privateChannel-handlers.js";
 import {narrateAndPlayVoiceLine} from "../commands/handlers/voice-handlers.js";
@@ -59,143 +60,148 @@ client.on('interactionCreate', async interaction => {
 
         }
 
-        // if starts from mafia_vote_(userid) get the userid from the name
-        if (interaction.customId.startsWith('mafia_vote_')) {
-            try {
-                const userId = interaction.customId.split('_')[2];
-                console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
-                await interaction.reply({ content: `Mafia ${interaction.user.username} has voted for <@${userId}>!`, ephemeral: false });
+        if (currentGame) {
+            if (await checkIfDead(interaction.user.id, currentGame.id)) {
+                await interaction.reply({ content: `You are dead. You can't vote.`, ephemeral: true });
+            } else {
+                // if starts from mafia_vote_(userid) get the userid from the name
+                if (interaction.customId.startsWith('mafia_vote_')) {
+                    try {
+                        const userId = interaction.customId.split('_')[2];
+                        console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
+                        await interaction.reply({ content: `Mafia ${interaction.user.username} has voted for <@${userId}>!`, ephemeral: false });
 
-                if (currentGame) {
-                    const gameId = currentGame.id;
-                    console.log('game id is ' + gameId)
-                    console.log(currentGame)
-                    const gameday = await getGameDay(interaction, gameId)
-                    console.log('zero try game day is ' + gameday)
+                        if (currentGame) {
+                            const gameId = currentGame.id;
+                            console.log('game id is ' + gameId)
+                            console.log(currentGame)
+                            const gameday = await getGameDay(interaction, gameId)
+                            console.log('zero try game day is ' + gameday)
 
-                    console.log('game day is ' + gameday)
-                    await addTargetToDatabase(gameday, gameId, 'gamemafiatarget', userId)
-                    console.log('nuh uh')
-                } else {
-                    // send message to the interaction channel
-                    await interaction.channel.send('Something went wrong. Please, try again.');
-                }
-            } catch (error) {
-                interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
-            }
-        }
-
-        // if starts from doctor_vote_(userid) get the userid from the name
-        if (interaction.customId.startsWith('doctor_vote_')) {
-            try {
-                const userId = interaction.customId.split('_')[2];
-                console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
-                await interaction.reply({ content: `You have voted for <@${userId}>!`, ephemeral: false });
-
-                if (currentGame) {
-                    const gameId = currentGame.id;
-                    console.log('game id is ' + gameId)
-                    console.log(currentGame)
-                    const gameday = await getGameDay(interaction, gameId)
-                    console.log('zero try game day is ' + gameday)
-
-                    console.log('game day is ' + gameday)
-                    await addTargetToDatabase(gameday, gameId, 'gamedoctortarget', userId)
-                    console.log('nuh uh doctor')
-                } else {
-                    // send message to the interaction channel
-                    await interaction.channel.send('Something went wrong. Please, try again.');
-                }
-            } catch (error) {
-                interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
-            }
-        }
-
-        // if starts from detective_vote_(userid) get the userid from the name
-        if (interaction.customId.startsWith('detective_vote_')) {
-            try {
-                const userId = interaction.customId.split('_')[2];
-                console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
-                await interaction.reply({ content: `You have voted for checking the <@${userId}>\'s role! You will receive a message in the morning with results of your check. `, ephemeral: false });
-
-                if (currentGame) {
-                    const gameId = currentGame.id;
-                    console.log('game id is ' + gameId)
-                    console.log(currentGame)
-                    const gameday = await getGameDay(interaction, gameId)
-                    console.log('zero try game day is ' + gameday)
-
-                    console.log('game day is ' + gameday)
-                    await addTargetToDatabase(gameday, gameId, 'gamedetectivetarget', userId)
-                    console.log('nuh uh detective')
-                } else {
-                    // send message to the interaction channel
-                    await interaction.channel.send('Something went wrong. Please, try again.');
-                }
-            } catch (error) {
-                interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
-            }
-        }
-
-        // daily vote buttons
-        if (interaction.customId.startsWith('daily_vote_')) {
-            // get the userid of target and userid of voter (daily_vote_userid_voterid)
-            const userId = interaction.customId.split('_')[2];
-            const voterId = interaction.user.id;
-
-            const cId = '1175130149516214472';
-
-            try {
-                if (currentGame) {
-
-                    // if the user's game role is dead, then don't allow to vote
-                    const userRole = await gameState.getRole(currentGame.id, voterId);
-                    if (userRole === 'dead') {
-                        await interaction.reply({ content: `You are dead. You can't vote.`, ephemeral: true });
-                    } else {
-                        const gameId = currentGame.id;
-                        const gameDay = await getGameDay(interaction, gameId)
-                        addDailyVoteToDatabase(gameDay, gameId, voterId, userId)
-
-                        interaction.reply({ content: `You have voted for <@${userId}>! If you want to change your mind just click on somebody's else button.`, ephemeral: true });
-
-                        let userUsername = client.users.cache.get(userId).username;
-                        let targetUsername = client.users.cache.get(voterId).username;
-
-                        // capitalizing the first letter
-                        userUsername = userUsername.charAt(0).toUpperCase() + userUsername.slice(1);
-                        targetUsername = targetUsername.charAt(0).toUpperCase() + targetUsername.slice(1);
-
-                        embed = new EmbedBuilder()
-                            .setColor('3a3a3a')
-                            .setTitle('Mafia Game: Daily vote')
-                            .setDescription(`**${targetUsername}** has voted to execute **${userUsername}**`)
-                            .setTimestamp()
-                            .setFooter({
-                                text: 'MafiaBot',
-                                iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
-                            });
-
-                        client.channels.fetch(cId)
-                            .then(channel => {
-                                // Send a message to the channel
-                                channel.send({embeds: [embed]}).then(message => {
-                                    // delete message after 60 sec
-                                    setTimeout(() => {
-                                        message.delete();
-                                    }, 60000);
-                                });
-                                setTimeout(async () => {
-                                    await addDailyVoteToDatabase(gameDay, gameId, voterId, userId);
-                                }, 15000);
-                            })
+                            console.log('game day is ' + gameday)
+                            await addTargetToDatabase(gameday, gameId, 'gamemafiatarget', userId)
+                            console.log('nuh uh')
+                        } else {
+                            // send message to the interaction channel
+                            await interaction.channel.send('Something went wrong. Please, try again.');
+                        }
+                    } catch (error) {
+                        interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
                     }
-
                 }
-            } catch (error) {
-                interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
-            }
 
+                // if starts from doctor_vote_(userid) get the userid from the name
+                if (interaction.customId.startsWith('doctor_vote_')) {
+                    try {
+                        const userId = interaction.customId.split('_')[2];
+                        console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
+                        await interaction.reply({ content: `You have voted for <@${userId}>!`, ephemeral: false });
+
+                        if (currentGame) {
+                            const gameId = currentGame.id;
+                            console.log('game id is ' + gameId)
+                            console.log(currentGame)
+                            const gameday = await getGameDay(interaction, gameId)
+                            console.log('zero try game day is ' + gameday)
+
+                            console.log('game day is ' + gameday)
+                            await addTargetToDatabase(gameday, gameId, 'gamedoctortarget', userId)
+                            console.log('nuh uh doctor')
+                        } else {
+                            // send message to the interaction channel
+                            await interaction.channel.send('Something went wrong. Please, try again.');
+                        }
+                    } catch (error) {
+                        interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
+                    }
+                }
+
+                // if starts from detective_vote_(userid) get the userid from the name
+                if (interaction.customId.startsWith('detective_vote_')) {
+                    try {
+                        const userId = interaction.customId.split('_')[2];
+                        console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
+                        await interaction.reply({ content: `You have voted for checking the <@${userId}>\'s role! You will receive a message in the morning with results of your check. `, ephemeral: false });
+
+                        if (currentGame) {
+                            const gameId = currentGame.id;
+                            console.log('game id is ' + gameId)
+                            console.log(currentGame)
+                            const gameday = await getGameDay(interaction, gameId)
+                            console.log('zero try game day is ' + gameday)
+
+                            console.log('game day is ' + gameday)
+                            await addTargetToDatabase(gameday, gameId, 'gamedetectivetarget', userId)
+                            console.log('nuh uh detective')
+                        } else {
+                            // send message to the interaction channel
+                            await interaction.channel.send('Something went wrong. Please, try again.');
+                        }
+                    } catch (error) {
+                        interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
+                    }
+                }
+
+                // daily vote buttons
+                if (interaction.customId.startsWith('daily_vote_')) {
+                    // get the userid of target and userid of voter (daily_vote_userid_voterid)
+                    const userId = interaction.customId.split('_')[2];
+                    const voterId = interaction.user.id;
+
+                    const cId = '1175130149516214472';
+
+                    try {
+                        if (currentGame) {
+
+                            // if the user's game role is dead, then don't allow to vote
+                            const userRole = await gameState.getRole(currentGame.id, voterId);
+                            if (userRole === 'dead') {
+                                await interaction.reply({ content: `You are dead. You can't vote.`, ephemeral: true });
+                            } else {
+                                const gameId = currentGame.id;
+                                const gameDay = await getGameDay(interaction, gameId)
+                                addDailyVoteToDatabase(gameDay, gameId, voterId, userId)
+
+                                interaction.reply({ content: `You have voted for <@${userId}>! If you want to change your mind just click on somebody's else button.`, ephemeral: true });
+
+                                let userUsername = client.users.cache.get(userId).username;
+                                let targetUsername = client.users.cache.get(voterId).username;
+
+                                // capitalizing the first letter
+                                userUsername = userUsername.charAt(0).toUpperCase() + userUsername.slice(1);
+                                targetUsername = targetUsername.charAt(0).toUpperCase() + targetUsername.slice(1);
+
+                                embed = new EmbedBuilder()
+                                    .setColor('3a3a3a')
+                                    .setTitle('Mafia Game: Daily vote')
+                                    .setDescription(`**${targetUsername}** has voted to execute **${userUsername}**`)
+                                    .setTimestamp()
+                                    .setFooter({
+                                        text: 'MafiaBot',
+                                        iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                                    });
+
+                                client.channels.fetch(cId)
+                                    .then(channel => {
+                                        // Send a message to the channel
+                                        channel.send({embeds: [embed]}).then(message => {
+                                            // delete message after 60 sec
+                                            setTimeout(() => {
+                                                message.delete();
+                                            }, 60000);
+                                        });
+                                        setTimeout(async () => {
+                                            await addDailyVoteToDatabase(gameDay, gameId, voterId, userId);
+                                        }, 15000);
+                                    })
+                            }
+
+                        }
+                    } catch (error) {
+                        interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
+                    }
+                }
+        }
 
         }
     }

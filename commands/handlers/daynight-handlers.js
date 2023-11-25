@@ -2,7 +2,7 @@ import {generateVoiceLine} from "./openai-handlers.js";
 import {narrateAndPlay, narrateAndPlayVoiceLine} from "./voice-handlers.js";
 import {EmbedBuilder} from "discord.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import {getChannelIdsFromDatabase, processDailyVote} from "./database-handlers.js";
+import {getChannelIdsFromDatabase, nextStage, processDailyVote} from "./database-handlers.js";
 import gameState from "../../src/gameState.js";
 import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./privateChannel-handlers.js";
 
@@ -111,7 +111,15 @@ export const startDailyVote = async (gameId, playersLeft, playersCount, currentD
                 // Send a message to the channel
                 channel.send({embeds: [embed], components: [row]}).then(message => {
                     setTimeout(() => {
-                        message.delete();
+                        // disable all buttons
+                        row.components.forEach(component => {
+                            component.setDisabled(true);
+                        });
+
+                        // add text that the vote is ended
+                        embed.setDescription(`🎙 Bot: ${voiceLine}\n\nThe vote has ended. You can't vote anymore.`)
+                        message.edit({embeds: [embed], components: [row]});
+
                         endDailyVote(gameId, playersLeft, playersCount, currentDay, client);
                     }, 60000);
                 });
@@ -179,66 +187,90 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
 // night handler
 export const nightHandler = async (gameId, playersLeft, playersCount, currentDay, client) => {
 
-    let embed, cId = '1175130149516214472';
+    // next stage
+    await nextStage(0, gameId, client, async (error, message) => {
+        if (error) {
+            console.error(error);
+        } else {
+            console.log(message);
+        }});
 
-    const topic = `Night number ${currentDay} is coming. Tell everybody to brace.`
-    const voiceLine = generateVoiceLine(topic).then(voiceLine => {
-        // play the voice line
-        narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
+        let embed, cId = '1175130149516214472';
+        let day = currentDay + 1;
 
-        embed = new EmbedBuilder()
-            .setColor('3a3a3a')
-            .setTitle('Mafia Game: Night')
-            .setDescription(`🎙 Bot: ${voiceLine}`)
-            .addFields(
-                {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
-            )
-            .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
-            .setTimestamp()
-            .setFooter({
-                text: 'MafiaBot',
-                iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
-            });
+        const topic = `Night number ${day} is coming. Tell everybody to brace.`
+        const voiceLine = generateVoiceLine(topic).then(voiceLine => {
+            // play the voice line
+            narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
 
-        client.channels.fetch(cId)
-            .then(channel => {
-                // Send a message to the channel
-                channel.send({embeds: [embed]})
-            });
-    });
+            embed = new EmbedBuilder()
+                .setColor('3a3a3a')
+                .setTitle('Mafia Game: Night')
+                .setDescription(`🎙 Bot: ${voiceLine}`)
+                .addFields(
+                    {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
+                )
+                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
+                .setTimestamp()
+                .setFooter({
+                    text: 'MafiaBot',
+                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                });
 
-    await getChannelIdsFromDatabase(gameId).then(async channelIds => {
+            client.channels.fetch(cId)
+                .then(channel => {
+                    // Send a message to the channel
+                    channel.send({embeds: [embed]})
+                });
+        });
 
-        console.log('channelIds:', channelIds)
-        console.log('channelIds.gamemafiachid:', channelIds.gamemafiachid)
-        console.log('channelIds.gamedoctorchid:', channelIds.gamedoctorchid)
+        await getChannelIdsFromDatabase(gameId).then(async channelIds => {
 
-        // fetch channels from channelids
-        const mafiaChannel = await client.channels.fetch(channelIds.gamemafiachid);
-        const doctorChannel = await client.channels.fetch(channelIds.gamedoctorchid);
-        const detectiveChannel = await client.channels.fetch(channelIds.gamedetectivechid);
+            console.log('channelIds:', channelIds)
+            console.log('channelIds.gamemafiachid:', channelIds.gamemafiachid)
+            console.log('channelIds.gamedoctorchid:', channelIds.gamedoctorchid)
 
-        await sendMafiaVote(mafiaChannel, gameId);
-        await sendDoctorVote(doctorChannel, gameId);
-        await sendDetectiveVote(detectiveChannel, gameId);
-    });
+            // fetch channels from channelids
+            const mafiaChannel = await client.channels.fetch(channelIds.gamemafiachid);
+            const doctorChannel = await client.channels.fetch(channelIds.gamedoctorchid);
+            const detectiveChannel = await client.channels.fetch(channelIds.gamedetectivechid);
 
-    await setTimeout(async () => {
-        const voiceLine = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels.\n\nThe night will end in 60 seconds.';
-        narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
+            await sendMafiaVote(mafiaChannel, gameId);
+            await sendDoctorVote(doctorChannel, gameId);
+            await sendDetectiveVote(detectiveChannel, gameId);
+        });
 
-        const embed = new EmbedBuilder()
-            .setColor('3a3a3a')
-            .setTitle('Mafia Game')
-            .setDescription(`🎙 Bot: ${voiceLine}`)
-            .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175725053258760223/channels.png?ex=656c4648&is=6559d148&hm=f3f2ac5e98d762a3b1a647412817f7d88d6f85a90d666bcec172670fe5d7bd53&=&width=1207&height=905')
-            .setTimestamp()
-            .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+        await setTimeout(async () => {
+            const voiceLine = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels.\n\nThe night will end in 60 seconds.';
+            narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
 
-        client.channels.fetch(cId)
-            .then(channel => {
-                // Send a message to the channel
-                channel.send({ embeds: [embed] });
-            })
-    }, 25000);
-}
+            const embed = new EmbedBuilder()
+                .setColor('3a3a3a')
+                .setTitle('Mafia Game')
+                .setDescription(`🎙 Bot: ${voiceLine}`)
+                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175725053258760223/channels.png?ex=656c4648&is=6559d148&hm=f3f2ac5e98d762a3b1a647412817f7d88d6f85a90d666bcec172670fe5d7bd53&=&width=1207&height=905')
+                .setTimestamp()
+                .setFooter({
+                    text: 'MafiaBot',
+                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                });
+
+            client.channels.fetch(cId)
+                .then(channel => {
+                    // Send a message to the channel
+                    channel.send({embeds: [embed]});
+
+                    // timeout for 60 seconds
+                    setTimeout(async () => {
+                        // next stage
+                        nextStage(0, gameId, client, (error, message) => {
+                            if (error) {
+                                console.error(error);
+                            } else {
+                                console.log(message);
+                            }
+                        });
+                    }, 60000);
+                })
+        }, 25000);
+    }
