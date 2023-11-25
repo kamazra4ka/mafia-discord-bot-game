@@ -322,25 +322,30 @@ export const sendChannelIdsToDatabase = async (gameId, mafiaChannelId, doctorCha
     });
 }
 
-// get the channel ids from the database
-export const getChannelIdsFromDatabase = async (interaction, gameId) => {
-    pool.getConnection((err, connection) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-
-        connection.query('SELECT doctorchannelid, detectivechannelid, mafiachannelid FROM games WHERE gameid = ?', [gameId], async (err, rows) => {
-            connection.release();
+// get the channel ids from the database promise
+export const getChannelIdsFromDatabase = async (gameId) => {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
             if (err) {
                 console.error(err);
+                reject(err);
                 return;
             }
-            console.log(rows);
-            return rows;
+
+            connection.query('SELECT gamedoctorchid, gamedetectivechid, gamemafiachid FROM games WHERE gameid = ?', [gameId], (err, rows) => {
+                connection.release();
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                    return;
+                }
+                console.log(rows[0]);
+                resolve(rows[0]);
+            });
         });
     });
 }
+
 
 // night_actions table row creation with gameid and gameday
 export const createNightActionsRow = async (gameId, gameDay) => {
