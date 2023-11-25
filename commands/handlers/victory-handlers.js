@@ -86,7 +86,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`);
 
             // convert them into mentions + their game roles (mention: role)
-            const alivePLayersRolesMentions = alivePlayers.map(async player => {
+            const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
                 let role = await gameState.getRole(gameId, player);
 
                 // add emojis to the roles + capitalise the first letter
@@ -103,7 +103,7 @@ export const victoryHandler = async (gameId, type, client) => {
                 }
 
                 return `<@${player}> : **${role}**`;
-            });
+            }));
 
             const embed = new EmbedBuilder()
                 .setColor('90EE90')
@@ -143,8 +143,7 @@ export const victoryHandler = async (gameId, type, client) => {
             // convert them into mentions
             const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`);
 
-            // convert them into mentions + their game roles (mention: role)
-            const alivePlayersRolesMentions = alivePlayers.map(async player => {
+            const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
                 let role = await gameState.getRole(gameId, player);
 
                 // add emojis to the roles + capitalise the first letter
@@ -161,7 +160,8 @@ export const victoryHandler = async (gameId, type, client) => {
                 }
 
                 return `<@${player}> : **${role}**`;
-            });
+            }));
+
 
             const embed = new EmbedBuilder()
                 .setColor('FF7F7F')
