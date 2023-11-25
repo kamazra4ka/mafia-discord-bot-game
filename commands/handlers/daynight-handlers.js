@@ -136,7 +136,7 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
 
         const playersAfterVote = playersCount - 1;
 
-        const topic = `Civilian daily vote has ended. Other players think, that ${executedPlayerNickname} is a mafia and he will be executed right now, ${executedPlayer.mostVotes} players voted against him. ${playersAfterVote} players are still alive. We don't know was he mafia or not. Tell players, that they have 20 seconds to discuss everything.`
+        const topic = `Civilian daily vote has ended. Civilian players think, that ${executedPlayerNickname} is a mafia and he will be executed right now, ${playersAfterVote} players are still alive. We don't know was he mafia or not.`
         const voiceLine = generateVoiceLine(topic).then(voiceLine => {
             // play the voice line
             narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
@@ -213,9 +213,14 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
         console.log('channelIds.gamemafiachid:', channelIds.gamemafiachid)
         console.log('channelIds.gamedoctorchid:', channelIds.gamedoctorchid)
 
-        await sendMafiaVote(channelIds.gamemafiachid, gameId);
-        await sendDoctorVote(channelIds.gamedoctorchid, gameId);
-        await sendDetectiveVote(channelIds.gamedetectivechid, gameId);
+        // fetch channels from channelids
+        const mafiaChannel = await client.channels.fetch(channelIds.gamemafiachid);
+        const doctorChannel = await client.channels.fetch(channelIds.gamedoctorchid);
+        const detectiveChannel = await client.channels.fetch(channelIds.gamedetectivechid);
+
+        await sendMafiaVote(mafiaChannel, gameId);
+        await sendDoctorVote(doctorChannel, gameId);
+        await sendDetectiveVote(detectiveChannel, gameId);
     });
 
     await setTimeout(async () => {
