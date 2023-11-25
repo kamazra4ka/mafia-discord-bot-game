@@ -273,8 +273,12 @@ export const getGameDay = async (interaction, gameId) => {
                     reject(err);
                     return;
                 }
-                console.log(rows[0].gameday);
-                resolve(rows[0].gameday);
+                if (rows.length === 0) {
+                    resolve(0);
+                } else {
+                    console.log(rows[0].gameday);
+                    resolve(rows[0].gameday);
+                }
             });
         });
     });

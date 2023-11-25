@@ -1,5 +1,5 @@
 import gameState from "../../src/gameState.js";
-import {getChannelIdsFromDatabase} from "./database-handlers.js";
+import {getChannelIdsFromDatabase, getGameDay} from "./database-handlers.js";
 import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./privateChannel-handlers.js";
 import {EmbedBuilder} from "discord.js";
 import {generateVoiceLine} from "./openai-handlers.js";
@@ -8,30 +8,38 @@ import {narrateAndPlay} from "./voice-handlers.js";
 export const checkVictory = async (gameId, client) => {
 
     if (gameId) {
-        // get alive players
-        const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
-        // get mafias
-        const mafias = await gameState.getUsersByRole(gameId, 'mafia');
+        // get the game day
+        const gameDay = getGameDay(gameId).then(async gameDay => {
+            if (gameDay === 0) {
 
-        // get civilians + detectives + doctors
-        const civilians = await gameState.getUsersByRole(gameId, 'civilian');
-        const detectives = await gameState.getUsersByRole(gameId, 'detective');
-        const doctors = await gameState.getUsersByRole(gameId, 'doctor');
+            } else {
+                // get alive players
+                const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
-        const peacefuls = [...civilians, ...detectives, ...doctors];
+                // get mafias
+                const mafias = await gameState.getUsersByRole(gameId, 'mafia');
 
-        // if all mafias are dead, civilians win
-        if (mafias.every(mafia => !alivePlayers.includes(mafia))) {
-            await victoryHandler(gameId, 'civilian', client);
-            return true;
-        }
+                // get civilians + detectives + doctors
+                const civilians = await gameState.getUsersByRole(gameId, 'civilian');
+                const detectives = await gameState.getUsersByRole(gameId, 'detective');
+                const doctors = await gameState.getUsersByRole(gameId, 'doctor');
 
-        // if all peacefuls are dead, mafias win
-        if (peacefuls.every(peaceful => !alivePlayers.includes(peaceful))) {
-            await victoryHandler(gameId, 'mafia', client);
-            return true;
-        }
+                const peacefuls = [...civilians, ...detectives, ...doctors];
+
+                // if all mafias are dead, civilians win
+                if (mafias.every(mafia => !alivePlayers.includes(mafia))) {
+                    await victoryHandler(gameId, 'civilian', client);
+                    return true;
+                }
+
+                // if all peacefuls are dead, mafias win
+                if (peacefuls.every(peaceful => !alivePlayers.includes(peaceful))) {
+                    await victoryHandler(gameId, 'mafia', client);
+                    return true;
+                }
+            }
+        });
     }
 
 }
