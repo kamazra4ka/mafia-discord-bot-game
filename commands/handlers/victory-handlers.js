@@ -108,7 +108,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const embed = new EmbedBuilder()
                 .setColor('90EE90')
                 .setTitle('Mafia Game: Civilian Victory!')
-                .setDescription(`🎙 Bot: ${voiceLine}\n\n🏆  Winners: ${alivePLayersRolesMentions}`)
+                .setDescription(`🎙 Bot: ${voiceLine}\n\n🎖️ Alive players: ${alivePlayersRolesMentions}`)
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
                     {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
@@ -166,7 +166,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const embed = new EmbedBuilder()
                 .setColor('FF7F7F')
                 .setTitle('Mafia Game: Mafia Victory!')
-                .setDescription(`🎙 Bot: ${voiceLine}\n\n🏆  Winners: ${alivePlayersRolesMentions}`)
+                .setDescription(`🎙 Bot: ${voiceLine}\n\n🎖️ Alive players: ${alivePlayersRolesMentions}`)
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
                     {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
