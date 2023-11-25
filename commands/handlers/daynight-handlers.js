@@ -140,21 +140,21 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
         const executedPlayerNickname = client.users.cache.get(executedPlayer.mostVotedTargetId).username;
         console.log('executedPlayerNickname:', executedPlayerNickname)
         // changing executed player's role to dead
-        await gameState.updateRole(gameId, executedPlayer, 'dead');
+        await gameState.updateRole(gameId, executedPlayer.mostVotedTargetId, 'dead');
 
         const playersAfterVote = playersCount - 1;
 
-        const topic = `Civilian daily vote has ended. Civilian players think, that ${executedPlayerNickname} is a mafia and he will be executed right now, ${playersAfterVote} players are still alive. We don't know was he mafia or not.`
+        const topic = `Civilian daily vote has ended. Civilian players think, that ${executedPlayerNickname} is a mafia and he will be executed right now, ${playersAfterVote} players are still alive. We don't know was he mafia or not. Limit response: 180 characters.`
         const voiceLine = generateVoiceLine(topic).then(voiceLine => {
             // play the voice line
             narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
 
             // remove executed player from PlayersLeft
-            const playersLeft = playersLeft.filter(player => player !== executedPlayer.mostVotedTargetId);
-            const playersCount = playersLeft.length;
+            const playersLeftNow = playersLeft.filter(player => player !== executedPlayer.mostVotedTargetId);
+            const playersCount = playersLeftNow.length;
 
             // put all player's mentions in a variable players
-            const players = playersLeft.map(player => `<@${player}>`).join(', ');
+            const players = playersLeftNow.map(player => `<@${player}>`).join(', ');
 
             embed = new EmbedBuilder()
                 .setColor('3a3a3a')
@@ -178,7 +178,7 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
                     channel.send({embeds: [embed]})
                     // timeout for 35 seconds
                     setTimeout(async () => {
-                        await nightHandler(gameId, playersLeft, playersCount, currentDay, client);
+                        await nightHandler(gameId, playersLeftNow, playersCount, currentDay, client);
                     }, 35000);
                 });
         });
