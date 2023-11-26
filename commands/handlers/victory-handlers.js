@@ -83,7 +83,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
             // convert them into mentions
-            const alivePlayersMentions = alivePlayers.map(player => `<@${player}>, `);
+            const alivePlayersMentions = alivePlayers.map(player => `<@${player}> `);
 
             // convert them into mentions + their game roles (mention: role)
             const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
@@ -102,7 +102,7 @@ export const victoryHandler = async (gameId, type, client) => {
                     role = '🔴 Error';
                 }
 
-                return `<@${player}> : **${role}**\n`;
+                return `<@${player}> - **${role}**\n`;
             }));
 
             const embed = new EmbedBuilder()
@@ -141,7 +141,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
             // convert them into mentions
-            const alivePlayersMentions = alivePlayers.map(player => `<@${player}>, `);
+            const alivePlayersMentions = alivePlayers.map(player => `<@${player}> `);
 
             const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
                 let role = await gameState.getRole(gameId, player);
@@ -159,7 +159,7 @@ export const victoryHandler = async (gameId, type, client) => {
                     role = '🔴 Error';
                 }
 
-                return `<@${player}> : **${role}**\n`;
+                return `<@${player}> - **${role}**\n`;
             }));
 
 

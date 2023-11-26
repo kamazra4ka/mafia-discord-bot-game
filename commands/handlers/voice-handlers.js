@@ -220,7 +220,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                                 }, 30000);
                             });
                         })
-                }, 70000);
+                }, 67000);
                 await setTimeout(async () => {
                     const voiceLineText = ' A better instruction can be found in the chat. Good luck!';
                     narrateAndPlay(guildId, channelId, voiceLineText);
@@ -347,37 +347,5 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         channel.send({embeds: [embed]})
                     })
                 break;
-            case '5':
-
-                // CODE BELOW IS NOT USED ANYMORE, WILL BE DELETED SOON
-
-                    if (additionalData.nightNumber && additionalData.countPlayers && additionalData.players) {
-                        topic = `Night ${additionalData.nightNumber} has ended, it's morning now. ${additionalData.countPlayers} players are still alive.`
-                    } else {
-                        topic = `Night has ended, it's morning now.`
-                    }
-
-                    voiceLineText = await generateVoiceLine(topic)
-                    embed = new EmbedBuilder()
-                        .setColor('3a3a3a')
-                        .setTitle('Mafia Game: Morning')
-                        .setDescription(`🎙 Bot: ${voiceLineText}`)
-                        .addFields(
-                            {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                                    {name: '👤 Alive players', value: `${additionalData.players}`, inline: true}
-                        )
-                        .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177326765287411734/sunrise.gif?ex=657219fe&is=655fa4fe&hm=5df6b929b782c0801162800f13b93cae68c9ce56387495ec2fa89e58942c1528&=&width=837&height=295')
-                        .setTimestamp()
-                        .setFooter({
-                            text: 'MafiaBot',
-                            iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
-                        });
-
-                    narrateAndPlay(guildId, channelId, voiceLineText);
-                    client.channels.fetch(cId)
-                        .then(channel => {
-                            // Send a message to the channel
-                            channel.send({embeds: [embed]});
-                        })
         }
 }
