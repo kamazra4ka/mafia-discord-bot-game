@@ -90,16 +90,21 @@ export const victoryHandler = async (gameId, type, client) => {
                 let role = await gameState.getRole(gameId, player);
 
                 // add emojis to the roles + capitalise the first letter
-                if (role === 'mafia') {
-                    role = '🔪 Mafia';
-                } else if (role === 'detective') {
-                    role = '🕵️‍♂️ Detective';
-                } else if (role === 'doctor') {
-                    role = '🧑‍⚕️ Doctor';
-                } else if (role === 'civilian') {
-                    role = '👤 Civilian';
-                } else {
-                    role = '🔴 Error';
+                switch (role) {
+                    case 'mafia':
+                        role = '🔪 Mafia';
+                        break;
+                    case 'detective':
+                        role = '🕵️‍♂️ Detective';
+                        break;
+                    case 'doctor':
+                        role = '🧑‍⚕️ Doctor';
+                        break;
+                    case 'civilian':
+                        role = '👤 Civilian';
+                        break;
+                    default:
+                        role = '🔴 Error';
                 }
 
                 return `<@${player}> - **${role}**\n`;
@@ -147,16 +152,21 @@ export const victoryHandler = async (gameId, type, client) => {
                 let role = await gameState.getRole(gameId, player);
 
                 // add emojis to the roles + capitalise the first letter
-                if (role === 'mafia') {
-                    role = '🔪 Mafia';
-                } else if (role === 'detective') {
-                    role = '🕵️‍♂️ Detective';
-                } else if (role === 'doctor') {
-                    role = '🧑‍⚕️ Doctor';
-                } else if (role === 'civilian') {
-                    role = '👤 Civilian';
-                } else {
-                    role = '🔴 Error';
+                switch (role) {
+                    case 'mafia':
+                        role = '🔪 Mafia';
+                        break;
+                    case 'detective':
+                        role = '🕵️‍♂️ Detective';
+                        break;
+                    case 'doctor':
+                        role = '🧑‍⚕️ Doctor';
+                        break;
+                    case 'civilian':
+                        role = '👤 Civilian';
+                        break;
+                    default:
+                        role = '🔴 Error';
                 }
 
                 return `<@${player}> - **${role}**\n`;

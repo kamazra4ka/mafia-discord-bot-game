@@ -74,14 +74,9 @@ client.on('interactionCreate', async interaction => {
 
                         if (currentGame) {
                             const gameId = currentGame.id;
-                            console.log('game id is ' + gameId)
-                            console.log(currentGame)
                             const gameday = await getGameDay(interaction, gameId)
-                            console.log('zero try game day is ' + gameday)
 
-                            console.log('game day is ' + gameday)
                             await addTargetToDatabase(gameday, gameId, 'gamemafiatarget', userId)
-                            console.log('nuh uh')
                         } else {
                             // send message to the interaction channel
                             await interaction.channel.send('Something went wrong. Please, try again.');
@@ -100,14 +95,9 @@ client.on('interactionCreate', async interaction => {
 
                         if (currentGame) {
                             const gameId = currentGame.id;
-                            console.log('game id is ' + gameId)
-                            console.log(currentGame)
                             const gameday = await getGameDay(interaction, gameId)
-                            console.log('zero try game day is ' + gameday)
 
-                            console.log('game day is ' + gameday)
                             await addTargetToDatabase(gameday, gameId, 'gamedoctortarget', userId)
-                            console.log('nuh uh doctor')
                         } else {
                             // send message to the interaction channel
                             await interaction.channel.send('Something went wrong. Please, try again.');
@@ -121,19 +111,13 @@ client.on('interactionCreate', async interaction => {
                 if (interaction.customId.startsWith('detective_vote_')) {
                     try {
                         const userId = interaction.customId.split('_')[2];
-                        console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
                         await interaction.reply({ content: `You have voted for checking the <@${userId}>\'s role! You will receive a message in the morning with results of your check. `, ephemeral: false });
 
                         if (currentGame) {
                             const gameId = currentGame.id;
-                            console.log('game id is ' + gameId)
-                            console.log(currentGame)
                             const gameday = await getGameDay(interaction, gameId)
-                            console.log('zero try game day is ' + gameday)
 
-                            console.log('game day is ' + gameday)
                             await addTargetToDatabase(gameday, gameId, 'gamedetectivetarget', userId)
-                            console.log('nuh uh detective')
                         } else {
                             // send message to the interaction channel
                             await interaction.channel.send('Something went wrong. Please, try again.');
@@ -215,7 +199,6 @@ client.on('interactionCreate', async interaction => {
 gameEvents.on('stageUpdate', async (data) => {
     const guild = client.guilds.cache.get('1174666167227531345');
     const guildId = 1174666167227531345, cId = '1175130149516214472';
-    console.log(`Stage updated for game ${data.gameId} to ${data.currentStage}`);
 
     const gameId = data.gameId;
     const stage = data.currentStage;
@@ -398,9 +381,6 @@ gameEvents.on('dayUpdate', async (data) => {
                     detectiveChannelId
                 } = await processNightActions(gameId);
 
-                console.log('mafia action result is ' + mafiaActionResult.target)
-                console.log('doctor action result is ' + doctorActionResult.target)
-
                 // get username from the mafiaActionResult.target (discord id)
                 let targetMafia
                 if (mafiaActionResult.target) {
@@ -424,10 +404,8 @@ gameEvents.on('dayUpdate', async (data) => {
 
                     // changing the role of the target to dead
                     await gameState.updateRole(gameId, mafiaActionResult.target, 'dead');
-                    console.log('goofy mafia killed somebody voice line played');
                 } else {
                     await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '4', targetDoctor.username);
-                    console.log('goofy mafia failed to kill somebody voice line played');
                 }
 
                 playersLeft = await gameState.getPlayersList(gameId);
