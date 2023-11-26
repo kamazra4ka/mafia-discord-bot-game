@@ -235,8 +235,9 @@ gameEvents.on('stageUpdate', async (data) => {
 
             // if there are 3 or less players, then don't start the game
             const playersCount = await gameState.getAlivePlayersList(gameId);
-            if (playersCount.length <= 3) {
-                await interaction.reply({ content: `There are not enough players to start the game.`, ephemeral: true });
+            if (false) {
+                const channel = await client.channels.fetch(cId);
+                await channel.send({ content: `There are not enough players to start the game.`, ephemeral: true });
             } else {
 
             let mafiaChannelId;

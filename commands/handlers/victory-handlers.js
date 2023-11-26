@@ -83,7 +83,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
             // convert them into mentions
-            const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`);
+            const alivePlayersMentions = alivePlayers.map(player => `<@${player}>, `);
 
             // convert them into mentions + their game roles (mention: role)
             const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
@@ -102,13 +102,13 @@ export const victoryHandler = async (gameId, type, client) => {
                     role = '🔴 Error';
                 }
 
-                return `<@${player}> : **${role}**`;
+                return `<@${player}> : **${role}**\n`;
             }));
 
             const embed = new EmbedBuilder()
                 .setColor('006400')
                 .setTitle('Mafia Game: Civilian Victory!')
-                .setDescription(`🎙 Bot: ${voiceLine}\n\n**🎖️ Alive players:** \n\n${alivePlayersRolesMentions}\n\n`)
+                .setDescription(`🎙 Bot: ${voiceLine}\n\n**🎖️ Alive players:** \n${alivePlayersRolesMentions}\n\n`)
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
                     {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
@@ -141,7 +141,7 @@ export const victoryHandler = async (gameId, type, client) => {
             const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
             // convert them into mentions
-            const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`);
+            const alivePlayersMentions = alivePlayers.map(player => `<@${player}>, `);
 
             const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
                 let role = await gameState.getRole(gameId, player);
@@ -159,14 +159,14 @@ export const victoryHandler = async (gameId, type, client) => {
                     role = '🔴 Error';
                 }
 
-                return `<@${player}> : **${role}**`;
+                return `<@${player}> : **${role}**\n`;
             }));
 
 
             const embed = new EmbedBuilder()
                 .setColor('8e0922')
                 .setTitle('Mafia Game: Mafia Victory!')
-                .setDescription(`🎙 Bot: ${voiceLine}\n\n**🎖️ Alive players:** \n\n${alivePlayersRolesMentions}\n\n`)
+                .setDescription(`🎙 Bot: ${voiceLine}\n\n**🎖️ Alive players:** \n${alivePlayersRolesMentions}\n\n`)
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
                     {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
