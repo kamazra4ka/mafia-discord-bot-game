@@ -19,11 +19,11 @@ const commands = [
 const rest = new REST({ version: '10' }).setToken(botToken);
 
 try {
-    console.log('Started refreshing application (/) commands.');
+    console.log('Started refreshing application (/) Commands.');
 
     await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
 
-    console.log('Successfully reloaded application (/) commands.');
+    console.log('Successfully reloaded application (/) Commands.');
 } catch (error) {
     console.error(error);
 }

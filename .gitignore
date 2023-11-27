@@ -1,5 +1,5 @@
 /src/.env
-/commands/.env
-/commands/handlers/.env
+/Commands/.env
+/Commands/Handlers/.env
 /node_modules
 /.idea

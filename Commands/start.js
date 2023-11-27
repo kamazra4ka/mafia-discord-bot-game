@@ -1,8 +1,8 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
-import {createGame, gameStarts, nextStage} from './handlers/database-handlers.js';
+import {createGame, gameStarts, nextStage} from './Handlers/database-handlers.js';
 import mysql from 'mysql2';
 import { config } from 'dotenv';
-import {joinVoice, narrateAndPlay, narrateAndPlayVoiceLine} from "./handlers/voice-handlers.js";
+import {joinVoice, narrateAndPlay, narrateAndPlayVoiceLine} from "./Handlers/voice-handlers.js";
 import gameState from "../src/gameState.js";
 
 await config();

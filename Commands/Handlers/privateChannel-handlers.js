@@ -73,7 +73,7 @@ export const sendMafiaVote = async (channel, gameId) => {
                         components: [
                             {
                                 type: 2,
-                                label: `${user.nickname || user.user.username}`,
+                                label: `🔪 ${user.nickname || user.user.username}`,
                                 // 1 is blue
                                 // 2 is gray
                                 // 3 is green
@@ -142,7 +142,7 @@ export const sendDoctorVote = async (channel, gameId) => {
                         components: [
                             {
                                 type: 2,
-                                label: `${user.nickname || user.user.username}`,
+                                label: `💊 ${user.nickname || user.user.username}`,
                                 // 1 is blue
                                 // 2 is gray
                                 // 3 is green
@@ -209,7 +209,7 @@ export const sendDetectiveVote = async (channel, gameId) => {
                         components: [
                             {
                                 type: 2,
-                                label: `${user.nickname || user.user.username}`,
+                                label: `🔎 ${user.nickname || user.user.username}`,
                                 // 1 is blue
                                 // 2 is gray
                                 // 3 is green

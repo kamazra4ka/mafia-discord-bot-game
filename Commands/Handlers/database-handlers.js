@@ -1,6 +1,6 @@
 import mysql from 'mysql2';
 import { config } from 'dotenv';
-import gameEvents from "../emitters/emitter.js";
+import gameEvents from "../Emitters/emitter.js";
 import gameState from "../../src/gameState.js";
 
 await config();

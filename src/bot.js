@@ -13,25 +13,25 @@ import {
     getGameId, nextStage,
     processNightActions,
     sendChannelIdsToDatabase
-} from "../commands/handlers/database-handlers.js";
+} from "../Commands/Handlers/database-handlers.js";
 
 import {
     ping
-} from '../commands/ping.js';
+} from '../Commands/ping.js';
 
 import {
     start
-} from '../commands/start.js';
-import gameEvents from "../commands/emitters/emitter.js";
+} from '../Commands/start.js';
+import gameEvents from "../Commands/Emitters/emitter.js";
 import gameState from "./gameState.js";
 
 import {
     checkIfDead,
     createPrivateChannelForUsers, disableMafiaVoteButtons, sendDetectiveVote, sendDoctorVote, sendMafiaVote
-} from "../commands/handlers/privateChannel-handlers.js";
-import {narrateAndPlayVoiceLine} from "../commands/handlers/voice-handlers.js";
-import {morningHandler, startDailyVote} from "../commands/handlers/daynight-handlers.js";
-import {checkVictory} from "../commands/handlers/victory-handlers.js";
+} from "../Commands/Handlers/privateChannel-handlers.js";
+import {narrateAndPlayVoiceLine} from "../Commands/Handlers/voice-handlers.js";
+import {morningHandler, startDailyVote} from "../Commands/Handlers/daynight-handlers.js";
+import {checkVictory} from "../Commands/Handlers/victory-handlers.js";
 
 // get the token from the .env file using dotenv
 config();
