@@ -1,9 +1,9 @@
 import gameState from "../../src/gameState.js";
-import {getChannelIdsFromDatabase, getGameDay} from "./database-handlers.js";
-import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./privateChannel-handlers.js";
+import {getChannelIdsFromDatabase, getGameDay} from "./DatabaseHandlers.js";
+import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./PrivateChannelsHandlers.js";
 import {EmbedBuilder} from "discord.js";
-import {generateVoiceLine} from "./openai-handlers.js";
-import {narrateAndPlay} from "./voice-handlers.js";
+import {generateVoiceLine} from "./OpenaiHandlers.js";
+import {narrateAndPlay} from "./VoiceHandlers.js";
 
 export const checkVictory = async (gameId, client) => {
 

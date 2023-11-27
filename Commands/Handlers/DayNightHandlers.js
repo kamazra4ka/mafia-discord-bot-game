@@ -1,10 +1,10 @@
-import {generateVoiceLine} from "./openai-handlers.js";
-import {narrateAndPlay, narrateAndPlayVoiceLine} from "./voice-handlers.js";
+import {generateVoiceLine} from "./OpenaiHandlers.js";
+import {narrateAndPlay, narrateAndPlayVoiceLine} from "./VoiceHandlers.js";
 import {EmbedBuilder} from "discord.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import {createNightActionsRow, getChannelIdsFromDatabase, nextStage, processDailyVote} from "./database-handlers.js";
+import {createNightActionsRow, getChannelIdsFromDatabase, nextStage, processDailyVote} from "./DatabaseHandlers.js";
 import gameState from "../../src/gameState.js";
-import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./privateChannel-handlers.js";
+import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./PrivateChannelsHandlers.js";
 
 export const morningHandler = async (gameId, playersLeft, playersCount, currentDay, client) => {
 

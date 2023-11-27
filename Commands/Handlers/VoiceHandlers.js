@@ -3,9 +3,9 @@ import fs from 'fs';
 import googleTTS from 'google-tts-api';
 import fetch from 'node-fetch';
 import {EmbedBuilder} from "discord.js";
-import {generateVoiceLine} from "./openai-handlers.js";
+import {generateVoiceLine} from "./OpenaiHandlers.js";
 import gameState from "../../src/gameState.js";
-import {getGameDay} from "./database-handlers.js";
+import {getGameDay} from "./DatabaseHandlers.js";
 
 export const joinVoice = async (interaction) => {
     // Check if the member is in a voice channel
