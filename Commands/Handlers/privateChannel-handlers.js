@@ -250,7 +250,7 @@ export const disableMafiaVoteButtons = async (interaction) => {
 export const checkIfDead = async (userId, gameId) => {
     try {
         // if user's role is dead then return true
-        const user = await gameState.getRole(userId);
+        const user = await gameState.getRole(gameId, userId);
         if (user === 'dead') {
             return true;
         } else {
