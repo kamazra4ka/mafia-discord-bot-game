@@ -379,7 +379,7 @@ gameEvents.on('dayUpdate', async (data) => {
                     doctorActionResult,
                     detectiveActionResult,
                     detectiveChannelId
-                } = await processNightActions(gameId);
+                } = await processNightActions(gameId, data.currentDay);
 
                 // get username from the mafiaActionResult.target (discord id)
                 let targetMafia

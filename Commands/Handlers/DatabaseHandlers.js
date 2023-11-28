@@ -398,7 +398,7 @@ export const addTargetToDatabase = async (gameDay, gameId, targetColumn, targetU
 };
 
 // night actions table update
-export const processNightActions = async (gameId) => {
+export const processNightActions = async (gameId, gameday) => {
     return new Promise((resolve, reject) => {
         pool.getConnection(async (err, connection) => {
             if (err) {
@@ -407,62 +407,66 @@ export const processNightActions = async (gameId) => {
                 return;
             }
 
-            const gameday = await getGameDay(gameId);
+                console.log('gameday:', gameday)
+                console.log('gameday:', gameday)
+                console.log('gameday:', gameday)
+                console.log('gameday:', gameday)
+                console.log('gameday:', gameday)
 
-            // Query to get night actions for the game
-            connection.query('SELECT * FROM night_actions WHERE gameid = ? AND gameday = ?', [gameId, gameday], async (err, rows) => {
-                if (err) {
-                    console.error('Query Error:', err);
+                // Query to get night actions for the game
+                connection.query('SELECT * FROM night_actions WHERE gameid = ? AND gameday = ?', [gameId, gameday], async (err, rows) => {
+                    if (err) {
+                        console.error('Query Error:', err);
+                        connection.release();
+                        reject(err);
+                        return;
+                    }
+
+                    if (rows.length === 0) {
+                        console.log('No night actions found for gameId:', gameId);
+                        connection.release();
+                        resolve({});
+                        return;
+                    }
+
+                    const nightActions = rows[0];
                     connection.release();
-                    reject(err);
-                    return;
-                }
 
-                if (rows.length === 0) {
-                    console.log('No night actions found for gameId:', gameId);
-                    connection.release();
-                    resolve({});
-                    return;
-                }
+                    // Initialize results variables
+                    let mafiaActionResult = null;
+                    let doctorActionResult = null;
+                    let detectiveActionResult = null;
 
-                const nightActions = rows[0];
-                connection.release();
+                    // Process Mafia action
+                    if (nightActions.gamemafiatarget !== nightActions.gamedoctortarget) {
+                        // Mafia's target was not saved by the doctor
+                        mafiaActionResult = {success: true, target: nightActions.gamemafiatarget};
+                    } else {
+                        // Mafia's target was saved by the doctor
+                        mafiaActionResult = {success: false, target: nightActions.gamemafiatarget};
+                    }
 
-                // Initialize results variables
-                let mafiaActionResult = null;
-                let doctorActionResult = null;
-                let detectiveActionResult = null;
+                    // Process Doctor action
+                    doctorActionResult = {saved: nightActions.gamedoctortarget};
 
-                // Process Mafia action
-                if (nightActions.gamemafiatarget !== nightActions.gamedoctortarget) {
-                    // Mafia's target was not saved by the doctor
-                    mafiaActionResult = {success: true, target: nightActions.gamemafiatarget};
-                } else {
-                    // Mafia's target was saved by the doctor
-                    mafiaActionResult = {success: false, target: nightActions.gamemafiatarget};
-                }
+                    // Process Detective action (you will need to fetch the actual role from the database)
+                    if (nightActions.gamedetectivetarget) {
+                        const detectiveTargetRole = await gameState.getRole(gameId, nightActions.gamedetectivetarget);
+                        detectiveActionResult = {
+                            checked: nightActions.gamedetectivetarget,
+                            role: `${detectiveTargetRole}` || 'An error occurred'
+                        };
+                    }
 
-                // Process Doctor action
-                doctorActionResult = {saved: nightActions.gamedoctortarget};
-
-                // Process Detective action (you will need to fetch the actual role from the database)
-                if (nightActions.gamedetectivetarget) {
-                    const detectiveTargetRole = await gameState.getRole(gameId, nightActions.gamedetectivetarget);
-                    detectiveActionResult = {
-                        checked: nightActions.gamedetectivetarget,
-                        role: `${detectiveTargetRole}` || 'An error occurred'
-                    };
-                }
-
-                // Resolve the promise with the results
-                resolve({
-                    mafiaActionResult,
-                    doctorActionResult,
-                    detectiveActionResult,
-                    detectiveChannelId: nightActions.gamedetectivechid
+                    // Resolve the promise with the results
+                    resolve({
+                        mafiaActionResult,
+                        doctorActionResult,
+                        detectiveActionResult,
+                        detectiveChannelId: nightActions.gamedetectivechid
+                    });
                 });
             });
-        });
     });
 };
 
