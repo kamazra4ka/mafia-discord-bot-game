@@ -326,6 +326,65 @@ export const sendChannelIdsToDatabase = async (gameId, mafiaChannelId, doctorCha
     });
 }
 
+// check if the user is in the table user_items and if not then add him
+export const checkUserInDatabaseItems = async (userDiscordId) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query('SELECT userid FROM user_items WHERE userid = ?', [userDiscordId], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
+            if (rows.length === 0) {
+                pool.getConnection((err, connection) => {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+
+                    connection.query('INSERT user_items SET userid = ?', [userDiscordId], async (err, rows) => {
+                        connection.release();
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                    });
+                });
+            }
+        });
+    });
+}
+
+// get player coins from the database table user_items
+export const getPlayerCoinsFromDatabase = async (userDiscordId) => {
+    console.log(userDiscordId)
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            }
+
+            connection.query('SELECT coins FROM user_items WHERE userid = ?', [userDiscordId], (err, rows) => {
+                connection.release();
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                }
+
+                console.log(rows)
+                console.log(rows[0].coins);
+                resolve(rows[0].coins);
+            });
+        });
+    });
+}
+
 // get the channel ids from the database promise
 export const getChannelIdsFromDatabase = async (gameId) => {
     return new Promise((resolve, reject) => {
