@@ -32,6 +32,8 @@ import {
 import {narrateAndPlayVoiceLine} from "../Commands/Handlers/VoiceHandlers.js";
 import {morningHandler, startDailyVote} from "../Commands/Handlers/DayNightHandlers.js";
 import {checkVictory} from "../Commands/Handlers/VictoryHandlers.js";
+import {stopAllGames} from "../Commands/stop.js";
+import {shop} from "../Commands/shop.js";
 
 // get the token from the .env file using dotenv
 config();
@@ -49,6 +51,14 @@ client.on('interactionCreate', async interaction => {
 
     if (interaction.commandName === 'start') {
         await start(interaction, client);
+    }
+
+    if (interaction.commandName === 'stop') {
+        await stopAllGames(interaction)
+    }
+
+    if (interaction.commandName === 'shop') {
+        await shop(interaction, client);
     }
 
     if (interaction.isButton()) {

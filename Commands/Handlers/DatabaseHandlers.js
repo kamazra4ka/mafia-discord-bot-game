@@ -398,7 +398,7 @@ export const addTargetToDatabase = async (gameDay, gameId, targetColumn, targetU
 };
 
 // night actions table update
-export const processNightActions = async (gameId, gameday) => {
+export const processNightActions = async (gameId) => {
     return new Promise((resolve, reject) => {
         pool.getConnection(async (err, connection) => {
             if (err) {
@@ -407,14 +407,8 @@ export const processNightActions = async (gameId, gameday) => {
                 return;
             }
 
-                console.log('gameday:', gameday)
-                console.log('gameday:', gameday)
-                console.log('gameday:', gameday)
-                console.log('gameday:', gameday)
-                console.log('gameday:', gameday)
-
                 // Query to get night actions for the game
-                connection.query('SELECT * FROM night_actions WHERE gameid = ? AND gameday = ?', [gameId, gameday], async (err, rows) => {
+                connection.query('SELECT * FROM night_actions WHERE gameid = ?', [gameId], async (err, rows) => {
                     if (err) {
                         console.error('Query Error:', err);
                         connection.release();
