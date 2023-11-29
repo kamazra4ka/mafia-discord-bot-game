@@ -13,6 +13,14 @@ const commands = [
     {
         name: 'ping',
         description: 'Replies with Pong!',
+    },
+    {
+        name: 'shop',
+        description: 'Opens the shop where you can buy additional power-ups!',
+    },
+    {
+        name: 'stop',
+        description: 'Stops all running games (requires admin rights)',
     }
 ];
 
