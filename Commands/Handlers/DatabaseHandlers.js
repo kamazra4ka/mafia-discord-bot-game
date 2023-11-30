@@ -360,6 +360,44 @@ export const checkUserInDatabaseItems = async (userDiscordId) => {
     });
 }
 
+// buy items from the shop (user_items table)
+export const takeCoinsFromDatabase = async (userDiscordId, item) => {
+
+    let price;
+    console.log('item: ', item)
+
+    switch (item) {
+        case 'activerole':
+            price = '1000';
+            break;
+        case 'fakedocuments':
+            price = '250';
+            break;
+        case 'knife':
+            price = '6450';
+            break;
+        default:
+            price = '0';
+    }
+
+    console.log('price: ', price)
+
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query('UPDATE user_items SET coins = coins - ? WHERE userid = ?', [price, userDiscordId], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
+        });
+    });
+}
+
 // get player coins from the database table user_items
 export const getPlayerCoinsFromDatabase = async (userDiscordId) => {
     console.log(userDiscordId)
