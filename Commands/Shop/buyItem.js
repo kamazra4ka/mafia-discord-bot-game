@@ -17,5 +17,5 @@ export const buyItem = async (interaction, item) => {
         default:
             itemName = 'Error';
     }
-    await interaction.reply(`You bought **${itemName}**!`);
+    await interaction.reply(`You bought **${itemName}**!`, { ephemeral: true });
 }
