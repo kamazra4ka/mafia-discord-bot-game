@@ -55,7 +55,14 @@ client.on('interactionCreate', async interaction => {
     }
 
     if (interaction.commandName === 'stop') {
-        await stopAllGames(interaction)
+
+        if (interaction.user.id === '669462196589166623') {
+            await stopAllGames(interaction)
+        } else {
+            await interaction.reply({ content: `You don't have permission to do that.`, ephemeral: true });
+        }
+
+
     }
 
     if (interaction.commandName === 'shop') {
