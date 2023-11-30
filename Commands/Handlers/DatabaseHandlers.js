@@ -388,7 +388,26 @@ export const takeCoinsFromDatabase = async (userDiscordId, item) => {
             return;
         }
 
-        connection.query('UPDATE user_items SET coins = coins - ? WHERE userid = ?', [price, userDiscordId], async (err, rows) => {
+        connection.query(`UPDATE user_items SET coins = coins - ? WHERE userid = ?`, [price, userDiscordId], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+                return;
+            }
+            return true;
+        });
+    });
+}
+
+// add items to the user (user_items table)
+export const addItemToUser = async (userDiscordId, item) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query(`UPDATE user_items SET ${item} = ${item} + 1 WHERE userid = ?`, [userDiscordId], async (err, rows) => {
             connection.release();
             if (err) {
                 console.error(err);
@@ -397,6 +416,7 @@ export const takeCoinsFromDatabase = async (userDiscordId, item) => {
         });
     });
 }
+
 
 // get player coins from the database table user_items
 export const getPlayerCoinsFromDatabase = async (userDiscordId) => {
