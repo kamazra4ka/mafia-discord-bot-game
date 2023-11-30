@@ -34,6 +34,7 @@ import {morningHandler, startDailyVote} from "../Commands/Handlers/DayNightHandl
 import {checkVictory} from "../Commands/Handlers/VictoryHandlers.js";
 import {stopAllGames} from "../Commands/stop.js";
 import {shop} from "../Commands/shop.js";
+import {buyItem} from "../Commands/Shop/buyItem.js";
 
 // get the token from the .env file using dotenv
 config();
@@ -68,7 +69,14 @@ client.on('interactionCreate', async interaction => {
             await interaction.reply({ content: `You have joined the game!`, ephemeral: true });
 
             await addUserToGame(interaction)
+        }
 
+        if (interaction.customId.startsWith('buy_item_')) {
+            const item = interaction.customId.split('_')[2];
+
+            console.log(`User ID: ${interaction.user.id} bought the item ${item}.`);
+
+            await buyItem(interaction, item)
         }
 
         if (currentGame) {
