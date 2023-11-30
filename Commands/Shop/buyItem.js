@@ -2,9 +2,9 @@ import {addItemToUser, takeCoinsFromDatabase} from "../Handlers/DatabaseHandlers
 import {editShopEmbed} from "./sendShopEmbed.js";
 
 export const buyItem = async (interaction, item) => {
-
-    await takeCoinsFromDatabase(interaction.user.id, item);
-    await addItemToUser(interaction.user.id, item);
+    try {
+        await takeCoinsFromDatabase(interaction.user.id, item);
+        await addItemToUser(interaction.user.id, item);
 
         let itemName;
         // switch case to add emojis
@@ -26,4 +26,8 @@ export const buyItem = async (interaction, item) => {
         setTimeout(async () => {
             await interaction.deleteReply();
         }, 2500);
+    } catch (e) {
+        const channel = await client.channels.fetch('1175130149516214472');
+        channel.send('Something went wrong. Please, try again.\n\n' + error);
+    }
 }
