@@ -87,17 +87,13 @@ export const victoryHandler = async (gameId, type, client) => {
                 // get alive players
                 const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
-                // a loop to calculate everybody's reward
-                for (let i = 0; i < alivePlayers.length; i++) {
-                    await calculateGameReward(gameId, 'civilian', alivePlayers[i]);
-                }
-
                 // convert them into mentions
                 const alivePlayersMentions = alivePlayers.map(player => `<@${player}> `);
 
                 // convert them into mentions + their game roles (mention: role)
                 const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
                     let role = await gameState.getRole(gameId, player);
+                    const earnedCoins = await calculateGameReward(gameId, 'civilian', player);
 
                     // add emojis to the roles + capitalise the first letter
                     switch (role) {
@@ -117,6 +113,8 @@ export const victoryHandler = async (gameId, type, client) => {
                             role = '🔴 Error';
                     }
 
+                    // add the amount of money they earned to the role
+                    role += ` | +${earnedCoins}** 🪙`;
                     return `<@${player}> - **${role}**\n`;
                 }));
 
@@ -155,16 +153,12 @@ export const victoryHandler = async (gameId, type, client) => {
                 // get alive players
                 const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
-                // a loop to calculate everybody's reward
-                for (let i = 0; i < alivePlayers.length; i++) {
-                    await calculateGameReward(gameId, 'mafia', alivePlayers[i]);
-                }
-
                 // convert them into mentions
                 const alivePlayersMentions = alivePlayers.map(player => `<@${player}> `);
 
                 const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
                     let role = await gameState.getRole(gameId, player);
+                    const earnedCoins = await calculateGameReward(gameId, 'civilian', player);
 
                     // add emojis to the roles + capitalise the first letter
                     switch (role) {
@@ -184,6 +178,8 @@ export const victoryHandler = async (gameId, type, client) => {
                             role = '🔴 Error';
                     }
 
+                    // add the amount of money they earned to the role
+                    role += ` | +${earnedCoins}** 🪙`;
                     return `<@${player}> - **${role}**\n`;
                 }));
 

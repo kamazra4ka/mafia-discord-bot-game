@@ -84,4 +84,5 @@ export const calculateGameReward = async (gameId, victorySide, userId) => {
 
     // add coins to the user
     await addCoinsToUser(userId, userReward);
+    return userReward;
 }
