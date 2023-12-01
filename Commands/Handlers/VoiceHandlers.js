@@ -277,7 +277,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         }, 5000);
 
                 await setTimeout(async () => {
-                    const voiceLineText = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels.\n\nThe night will end in 60 seconds.';
+                    const voiceLineText = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels. If you don\'t see any channels that means you are a civilian. \n\nThe night will end in 60 seconds.';
                     narrateAndPlay(guildId, channelId, voiceLineText);
 
                     const embed = new EmbedBuilder()
