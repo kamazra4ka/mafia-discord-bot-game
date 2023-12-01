@@ -1,7 +1,7 @@
 import {addCoinsToUser, getGameDay} from "../Handlers/DatabaseHandlers.js";
 import gameState from "../../src/gameState.js";
 
-export async const calculateGameReward = async (gameId, victorySide, userId) => {
+export const calculateGameReward = async (gameId, victorySide, userId) => {
 
     let userReward, roleReward, dayReward
     const gameDay = await getGameDay(gameId);
