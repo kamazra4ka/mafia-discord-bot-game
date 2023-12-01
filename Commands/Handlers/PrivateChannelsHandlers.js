@@ -251,7 +251,7 @@ export const checkIfDead = async (userId, gameId) => {
     try {
         // if user's role is dead then return true
         const user = await gameState.getRole(gameId, userId);
-        if (user === 'dead') {
+        if (user === 'dead' || !user) {
             return true;
         } else {
             return false;
