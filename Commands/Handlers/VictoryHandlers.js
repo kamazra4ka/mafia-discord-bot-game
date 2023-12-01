@@ -4,6 +4,7 @@ import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./PrivateChannel
 import {EmbedBuilder} from "discord.js";
 import {generateVoiceLine} from "./OpenaiHandlers.js";
 import {narrateAndPlay} from "./VoiceHandlers.js";
+import {calculateGameReward} from "../Shop/calculateGameReward.js";
 
 export const checkVictory = async (gameId, client) => {
     try {
@@ -86,6 +87,11 @@ export const victoryHandler = async (gameId, type, client) => {
                 // get alive players
                 const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
+                // a loop to calculate everybody's reward
+                for (let i = 0; i < alivePlayers.length; i++) {
+                    await calculateGameReward(gameId, 'civilian', alivePlayers[i]);
+                }
+
                 // convert them into mentions
                 const alivePlayersMentions = alivePlayers.map(player => `<@${player}> `);
 
@@ -148,6 +154,11 @@ export const victoryHandler = async (gameId, type, client) => {
 
                 // get alive players
                 const alivePlayers = await gameState.getAlivePlayersList(gameId);
+
+                // a loop to calculate everybody's reward
+                for (let i = 0; i < alivePlayers.length; i++) {
+                    await calculateGameReward(gameId, 'mafia', alivePlayers[i]);
+                }
 
                 // convert them into mentions
                 const alivePlayersMentions = alivePlayers.map(player => `<@${player}> `);
