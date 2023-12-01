@@ -180,7 +180,7 @@ export const victoryHandler = async (gameId, type, client) => {
 
                     // add the amount of money they earned to the role
                     role += ` | +${earnedCoins}** 🪙`;
-                    return `<@${player}> - **${role}**\n`;
+                    return `<@${player}> - **${role}\n`;
                 }));
 
 
