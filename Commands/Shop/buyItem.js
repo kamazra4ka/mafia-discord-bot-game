@@ -1,5 +1,4 @@
 import {addItemToUser, takeCoinsFromDatabase} from "../Handlers/DatabaseHandlers.js";
-import {editShopEmbed} from "./sendShopEmbed.js";
 
 export const buyItem = async (interaction, item) => {
     try {

@@ -66,7 +66,7 @@ export const sendShopEmbed = async (interaction) => {
             await editShopEmbed(interaction);
         }, 500);
 
-    }, 500);
+    }, 1000);
 }
 
 export const editShopEmbed = async (interaction) => {
