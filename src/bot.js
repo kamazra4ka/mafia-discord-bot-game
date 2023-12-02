@@ -172,7 +172,12 @@ client.on('interactionCreate', async interaction => {
                                 const gameDay = await getGameDay(interaction, gameId)
                                 addDailyVoteToDatabase(gameDay, gameId, voterId, userId)
 
-                                interaction.reply({ content: `You have voted for <@${userId}>! If you want to change your mind just click on somebody's else button.`, ephemeral: true });
+                                interaction.reply({ content: `You have voted for <@${userId}>! If you want to change your mind just click on somebody's else button.`, ephemeral: true }).then(message => {
+                                    // delete message after 2 sec
+                                    setTimeout(() => {
+                                        message.delete();
+                                    }, 2000);
+                                });
 
                                 let userUsername = client.users.cache.get(userId).username;
                                 let targetUsername = client.users.cache.get(voterId).username;
@@ -279,8 +284,8 @@ gameEvents.on('stageUpdate', async (data) => {
                             // mentioning all mafias (multiple possible)
                             for (let i = 0; i < mafiaUserIds.length ; i++) {
                                 mafiaUserIds[i] = '<@' + mafiaUserIds[i] + '>';
-                                channel.send(`In this match there are ${mafiaUserIds.length} mafias.`)
-                                channel.send(`The mafia is: ${mafiaUserIds[i]}`)
+                                channel.send(`# In this match there are ${mafiaUserIds.length} mafias.`)
+                                channel.send(`# Mafia members: ${mafiaUserIds[i]}`)
                             }
 
                             await channel.send({embeds: [embed]});
@@ -307,7 +312,7 @@ gameEvents.on('stageUpdate', async (data) => {
                                 });
 
                             // mentioning user
-                            await channel.send(`Doctor: <@${doctorUserId}>`)
+                            await channel.send(`# Doctor: <@${doctorUserId}>`)
 
                             await channel.send({embeds: [embed]});
                             await sendDoctorVote(channel, gameId);

@@ -46,6 +46,11 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
     if (connection && connection.joinConfig.channelId === channelId) {
         // Generate TTS
 
+        // in case the text is too long (doesn't happen usually)
+        if (text.length > 200) {
+            text = text.substring(0, 200);
+        }
+
         const url = googleTTS.getAudioUrl(text, {
             lang: 'en',
             slow: false,

@@ -570,6 +570,7 @@ export const processNightActions = async (gameId) => {
                     if (nightActions.gamemafiatarget !== nightActions.gamedoctortarget) {
                         // Mafia's target was not saved by the doctor
                         mafiaActionResult = {success: true, target: nightActions.gamemafiatarget};
+
                     } else {
                         // Mafia's target was saved by the doctor
                         mafiaActionResult = {success: false, target: nightActions.gamemafiatarget};

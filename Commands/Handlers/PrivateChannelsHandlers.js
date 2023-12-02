@@ -30,9 +30,15 @@ export const createPrivateChannelForUsers = async (guild, channelName, userIds) 
     }
 };
 
-// send a mafia's vote. There are multiple mafias possible so make it a vote on buttons. Every button is a user and must be named with his username. After 30 seconds the vote must close
+// send a mafia's vote.
 export const sendMafiaVote = async (channel, gameId) => {
     try {
+
+        // mention all mafia members
+        const mafiaMembers = await gameState.getUsersByRole(gameId, 'mafia');
+        const mafiaMentions = mafiaMembers.map(member => `<@${member}>`).join(' ');
+
+        channel.send(`${mafiaMentions}`)
 
         const players = await gameState.getUsersByRole(gameId, 'civilian');
 
@@ -106,6 +112,12 @@ export const sendMafiaVote = async (channel, gameId) => {
 // send a doctor's vote.
 export const sendDoctorVote = async (channel, gameId) => {
     try {
+
+        // mention the doctor
+        const doctor = await gameState.getUsersByRole(gameId, 'doctor');
+        const doctorMention = doctor.map(member => `<@${member}>`).join(' ');
+
+        channel.send(`${doctorMention}`)
 
         const players = await gameState.getUsersByRole(gameId, 'civilian');
 
