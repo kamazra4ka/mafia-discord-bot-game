@@ -88,7 +88,7 @@ export const victoryHandler = async (gameId, type, client) => {
                 const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
                 // convert them into mentions
-                const alivePlayersMentions = alivePlayers.map(player => `<@${player}> `);
+                const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`).join(' ');
 
                 // convert them into mentions + their game roles (mention: role)
                 const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
@@ -98,24 +98,24 @@ export const victoryHandler = async (gameId, type, client) => {
                     // add emojis to the roles + capitalise the first letter
                     switch (role) {
                         case 'mafia':
-                            role = '🔪 Mafia';
+                            role = '**🔪 Mafia**';
                             break;
                         case 'detective':
-                            role = '🕵️‍♂️ Detective';
+                            role = '🕵**️‍♂️ Detective**';
                             break;
                         case 'doctor':
-                            role = '🧑‍⚕️ Doctor';
+                            role = '**🧑‍⚕️ Doctor**';
                             break;
                         case 'civilian':
-                            role = '👤 Civilian';
+                            role = '**👤 Civilian**';
                             break;
                         default:
-                            role = '🔴 Error';
+                            role = '**🔴 Error**';
                     }
 
                     // add the amount of money they earned to the role
-                    role += ` | +${earnedCoins}** 🪙`;
-                    return `<@${player}> - **${role}**\n`;
+                    role += `** | +${earnedCoins}** 🪙`;
+                    return `<@${player}> - ${role}\n`;
                 }));
 
                 const embed = new EmbedBuilder()
@@ -154,7 +154,7 @@ export const victoryHandler = async (gameId, type, client) => {
                 const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
                 // convert them into mentions
-                const alivePlayersMentions = alivePlayers.map(player => `<@${player}> `);
+                const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`).join(' ');
 
                 const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
                     let role = await gameState.getRole(gameId, player);
@@ -163,24 +163,24 @@ export const victoryHandler = async (gameId, type, client) => {
                     // add emojis to the roles + capitalise the first letter
                     switch (role) {
                         case 'mafia':
-                            role = '🔪 Mafia';
+                            role = '**🔪 Mafia**';
                             break;
                         case 'detective':
-                            role = '🕵️‍♂️ Detective';
+                            role = '🕵**️‍♂️ Detective**';
                             break;
                         case 'doctor':
-                            role = '🧑‍⚕️ Doctor';
+                            role = '**🧑‍⚕️ Doctor**';
                             break;
                         case 'civilian':
-                            role = '👤 Civilian';
+                            role = '**👤 Civilian**';
                             break;
                         default:
-                            role = '🔴 Error';
+                            role = '**🔴 Error**';
                     }
 
                     // add the amount of money they earned to the role
-                    role += ` | +${earnedCoins}** 🪙`;
-                    return `<@${player}> - **${role}\n`;
+                    role += `** | +${earnedCoins}** 🪙`;
+                    return `<@${player}> - ${role}\n`;
                 }));
 
 
