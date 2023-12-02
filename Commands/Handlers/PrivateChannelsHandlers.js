@@ -19,7 +19,8 @@ export const createPrivateChannelForUsers = async (guild, channelName, userIds) 
         const channel = await guild.channels.create({
             name: channelName,
             type: ChannelType.GuildText,
-            permissionOverwrites: permissionOverwrites
+            permissionOverwrites: permissionOverwrites,
+            parent: '1174697661539025098'
         });
 
         console.log(`Created new channel: ${channel.name}`);
