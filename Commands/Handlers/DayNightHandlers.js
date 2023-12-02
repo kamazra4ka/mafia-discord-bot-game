@@ -5,6 +5,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import {createNightActionsRow, getChannelIdsFromDatabase, nextStage, processDailyVote} from "./DatabaseHandlers.js";
 import gameState from "../../src/gameState.js";
 import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./PrivateChannelsHandlers.js";
+import {checkVictory} from "./VictoryHandlers.js";
 
 export const morningHandler = async (gameId, playersLeft, playersCount, currentDay, client) => {
 
@@ -14,7 +15,7 @@ export const morningHandler = async (gameId, playersLeft, playersCount, currentD
 
         // if all players have the mafia role send a message that mafia won
         if (playersLeft.every(player => player.role === 'mafia')) {
-            console.log('Mafia won');
+            await checkVictory(gameId, client)
         } else {
             // put all player's mentions in a variable players
             const players = playersLeft.map(player => `<@${player}>`).join(', ');

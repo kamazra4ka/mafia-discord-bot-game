@@ -181,7 +181,7 @@ export const victoryHandler = async (gameId, type, client) => {
                     // Construct the entire string to be bolded
                     const roleWithCoins = `**${role} | +${earnedCoins} 🪙**`;
                     return `<@${player}> - ${roleWithCoins}\n`;
-                }));
+                }).join(' '));
 
 
                 const embed = new EmbedBuilder()
