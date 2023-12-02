@@ -95,27 +95,27 @@ export const victoryHandler = async (gameId, type, client) => {
                     let role = await gameState.getRole(gameId, player);
                     const earnedCoins = await calculateGameReward(gameId, 'civilian', player);
 
-                    // add emojis to the roles + capitalise the first letter
+                    // Add emojis to the roles + capitalise the first letter
                     switch (role) {
                         case 'mafia':
-                            role = '**🔪 Mafia**';
+                            role = '🔪 Mafia';
                             break;
                         case 'detective':
-                            role = '🕵**️‍♂️ Detective**';
+                            role = '🕵️‍♂️ Detective';
                             break;
                         case 'doctor':
-                            role = '**🧑‍⚕️ Doctor**';
+                            role = '🧑‍⚕️ Doctor';
                             break;
                         case 'civilian':
-                            role = '**👤 Civilian**';
+                            role = '👤 Civilian';
                             break;
                         default:
-                            role = '**🔴 Error**';
+                            role = '🔴 Error';
                     }
 
-                    // add the amount of money they earned to the role
-                    role += `** | +${earnedCoins}** 🪙`;
-                    return `<@${player}> - ${role}\n`;
+                    // Construct the entire string to be bolded
+                    const roleWithCoins = `**${role} | +${earnedCoins} 🪙**`;
+                    return `<@${player}> - ${roleWithCoins}\n`;
                 }));
 
                 const embed = new EmbedBuilder()
@@ -160,27 +160,27 @@ export const victoryHandler = async (gameId, type, client) => {
                     let role = await gameState.getRole(gameId, player);
                     const earnedCoins = await calculateGameReward(gameId, 'civilian', player);
 
-                    // add emojis to the roles + capitalise the first letter
+                    // Add emojis to the roles + capitalise the first letter
                     switch (role) {
                         case 'mafia':
-                            role = '**🔪 Mafia**';
+                            role = '🔪 Mafia';
                             break;
                         case 'detective':
-                            role = '🕵**️‍♂️ Detective**';
+                            role = '🕵️‍♂️ Detective';
                             break;
                         case 'doctor':
-                            role = '**🧑‍⚕️ Doctor**';
+                            role = '🧑‍⚕️ Doctor';
                             break;
                         case 'civilian':
-                            role = '**👤 Civilian**';
+                            role = '👤 Civilian';
                             break;
                         default:
-                            role = '**🔴 Error**';
+                            role = '🔴 Error';
                     }
 
-                    // add the amount of money they earned to the role
-                    role += `** | +${earnedCoins}** 🪙`;
-                    return `<@${player}> - ${role}\n`;
+                    // Construct the entire string to be bolded
+                    const roleWithCoins = `**${role} | +${earnedCoins} 🪙**`;
+                    return `<@${player}> - ${roleWithCoins}\n`;
                 }));
 
 
