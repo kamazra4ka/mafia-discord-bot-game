@@ -668,23 +668,46 @@ export const processDailyVote = async (gameId, gameday) => {
                 let mostVotedTargetId = null;
                 let mostVotes = 0;
 
+                let voteMembers = {};
+
                 // Process daily votes
                 dailyVotes.forEach(vote => {
                     const targetId = vote.targetid;
-                    if (targetId) {
-                        if (!mostVotedTargetId) {
-                            // First vote
-                            mostVotedTargetId = targetId;
-                            mostVotes = 1;
-                        } else if (mostVotedTargetId === targetId) {
-                            // Another vote for the same target
-                            mostVotes++;
-                        } else {
-                            // A vote for a different target
-                            mostVotes--;
+
+                    if (!voteMembers[targetId]) {
+                        // First vote
+                        voteMembers.append({targetId: 1});
+                    } else {
+                        // Add vote
+                        voteMembers[targetId] += 1;
+                    }
+
+                    // if (targetId) {
+                    //     if (!mostVotedTargetId) {
+                    //         // First vote
+                    //         mostVotedTargetId = targetId;
+                    //         mostVotes = 1;
+                    //     } else if (mostVotedTargetId === targetId) {
+                    //         // Another vote for the same target
+                    //         mostVotes++;
+                    //     } else {
+                    //         // A vote for a different target
+                    //         mostVotes--;
+                    //     }
+                    // }
+                });
+
+                let maxVotesUser = null;
+
+                for (let key in voteMembers) {
+                    if (voteMembers.hasOwnProperty(key)) {
+                        if (!maxVotesUser || voteMembers[key] > maxVotesUser) {
+                            maxVotesUser = key;
                         }
                     }
-                });
+                }
+
+                mostVotedTargetId = maxVotesUser;
 
                 // Resolve the promise with the results
                 resolve({
