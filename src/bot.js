@@ -241,8 +241,10 @@ gameEvents.on('stageUpdate', async (data) => {
             if (stage === 1 && data.currentDay === 0) {
                 const gameInfo = {
                     roles: {},
-                    id: gameId
+                    id: gameId,
+                    dailyVotes: {}
                 };
+
                 // Initialize the game with no roles assigned yet
                 await gameState.setGame(gameId, gameInfo);
                 await assignStartRoles(gameId);

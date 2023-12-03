@@ -1,4 +1,6 @@
 // gameState.js
+import {getGameDay} from "../Commands/Handlers/DatabaseHandlers.js";
+
 class GameState {
     constructor() {
         this.games = new Map(); // Maps gameId to game info
@@ -117,6 +119,40 @@ class GameState {
         if (game) {
             return Object.keys(game.roles).filter(userId => game.roles[userId] === role);
         }
+    }
+
+    async addVote(gameId, day, voter, target) {
+        const game = this.getGame(gameId);
+
+        if (!game.dailyVotes[day]) {
+            // day does not exist
+            game.dailyVotes[day] = [{
+                voter: voter, target: target
+            }]
+        } else {
+
+            // day exists
+
+            for (let i in game.dailyVotes[day]) {
+                const vote = game.dailyVotes[day][i];
+
+                if (vote.voter === voter) {
+                    game.dailyVotes[day][i].target = target;
+                    return;
+                }
+            }
+
+            game.dailyVotes[day].push({
+                voter,
+                target
+            })
+        }
+    }
+
+    async getVote(gameId, day) {
+        const game = this.getGame(gameId);
+
+        return game.dailyVotes[day];
     }
 
     // get alive players (all dead users have a role of 'dead')

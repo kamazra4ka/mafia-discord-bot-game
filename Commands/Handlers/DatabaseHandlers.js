@@ -613,6 +613,8 @@ export const addDailyVoteToDatabase = async (gameDay, gameId, voterUserId, targe
                 return;
             }
 
+            gameState.addVote(gameId, gameDay, voterUserId, targetUserId);
+
             // Assuming the table for daily voting is called 'day_votes'
             // and there is a 'voterid' column to store the ID of the user who is voting.
             const query = `
@@ -667,12 +669,11 @@ export const processDailyVote = async (gameId, gameday) => {
                 let mostVotedTargetId = null;
                 let mostVotes = 0;
 
-                let voteMembers = {};
+                let votedForIds = [];
 
-                let votedForIds = []
+                const votes = await gameState.getVote(gameId, gameday)
 
-                // Process daily votes
-                dailyVotes.forEach(vote => votedForIds.push(vote.targetid));
+                votes.forEach(vote => votedForIds.push(vote.target))
 
                 let maxVotesId = votedForIds.reduce((maxVotes, userId) => {
                     if (userId > maxVotes.userId) {
