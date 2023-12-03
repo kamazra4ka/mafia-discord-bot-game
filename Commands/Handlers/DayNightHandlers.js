@@ -247,7 +247,7 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
                 console.error('Mafia channel not found!');
             } else {
                 try {
-                    await sendMafiaVote(mafiaChannel, gameId);
+                    setTimeout(async () => await sendMafiaVote(mafiaChannel, gameId), 5000)
                 } catch (e) {
                     console.error('Mafia channel not found!\n' + e);
                 }
@@ -257,7 +257,7 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
                 console.error('Doctor channel not found!');
             } else {
                 try {
-                    await sendDoctorVote(doctorChannel, gameId);
+                    setTimeout(async () => await sendDoctorVote(doctorChannel, gameId), 5000);
                 } catch (e) {
                     console.error('Doctor channel not found!\n' + e);
                 }
@@ -267,7 +267,7 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
                 console.error('Detective channel not found!');
             } else {
                 try {
-
+                    setTimeout(async () => await sendDoctorVote(detectiveChannel, gameId), 5000);
                 } catch (e) {
                     console.error('Detective channel not found!\n' + e);
                 }
