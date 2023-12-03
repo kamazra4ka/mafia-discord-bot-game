@@ -36,7 +36,11 @@ export const sendMafiaVote = async (channel, gameId) => {
 
         // mention all mafia members
         const mafiaMembers = await gameState.getUsersByRole(gameId, 'mafia');
-        const mafiaMentions = mafiaMembers.map(member => `<@${member}>`).join(' ');
+        let mafiaMentions = mafiaMembers.map(member => `<@${member}>`).join(' ');
+
+        if (!mafiaMentions) {
+            mafiaMentions = 'No alive mafia members found.';
+        }
 
         channel.send(`${mafiaMentions}`)
 
@@ -115,7 +119,11 @@ export const sendDoctorVote = async (channel, gameId) => {
 
         // mention the doctor
         const doctor = await gameState.getUsersByRole(gameId, 'doctor');
-        const doctorMention = doctor.map(member => `<@${member}>`).join(' ');
+        let doctorMention = doctor.map(member => `<@${member}>`).join(' ');
+
+        if (!doctorMention) {
+            doctorMention = 'No alive doctors were found.';
+        }
 
         channel.send(`${doctorMention}`)
 
