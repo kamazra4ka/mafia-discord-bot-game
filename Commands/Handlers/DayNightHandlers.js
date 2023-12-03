@@ -9,7 +9,7 @@ import {checkVictory} from "./VictoryHandlers.js";
 
 export const morningHandler = async (gameId, playersLeft, playersCount, currentDay, client) => {
 
-    let topic, embed, cId = '1175130149516214472';
+    let topic, embed, cId = '1180826418523942922';
 
     try {
 
@@ -63,7 +63,7 @@ export const morningHandler = async (gameId, playersLeft, playersCount, currentD
 
 export const startDailyVote = async (gameId, playersLeft, playersCount, currentDay, client) => {
 
-    let embed, cId = '1175130149516214472';
+    let embed, cId = '1180826418523942922';
 
     try {
 
@@ -132,7 +132,7 @@ export const startDailyVote = async (gameId, playersLeft, playersCount, currentD
 
 export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay, client) => {
 
-    let embed, cId = '1175130149516214472';
+    let embed, cId = '1180826418523942922';
 
     try {
 
@@ -200,7 +200,7 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
             console.log(message);
         }});
 
-        let embed, cId = '1175130149516214472';
+        let embed, cId = '1180826418523942922';
         let day = currentDay + 1;
 
         // create a row for actions
@@ -243,9 +243,25 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
             const doctorChannel = await client.channels.fetch(channelIds.gamedoctorchid);
             const detectiveChannel = await client.channels.fetch(channelIds.gamedetectivechid);
 
-            await sendMafiaVote(mafiaChannel, gameId);
-            await sendDoctorVote(doctorChannel, gameId);
-            await sendDetectiveVote(detectiveChannel, gameId);
+
+            if (!mafiaChannel) {
+                console.error('Mafia channel not found!');
+            } else {
+                await sendMafiaVote(mafiaChannel, gameId);
+            }
+
+            if (!doctorChannel) {
+                console.error('Doctor channel not found!');
+            } else {
+                await sendDoctorVote(doctorChannel, gameId);
+            }
+
+            if (!detectiveChannel) {
+                console.error('Detective channel not found!');
+            } else {
+                await sendDetectiveVote(detectiveChannel, gameId);
+            }
+
         });
 
         await setTimeout(async () => {

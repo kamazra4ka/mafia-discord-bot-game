@@ -106,7 +106,7 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
 // voice lines for the game + ai
 export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceLine, additionalData) => {
 
-    const cId = '1175130149516214472';
+    const cId = '1180826418523942922';
 
     let topic;
     let voiceLineText;

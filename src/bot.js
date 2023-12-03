@@ -158,7 +158,7 @@ client.on('interactionCreate', async interaction => {
                     const userId = interaction.customId.split('_')[2];
                     const voterId = interaction.user.id;
 
-                    const cId = '1175130149516214472';
+                    const cId = '1180826418523942922';
 
                     try {
                         if (currentGame) {
@@ -229,7 +229,7 @@ client.on('interactionCreate', async interaction => {
 gameEvents.on('stageUpdate', async (data) => {
     try {
         const guild = client.guilds.cache.get('1174666167227531345');
-        const guildId = 1174666167227531345, cId = '1175130149516214472';
+        const guildId = 1174666167227531345, cId = '1180826418523942922';
 
         const gameId = data.gameId;
         const stage = data.currentStage;
@@ -422,7 +422,7 @@ gameEvents.on('dayUpdate', async (data) => {
                     if (mafiaActionResult.target) {
                         targetMafia = await client.users.fetch(mafiaActionResult.target);
                     } else {
-                        targetMafia.username = 'nobody'
+                        targetMafia = await client.users.fetch('1175134258482917518')
                     }
 
 
@@ -431,7 +431,7 @@ gameEvents.on('dayUpdate', async (data) => {
                     if (doctorActionResult.saved) {
                         targetDoctor = await client.users.fetch(doctorActionResult.saved);
                     } else {
-                        targetDoctor.username = 'nobody'
+                        targetDoctor = await client.users.fetch('1175134258482917518')
                     }
 
                     // if mafiaActionResult.success is true, then the target was killed and call the voice line 3 with additional data being player's nickname

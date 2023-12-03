@@ -40,9 +40,13 @@ export const sendMafiaVote = async (channel, gameId) => {
 
         if (!mafiaMentions) {
             mafiaMentions = 'No alive mafia members found.';
+        } else {
+            try {
+                channel.send(`${mafiaMentions}`)
+            } catch (error) {
+                console.error('Error sending mafia mentions:', error);
+            }
         }
-
-        channel.send(`${mafiaMentions}`)
 
         const players = await gameState.getUsersByRole(gameId, 'civilian');
 
@@ -97,15 +101,16 @@ export const sendMafiaVote = async (channel, gameId) => {
                 ],
             };
 
-            const message = await channel.send(mafiaVoteMessage).then(message => {
-                // delete after 30 seconds
-                setTimeout(() => {
-                    message.delete();
-                }, 60000);
-            });
-            console.log(`Sent mafia vote message: ${message.content}`);
+            if (mafiaVoteMessage) {
+                const message = await channel.send(mafiaVoteMessage).then(message => {
+                    // delete after 30 seconds
+                    setTimeout(() => {
+                        message.delete();
+                    }, 60000);
+                });
 
-            return message;
+                return message;
+            }
         }));
 
     } catch (error) {
@@ -123,9 +128,9 @@ export const sendDoctorVote = async (channel, gameId) => {
 
         if (!doctorMention) {
             doctorMention = 'No alive doctors were found.';
+        } else {
+            channel.send(`${doctorMention}`)
         }
-
-        channel.send(`${doctorMention}`)
 
         const players = await gameState.getUsersByRole(gameId, 'civilian');
 
@@ -175,14 +180,17 @@ export const sendDoctorVote = async (channel, gameId) => {
                     },
                 ],
             };
-            const message = await channel.send(doctorVoteMessage).then(message => {
-                // delete after 30 seconds
-                setTimeout(() => {
-                    message.delete();
-                }, 60000);
-            });
 
-            return message;
+            if (doctorVoteMessage) {
+                const message = await channel.send(doctorVoteMessage).then(message => {
+                    // delete after 30 seconds
+                    setTimeout(() => {
+                        message.delete();
+                    }, 60000);
+                });
+
+                return message;
+            }
         }));
 
     } catch (error) {
@@ -242,14 +250,19 @@ export const sendDetectiveVote = async (channel, gameId) => {
                     },
                 ],
             };
-            const message = await channel.send(doctorVoteMessage).then(message => {
-                // delete after 30 seconds
-                setTimeout(() => {
-                    message.delete();
-                }, 60000);
-            });
 
-            return message;
+            if (doctorVoteMessage) {
+                const message = await channel.send(doctorVoteMessage).then(message => {
+                    // delete after 30 seconds
+                    setTimeout(() => {
+                        message.delete();
+                    }, 60000);
+                });
+
+                return message;
+            }
+
+
         }));
 
     } catch (error) {

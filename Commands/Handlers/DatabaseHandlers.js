@@ -454,7 +454,6 @@ export const getPlayerCoinsFromDatabase = async (userDiscordId) => {
                 }
 
                 console.log(rows)
-                console.log(rows[0].coins);
 
                 if (rows[0].coins === null) {
                     resolve(1);
