@@ -102,14 +102,18 @@ export const sendMafiaVote = async (channel, gameId) => {
             };
 
             if (mafiaVoteMessage) {
-                const message = await channel.send(mafiaVoteMessage).then(message => {
-                    // delete after 30 seconds
-                    setTimeout(() => {
-                        message.delete();
-                    }, 60000);
-                });
+                try {
+                    const message = await channel.send(mafiaVoteMessage).then(message => {
+                        // delete after 30 seconds
+                        setTimeout(() => {
+                            message.delete();
+                        }, 60000);
+                    });
 
-                return message;
+                    return message;
+                } catch (e) {
+                    console.log(e)
+                }
             }
         }));
 
@@ -182,14 +186,18 @@ export const sendDoctorVote = async (channel, gameId) => {
             };
 
             if (doctorVoteMessage) {
-                const message = await channel.send(doctorVoteMessage).then(message => {
-                    // delete after 30 seconds
-                    setTimeout(() => {
-                        message.delete();
-                    }, 60000);
-                });
+                try {
+                    const message = await channel.send(doctorVoteMessage).then(message => {
+                        // delete after 30 seconds
+                        setTimeout(() => {
+                            message.delete();
+                        }, 60000);
+                    });
 
-                return message;
+                    return message;
+                } catch (e) {
+                    console.log(e)
+                }
             }
         }));
 
