@@ -1,6 +1,5 @@
 import gameState from "../../src/gameState.js";
-import {getChannelIdsFromDatabase, getGameDay} from "./DatabaseHandlers.js";
-import {sendDetectiveVote, sendDoctorVote, sendMafiaVote} from "./PrivateChannelsHandlers.js";
+import {getChannelIdsFromDatabase} from "./DatabaseHandlers.js";
 import {EmbedBuilder} from "discord.js";
 import {generateVoiceLine} from "./OpenaiHandlers.js";
 import {narrateAndPlay} from "./VoiceHandlers.js";
@@ -49,7 +48,7 @@ export const checkVictory = async (gameId, client) => {
             }
         }
     } catch (error) {
-        const channel = await client.channels.fetch('1175130149516214472');
+        const channel = await client.channels.fetch('1180826418523942922');
         channel.send('Something went wrong. Please, try again.\n\n' + error);
     }
 }
@@ -77,7 +76,7 @@ export const victoryHandler = async (gameId, type, client) => {
         if (type === 'civilian') {
 
             // fetching the channel
-            const channel = await client.channels.fetch('1175130149516214472');
+            const channel = await client.channels.fetch('1180826418523942922');
 
             const topic = `Civilian players won the game!`
             const voiceLine = generateVoiceLine(topic).then(async voiceLine => {
@@ -143,7 +142,7 @@ export const victoryHandler = async (gameId, type, client) => {
         } else if (type === 'mafia') {
 
             // fetching the channel
-            const channel = await client.channels.fetch('1175130149516214472');
+            const channel = await client.channels.fetch('1180826418523942922');
 
             const topic = `Mafia players won the game!`
             const voiceLine = generateVoiceLine(topic).then(async voiceLine => {
@@ -208,7 +207,7 @@ export const victoryHandler = async (gameId, type, client) => {
             });
         }
     } catch (error) {
-        const channel = await client.channels.fetch('1175130149516214472');
+        const channel = await client.channels.fetch('1180826418523942922');
         channel.send('Something went wrong. Please, try again.\n\n' + error);
     }
 

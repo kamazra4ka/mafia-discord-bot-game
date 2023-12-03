@@ -1,8 +1,5 @@
-import { config } from 'dotenv';
-import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
-let embed;
-
+import {config} from 'dotenv';
+import {Client, EmbedBuilder, GatewayIntentBits} from 'discord.js';
 import {
     addDailyVoteToDatabase,
     addTargetToDatabase,
@@ -10,31 +7,33 @@ import {
     assignStartRoles,
     createNightActionsRow,
     getGameDay,
-    getGameId, nextStage,
+    nextStage,
     processNightActions,
     sendChannelIdsToDatabase
 } from "../Commands/Handlers/DatabaseHandlers.js";
 
-import {
-    ping
-} from '../Commands/ping.js';
+import {ping} from '../Commands/ping.js';
 
-import {
-    start
-} from '../Commands/start.js';
+import {start} from '../Commands/start.js';
 import gameEvents from "../Commands/Emitters/emitter.js";
 import gameState from "./gameState.js";
 
 import {
     checkIfDead,
-    createPrivateChannelForUsers, disableMafiaVoteButtons, sendDetectiveVote, sendDoctorVote, sendMafiaVote
+    createPrivateChannelForUsers,
+    sendDetectiveVote,
+    sendDoctorVote,
+    sendMafiaVote
 } from "../Commands/Handlers/PrivateChannelsHandlers.js";
 import {narrateAndPlayVoiceLine} from "../Commands/Handlers/VoiceHandlers.js";
-import {morningHandler, startDailyVote} from "../Commands/Handlers/DayNightHandlers.js";
+import {morningHandler} from "../Commands/Handlers/DayNightHandlers.js";
 import {checkVictory} from "../Commands/Handlers/VictoryHandlers.js";
 import {stopAllGames} from "../Commands/stop.js";
 import {shop} from "../Commands/shop.js";
 import {buyItem} from "../Commands/Shop/buyItem.js";
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
+let embed;
 
 // get the token from the .env file using dotenv
 config();
@@ -276,7 +275,7 @@ gameEvents.on('stageUpdate', async (data) => {
                                 .addFields(
                                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                                 )
-                                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1176101942678794271/mafia.png?ex=656da54a&is=655b304a&hm=47205392d44c7620b987c443770d63f37581215b4db5ef51b772fe243c74da77&=&width=896&height=671')
+                                .setImage('https://media.discordapp.net/attachments/1180826418523942922/1176101942678794271/mafia.png?ex=656da54a&is=655b304a&hm=47205392d44c7620b987c443770d63f37581215b4db5ef51b772fe243c74da77&=&width=896&height=671')
                                 .setTimestamp()
                                 .setFooter({
                                     text: 'MafiaBot',
@@ -306,7 +305,7 @@ gameEvents.on('stageUpdate', async (data) => {
                                 .addFields(
                                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                                 )
-                                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175723886621507656/doctor.png?ex=656c4532&is=6559d032&hm=61d2b6af9841b420c14998bb09512755d6bafa731efde73f11e453409dca69f4&=&width=1207&height=905')
+                                .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175723886621507656/doctor.png?ex=656c4532&is=6559d032&hm=61d2b6af9841b420c14998bb09512755d6bafa731efde73f11e453409dca69f4&=&width=1207&height=905')
                                 .setTimestamp()
                                 .setFooter({
                                     text: 'MafiaBot',
@@ -331,7 +330,7 @@ gameEvents.on('stageUpdate', async (data) => {
                                 .addFields(
                                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                                 )
-                                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175351078741626950/detective.png?width=1207&height=905')
+                                .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175351078741626950/detective.png?width=1207&height=905')
                                 .setTimestamp()
                                 .setFooter({
                                     text: 'MafiaBot',
@@ -383,7 +382,7 @@ gameEvents.on('stageUpdate', async (data) => {
             }
         }
     } catch (error) {
-        const channel = await client.channels.fetch('1175130149516214472');
+        const channel = await client.channels.fetch('1180826418523942922');
         channel.send('Something went wrong. Please, try again.\n\n' + error);
     }
 
@@ -475,7 +474,7 @@ gameEvents.on('dayUpdate', async (data) => {
             }, 45000);
         }
     } catch (error) {
-        const channel = await client.channels.fetch('1175130149516214472');
+        const channel = await client.channels.fetch('1180826418523942922');
         channel.send('Something went wrong. Please, try again.\n\n' + error);
     }
 

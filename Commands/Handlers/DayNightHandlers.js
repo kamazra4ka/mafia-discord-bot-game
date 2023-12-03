@@ -217,7 +217,7 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                 )
-                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
+                .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
                 .setTimestamp()
                 .setFooter({
                     text: 'MafiaBot',
@@ -283,7 +283,7 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
             .setColor('3a3a3a')
             .setTitle('Mafia Game')
             .setDescription(`🎙 Bot: ${voiceLine}`)
-            .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175725053258760223/channels.png?ex=656c4648&is=6559d148&hm=f3f2ac5e98d762a3b1a647412817f7d88d6f85a90d666bcec172670fe5d7bd53&=&width=1207&height=905')
+            .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175725053258760223/channels.png?ex=656c4648&is=6559d148&hm=f3f2ac5e98d762a3b1a647412817f7d88d6f85a90d666bcec172670fe5d7bd53&=&width=1207&height=905')
             .setTimestamp()
             .setFooter({
                     text: 'MafiaBot',

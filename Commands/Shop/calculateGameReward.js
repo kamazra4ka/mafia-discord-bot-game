@@ -37,7 +37,7 @@ export const calculateGameReward = async (gameId, victorySide, userId) => {
             // calculate user reward
             userReward = roleReward + dayReward;
         } catch (error) {
-            const channel = await client.channels.fetch('1175130149516214472');
+            const channel = await client.channels.fetch('1180826418523942922');
             channel.send('Something went wrong. Please, try again.\n\n' + error);
         }
     } else if (victorySide === 'civilian') {
@@ -70,14 +70,14 @@ export const calculateGameReward = async (gameId, victorySide, userId) => {
             // calculate user reward
             userReward = roleReward + dayReward;
         } catch (error) {
-            const channel = await client.channels.fetch('1175130149516214472');
+            const channel = await client.channels.fetch('1180826418523942922');
             channel.send('Something went wrong. Please, try again.\n\n' + error);
         }
     } else {
         try {
 
         } catch (error) {
-            const channel = await client.channels.fetch('1175130149516214472');
+            const channel = await client.channels.fetch('1180826418523942922');
             channel.send('Something went wrong. Please, try again.\n\n' + error);
         }
     }

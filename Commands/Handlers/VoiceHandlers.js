@@ -1,11 +1,15 @@
-import { getVoiceConnection, createAudioResource, AudioPlayer, VoiceConnectionStatus, joinVoiceChannel } from '@discordjs/voice';
+import {
+    AudioPlayer,
+    createAudioResource,
+    getVoiceConnection,
+    joinVoiceChannel,
+    VoiceConnectionStatus
+} from '@discordjs/voice';
 import fs from 'fs';
 import googleTTS from 'google-tts-api';
 import fetch from 'node-fetch';
 import {EmbedBuilder} from "discord.js";
 import {generateVoiceLine} from "./OpenaiHandlers.js";
-import gameState from "../../src/gameState.js";
-import {getGameDay} from "./DatabaseHandlers.js";
 
 export const joinVoice = async (interaction) => {
     // Check if the member is in a voice channel
@@ -128,7 +132,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                     .setColor('3a3a3a')
                     .setTitle('Mafia Game')
                     .setDescription(`🎙 Bot: ${voiceLineText}`)
-                    .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175153853440725123/introduction.png?ex=656a324f&is=6557bd4f&hm=dc9bfadab571050136b4ca51169c4ba85c161e6a10a5d5da02b805b6095bfa5c&=&width=1500&height=500')
+                    .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175153853440725123/introduction.png?ex=656a324f&is=6557bd4f&hm=dc9bfadab571050136b4ca51169c4ba85c161e6a10a5d5da02b805b6095bfa5c&=&width=1500&height=500')
                     .setTimestamp()
                     .setFooter({
                         text: 'MafiaBot',
@@ -156,7 +160,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setColor('3a3a3a')
                         .setTitle('Mafia Game')
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
-                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175350035244912641/roles.png?ex=656ae905&is=65587405&hm=3d7c6c8d6ae69a62a4b1a54e1b141933e229722b241c4570d488ca6e8f28dc70&=&width=1207&height=905')
+                        .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175350035244912641/roles.png?ex=656ae905&is=65587405&hm=3d7c6c8d6ae69a62a4b1a54e1b141933e229722b241c4570d488ca6e8f28dc70&=&width=1207&height=905')
                         .setTimestamp()
                         .setFooter({
                             text: 'MafiaBot',
@@ -182,7 +186,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setColor('3a3a3a')
                         .setTitle('Mafia Game')
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
-                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1176101942678794271/mafia.png?ex=656da54a&is=655b304a&hm=47205392d44c7620b987c443770d63f37581215b4db5ef51b772fe243c74da77&=&width=896&height=671')
+                        .setImage('https://media.discordapp.net/attachments/1180826418523942922/1176101942678794271/mafia.png?ex=656da54a&is=655b304a&hm=47205392d44c7620b987c443770d63f37581215b4db5ef51b772fe243c74da77&=&width=896&height=671')
                         .setTimestamp()
                         .setFooter({
                             text: 'MafiaBot',
@@ -208,7 +212,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setColor('3a3a3a')
                         .setTitle('Mafia Game')
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
-                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175351853261803550/civilian.png?ex=656aeab6&is=655875b6&hm=035983a1fd77fc2a366f581dc3184aa7c7f43e9fbdc2090399b3d1299d6e948e&=&width=1207&height=905')
+                        .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175351853261803550/civilian.png?ex=656aeab6&is=655875b6&hm=035983a1fd77fc2a366f581dc3184aa7c7f43e9fbdc2090399b3d1299d6e948e&=&width=1207&height=905')
                         .setTimestamp()
                         .setFooter({
                             text: 'MafiaBot',
@@ -266,7 +270,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                                 .addFields(
                                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                                 )
-                                .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
+                                .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
                                 .setTimestamp()
                                 .setFooter({
                                     text: 'MafiaBot',
@@ -289,7 +293,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         .setColor('3a3a3a')
                         .setTitle('Mafia Game')
                         .setDescription(`🎙 Bot: ${voiceLineText}`)
-                        .setImage('https://media.discordapp.net/attachments/1175130149516214472/1175725053258760223/channels.png?ex=656c4648&is=6559d148&hm=f3f2ac5e98d762a3b1a647412817f7d88d6f85a90d666bcec172670fe5d7bd53&=&width=1207&height=905')
+                        .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175725053258760223/channels.png?ex=656c4648&is=6559d148&hm=f3f2ac5e98d762a3b1a647412817f7d88d6f85a90d666bcec172670fe5d7bd53&=&width=1207&height=905')
                         .setTimestamp()
                         .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
 
