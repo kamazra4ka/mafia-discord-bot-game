@@ -1,5 +1,5 @@
 import mysql from 'mysql2';
-import { config } from 'dotenv';
+import {config} from 'dotenv';
 import gameEvents from "../Emitters/emitter.js";
 import gameState from "../../src/gameState.js";
 
@@ -82,39 +82,39 @@ export const createGame = async (interaction, gameId) => {
 
 export const addUserToGame = async (interaction) => {
 
-        const userDiscordId = interaction.user.id;
-        const userName = interaction.user.username;
-        const serverDiscordId = interaction.guildId;
-        console.log(`${serverDiscordId} 123 discord server id addUserToGame`);
-        let gameId;
+    const userDiscordId = interaction.user.id;
+    const userName = interaction.user.username;
+    const serverDiscordId = interaction.guildId;
+    console.log(`${serverDiscordId} 123 discord server id addUserToGame`);
+    let gameId;
 
-        // get the gameId from the servers table
-         await pool.getConnection((err, connection) => {
+    // get the gameId from the servers table
+    await pool.getConnection((err, connection) => {
+        if (err) {
+            throw err;
+        }
+
+        connection.query('SELECT serverstartgameid FROM servers WHERE serverdiscordid = ? ORDER BY servers.serverstartdate DESC LIMIT 1;', [serverDiscordId], (err, rows, fields) => {
+            connection.release();
             if (err) {
                 throw err;
             }
+            gameId = rows[0].serverstartgameid;
 
-            connection.query('SELECT serverstartgameid FROM servers WHERE serverdiscordid = ? ORDER BY servers.serverstartdate DESC LIMIT 1;', [serverDiscordId], (err, rows, fields) => {
-                connection.release();
+            pool.getConnection((err, connection) => {
                 if (err) {
                     throw err;
                 }
-                gameId = rows[0].serverstartgameid;
 
-                pool.getConnection((err, connection) => {
+                connection.query('INSERT users SET userdiscordid = ?, usernickname = ?, usercurrentgame = ?', [userDiscordId, userName, gameId], (err, rows, fields) => {
+                    connection.release();
                     if (err) {
                         throw err;
                     }
-
-                    connection.query('INSERT users SET userdiscordid = ?, usernickname = ?, usercurrentgame = ?', [userDiscordId, userName, gameId], (err, rows, fields) => {
-                        connection.release();
-                        if (err) {
-                            throw err;
-                        }
-                    });
                 });
             });
         });
+    });
 }
 
 export const getUsersInGame = async (interaction, gameId) => {
@@ -150,19 +150,19 @@ export const gameStarts = async (interaction, gameId) => {
     let gamedate = new Date();
     gamedate = gamedate.getTime();
 
-        pool.getConnection((err, connection) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            throw err;
+        }
+
+        connection.query('INSERT games SET gameid = ?, gameday = 0, gamestage = 0, gameserverid = ?, gameended = 0, gamedate = ?', [gameId, serverDiscordId, gamedate], (err, rows, fields) => {
+            connection.release();
+            console.log(12346788989999)
             if (err) {
                 throw err;
             }
-
-            connection.query('INSERT games SET gameid = ?, gameday = 0, gamestage = 0, gameserverid = ?, gameended = 0, gamedate = ?', [gameId, serverDiscordId, gamedate], (err, rows, fields) => {
-                connection.release();
-                console.log(12346788989999)
-                if (err) {
-                    throw err;
-                }
-            });
         });
+    });
 
 
 }
@@ -237,13 +237,13 @@ export const nextStage = (interaction, gameId, client, callback) => {
             // It's currently day, switch to night
             query = 'UPDATE games SET gamestage = 1 WHERE gameid = ?';
             queryParams = [gameId];
-            gameEvents.emit('stageUpdate', { gameId, currentStage: 1, currentDay: currentStage.gameday });
+            gameEvents.emit('stageUpdate', {gameId, currentStage: 1, currentDay: currentStage.gameday});
         } else {
             // It's currently night, increment day and switch to day
             query = 'UPDATE games SET gamestage = 0, gameday = gameday + 1 WHERE gameid = ?';
             queryParams = [gameId];
-            gameEvents.emit('stageUpdate', { gameId, currentStage: 0, currentDay: currentStage.gameday + 1 });
-            gameEvents.emit('dayUpdate', { gameId, currentDay: currentStage.gameday + 1, client: client });
+            gameEvents.emit('stageUpdate', {gameId, currentStage: 0, currentDay: currentStage.gameday + 1});
+            gameEvents.emit('dayUpdate', {gameId, currentDay: currentStage.gameday + 1, client: client});
         }
 
         // Update the game stage
@@ -320,7 +320,7 @@ export const sendChannelIdsToDatabase = async (gameId, mafiaChannelId, doctorCha
             connection.release();
             if (err) {
                 console.error(err);
-                return;
+
             }
         });
     });
@@ -351,7 +351,7 @@ export const checkUserInDatabaseItems = async (userDiscordId) => {
                         connection.release();
                         if (err) {
                             console.error(err);
-                            return;
+
                         }
                     });
                 });
@@ -411,7 +411,7 @@ export const addItemToUser = async (userDiscordId, item) => {
             connection.release();
             if (err) {
                 console.error(err);
-                return;
+
             }
         });
     });
@@ -429,7 +429,7 @@ export const addCoinsToUser = async (userDiscordId, coins) => {
             connection.release();
             if (err) {
                 console.error(err);
-                return;
+
             }
         });
     });
@@ -502,7 +502,7 @@ export const createNightActionsRow = async (gameId, gameDay) => {
             connection.release();
             if (err) {
                 console.error(err);
-                return;
+
             }
         });
     });
@@ -546,61 +546,60 @@ export const processNightActions = async (gameId) => {
                 return;
             }
 
-                // Query to get night actions for the game
-                connection.query('SELECT * FROM night_actions WHERE gameid = ?', [gameId], async (err, rows) => {
-                    if (err) {
-                        console.error('Query Error:', err);
-                        connection.release();
-                        reject(err);
-                        return;
-                    }
-
-                    if (rows.length === 0) {
-                        console.log('No night actions found for gameId:', gameId);
-                        connection.release();
-                        resolve({});
-                        return;
-                    }
-
-                    const nightActions = rows[0];
+            // Query to get night actions for the game
+            connection.query('SELECT * FROM night_actions WHERE gameid = ?', [gameId], async (err, rows) => {
+                if (err) {
+                    console.error('Query Error:', err);
                     connection.release();
+                    reject(err);
+                    return;
+                }
 
-                    // Initialize results variables
-                    let mafiaActionResult = null;
-                    let doctorActionResult = null;
-                    let detectiveActionResult = null;
+                if (rows.length === 0) {
+                    console.log('No night actions found for gameId:', gameId);
+                    connection.release();
+                    resolve({});
+                    return;
+                }
 
-                    // Process Mafia action
-                    if (nightActions.gamemafiatarget !== nightActions.gamedoctortarget) {
-                        // Mafia's target was not saved by the doctor
-                        mafiaActionResult = {success: true, target: nightActions.gamemafiatarget};
+                const nightActions = rows[0];
+                connection.release();
 
-                    } else {
-                        // Mafia's target was saved by the doctor
-                        mafiaActionResult = {success: false, target: nightActions.gamemafiatarget};
-                    }
+                // Initialize results variables
+                let mafiaActionResult = null;
+                let doctorActionResult = null;
+                let detectiveActionResult = null;
 
-                    // Process Doctor action
-                    doctorActionResult = {saved: nightActions.gamedoctortarget};
+                // Process Mafia action
+                if (nightActions.gamemafiatarget !== nightActions.gamedoctortarget) {
+                    // Mafia's target was not saved by the doctor
+                    mafiaActionResult = {success: true, target: nightActions.gamemafiatarget};
 
-                    // Process Detective action (you will need to fetch the actual role from the database)
-                    if (nightActions.gamedetectivetarget) {
-                        const detectiveTargetRole = await gameState.getRole(gameId, nightActions.gamedetectivetarget);
-                        detectiveActionResult = {
-                            checked: nightActions.gamedetectivetarget,
-                            role: `${detectiveTargetRole}` || 'An error occurred'
-                        };
-                    }
+                } else {
+                    // Mafia's target was saved by the doctor
+                    mafiaActionResult = {success: false, target: nightActions.gamemafiatarget};
+                }
 
-                    // Resolve the promise with the results
-                    resolve({
-                        mafiaActionResult,
-                        doctorActionResult,
-                        detectiveActionResult,
-                        detectiveChannelId: nightActions.gamedetectivechid
-                    });
+                // Process Doctor action
+                doctorActionResult = {saved: nightActions.gamedoctortarget};
+
+                // Process Detective action (you will need to fetch the actual role from the database)
+                if (nightActions.gamedetectivetarget) {
+                    const detectiveTargetRole = await gameState.getRole(gameId, nightActions.gamedetectivetarget);
+                    detectiveActionResult = {
+                        checked: nightActions.gamedetectivetarget, role: `${detectiveTargetRole}` || 'An error occurred'
+                    };
+                }
+
+                // Resolve the promise with the results
+                resolve({
+                    mafiaActionResult,
+                    doctorActionResult,
+                    detectiveActionResult,
+                    detectiveChannelId: nightActions.gamedetectivechid
                 });
             });
+        });
     });
 };
 
@@ -670,55 +669,30 @@ export const processDailyVote = async (gameId, gameday) => {
 
                 let voteMembers = {};
 
+                let votedForIds = []
+
                 // Process daily votes
-                dailyVotes.forEach(vote => {
-                    const targetId = vote.targetid;
+                dailyVotes.forEach(vote => votedForIds.push(vote.targetid));
 
-                    if (!voteMembers[targetId]) {
-                        // First vote
-                        voteMembers.update({targetId: 1});
+                let maxVotesId = votedForIds.reduce((maxVotes, userId) => {
+                    if (userId > maxVotes.userId) {
+                        return {userId, votes: 1};
                     } else {
-                        // Add vote
-                        voteMembers[targetId] += 1;
+                        maxVotes.votes++;
+                        return maxVotes;
                     }
+                }, {userId: 0, votes: 0},);
 
-                    // if (targetId) {
-                    //     if (!mostVotedTargetId) {
-                    //         // First vote
-                    //         mostVotedTargetId = targetId;
-                    //         mostVotes = 1;
-                    //     } else if (mostVotedTargetId === targetId) {
-                    //         // Another vote for the same target
-                    //         mostVotes++;
-                    //     } else {
-                    //         // A vote for a different target
-                    //         mostVotes--;
-                    //     }
-                    // }
-                });
-
-                let maxVotesUser = null;
-
-                for (let key in voteMembers) {
-                    if (voteMembers.hasOwnProperty(key)) {
-                        if (!maxVotesUser || voteMembers[key] > maxVotesUser) {
-                            maxVotesUser = key;
-                        }
-                    }
-                }
-
-                mostVotedTargetId = maxVotesUser;
+                mostVotedTargetId = maxVotesId.userId;
 
                 // Resolve the promise with the results
                 resolve({
-                    mostVotedTargetId,
-                    mostVotes,
+                    mostVotedTargetId, mostVotes,
                 });
             });
         });
     });
 }
-
 
 
 // Usage:
