@@ -676,7 +676,7 @@ export const processDailyVote = async (gameId, gameday) => {
 
                     if (!voteMembers[targetId]) {
                         // First vote
-                        voteMembers.append({targetId: 1});
+                        voteMembers.update({targetId: 1});
                     } else {
                         // Add vote
                         voteMembers[targetId] += 1;
