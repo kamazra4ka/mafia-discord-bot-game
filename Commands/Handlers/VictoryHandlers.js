@@ -125,11 +125,11 @@ export const victoryHandler = async (gameId, type, client) => {
                         {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
                         {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
                     )
-                    .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177965568716980234/civ_won.png?ex=65746ced&is=6561f7ed&hm=8e9fcd4bd4f246943bafba82b00814a8cd03113ebf8ef668f7ad621b58310357&=&format=webp&width=1500&height=500')
+                    .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881557817409536/civ_won.png?ex=657f08a7&is=656c93a7&hm=24c0b1f6d5e78d590cbdd10a5fc3e1a3dabd6f03d9945e6f287d2358bc538a7b&=&format=webp&quality=lossless&width=1920&height=639')
                     .setTimestamp()
                     .setFooter({
                         text: 'MafiaBot',
-                        iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                     });
 
                 // sending the results
@@ -191,11 +191,11 @@ export const victoryHandler = async (gameId, type, client) => {
                         {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
                         {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
                     )
-                    .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177965568402411661/mafia_won.png?ex=65746ced&is=6561f7ed&hm=a3d5ed1e78b1a8241478699a4eb523c2cae6d43477e7602fd8467215f98238c6&=&format=webp&width=1500&height=500')
+                    .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881557569933452/mafia_won.png?ex=657f08a7&is=656c93a7&hm=3dd61104999476204664e3af0494cf19a8baa9b282cdec956f02b967d8be5db9&=&format=webp&quality=lossless&width=1920&height=639')
                     .setTimestamp()
                     .setFooter({
                         text: 'MafiaBot',
-                        iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                     });
 
                 // sending the results

@@ -39,7 +39,7 @@ export const morningHandler = async (gameId, playersLeft, playersCount, currentD
                         .setTimestamp()
                         .setFooter({
                             text: 'MafiaBot',
-                            iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                            iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                         });
 
                     client.channels.fetch(cId)
@@ -84,7 +84,7 @@ export const startDailyVote = async (gameId, playersLeft, playersCount, currentD
             .setTimestamp()
             .setFooter({
                 text: 'MafiaBot',
-                iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
             });
 
         // make a row with buttons with nicknames of all alive players (one player per button)
@@ -165,11 +165,11 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
                     {name: '👤 Alive players', value: `${players}`, inline: true},
                     {name: '🔪 Executed player', value: `${executedPlayerNickname}`, inline: true}
                 )
-                .setImage('https://media.discordapp.net/attachments/1174711985686970368/1177346474233839737/daily_vote.png?ex=65722c59&is=655fb759&hm=3274e81b50f58d372674b9245388e335ea64013123a53bf28656cdc812d5a8f4&=&format=webp&width=1500&height=500')
+                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881558048080025/daily_vote.png?ex=657f08a7&is=656c93a7&hm=394a74ed7bb9cc6bc279b9ae71cd6a3e05f35ad95b64398d64c7733d00eeed6e&=&format=webp&quality=lossless&width=1920&height=639')
                 .setTimestamp()
                 .setFooter({
                     text: 'MafiaBot',
-                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                 });
 
             client.channels.fetch(cId)
@@ -217,11 +217,11 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
                 .addFields(
                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                 )
-                .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175436517229993994/ezgif-4-5d6c3e3984.gif?ex=656b3990&is=6558c490&hm=4db7d44d24bc399c8db078ed1bc46d76c2747e8d1eb0366e61aa6cc8447be231&=&width=750&height=263')
+                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881503706685550/ezgif-4-5d6c3e3984.gif?ex=657f089a&is=656c939a&hm=cb386cde06ab7810cfd5660f29bdc698254479101009bb4938dc08e38ff4fda1&=&width=1125&height=395')
                 .setTimestamp()
                 .setFooter({
                     text: 'MafiaBot',
-                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                 });
 
             client.channels.fetch(cId)
@@ -283,11 +283,11 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
             .setColor('3a3a3a')
             .setTitle('Mafia Game')
             .setDescription(`🎙 Bot: ${voiceLine}`)
-            .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175725053258760223/channels.png?ex=656c4648&is=6559d148&hm=f3f2ac5e98d762a3b1a647412817f7d88d6f85a90d666bcec172670fe5d7bd53&=&width=1207&height=905')
+            .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881502989451365/channels.png?ex=657f089a&is=656c939a&hm=8dfdf541d40e870b706415d6f8419d74aa68ea113c7b0a64f5180d7671cb6b35&=&format=webp&quality=lossless&width=1293&height=969')
             .setTimestamp()
             .setFooter({
                     text: 'MafiaBot',
-                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                 });
 
             client.channels.fetch(cId)

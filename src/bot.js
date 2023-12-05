@@ -192,7 +192,7 @@ client.on('interactionCreate', async interaction => {
                                     .setTimestamp()
                                     .setFooter({
                                         text: 'MafiaBot',
-                                        iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                                     });
 
                                 client.channels.fetch(cId)
@@ -275,11 +275,11 @@ gameEvents.on('stageUpdate', async (data) => {
                                 .addFields(
                                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                                 )
-                                .setImage('https://media.discordapp.net/attachments/1180826418523942922/1176101942678794271/mafia.png?ex=656da54a&is=655b304a&hm=47205392d44c7620b987c443770d63f37581215b4db5ef51b772fe243c74da77&=&width=896&height=671')
+                                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881502582607942/mafia.png?ex=657f0899&is=656c9399&hm=a1bc47a1cfe1279e4d710e256fc3e38d5654646ce674c589fabcbcb3fed51e51&=&format=webp&quality=lossless&width=1406&height=1053')
                                 .setTimestamp()
                                 .setFooter({
                                     text: 'MafiaBot',
-                                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                                 });
 
                             // mentioning all mafias (multiple possible)
@@ -305,11 +305,11 @@ gameEvents.on('stageUpdate', async (data) => {
                                 .addFields(
                                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                                 )
-                                .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175723886621507656/doctor.png?ex=656c4532&is=6559d032&hm=61d2b6af9841b420c14998bb09512755d6bafa731efde73f11e453409dca69f4&=&width=1207&height=905')
+                                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881503404691498/doctor.png?ex=657f089a&is=656c939a&hm=fd6c12e54b0b6037999dbbce5529528186c4cbd1fbf6252de620af72058605f8&=&format=webp&quality=lossless&width=1293&height=969')
                                 .setTimestamp()
                                 .setFooter({
                                     text: 'MafiaBot',
-                                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                                 });
 
                             // mentioning user
@@ -330,11 +330,11 @@ gameEvents.on('stageUpdate', async (data) => {
                                 .addFields(
                                     {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
                                 )
-                                .setImage('https://media.discordapp.net/attachments/1180826418523942922/1175351078741626950/detective.png?width=1207&height=905')
+                                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881504541347950/detective.png?ex=657f089a&is=656c939a&hm=21e69af569052248bdaf0add3c232cdd823570910d13dc0208bef689a179cd85&=&format=webp&quality=lossless&width=1293&height=969')
                                 .setTimestamp()
                                 .setFooter({
                                     text: 'MafiaBot',
-                                    iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905'
+                                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                                 });
 
                             // mentioning user
@@ -457,7 +457,7 @@ gameEvents.on('dayUpdate', async (data) => {
                             .setTitle('Mafia Game')
                             .setDescription(`The role of the checked target (${detectiveActionResult.checked}) is ${detectiveActionResult.role}.`)
                             .setTimestamp()
-                            .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/1148207741706440807/1174807401308901556/logo1500x1500.png?ex=6568efa7&is=65567aa7&hm=95d0bbc48ebe36cd31f0fbb418cbd406763a0295c78e62ace705c3d3838f823f&=&width=905&height=905' });
+                            .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969' });
 
                         // Send the detective action embed to the detective channel
                         const detectiveChannel = await client.channels.fetch(detectiveChannelId);
