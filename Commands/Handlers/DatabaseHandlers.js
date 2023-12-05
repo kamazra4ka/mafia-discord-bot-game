@@ -517,6 +517,8 @@ export const addTargetToDatabase = async (gameDay, gameId, targetColumn, targetU
                 return;
             }
 
+            gameState.addNightVote(gameId, gameDay, targetColumn, targetUserId);
+
             const query = `
                 INSERT INTO night_actions (gameid, gameday, ${connection.escapeId(targetColumn)}) 
                 VALUES (?, ?, ?) 
@@ -562,7 +564,8 @@ export const processNightActions = async (gameId) => {
                     return;
                 }
 
-                const nightActions = rows[0];
+                //const nightActions = rows[0];
+                const nightActions = await gameState.getNightVote(gameId, day);
                 connection.release();
 
                 // Initialize results variables
@@ -570,24 +573,28 @@ export const processNightActions = async (gameId) => {
                 let doctorActionResult = null;
                 let detectiveActionResult = null;
 
+                const mafiaAction = nightActions.filter(action => action.voter === "gamemafiatarget")[0];
+                const detectiveAction = nightActions.filter(action => action.voter === "gamedetectivetarget")[0];
+                const doctorAction = nightActions.filter(action => action.voter === "gamedoctortarget")[0];
+
                 // Process Mafia action
-                if (nightActions.gamemafiatarget !== nightActions.gamedoctortarget) {
+                if (mafiaAction.target !== doctorAction.target) {
                     // Mafia's target was not saved by the doctor
-                    mafiaActionResult = {success: true, target: nightActions.gamemafiatarget};
+                    mafiaActionResult = {success: true, target: mafiaAction.target};
 
                 } else {
                     // Mafia's target was saved by the doctor
-                    mafiaActionResult = {success: false, target: nightActions.gamemafiatarget};
+                    mafiaActionResult = {success: false, target: mafiaAction.target};
                 }
 
                 // Process Doctor action
-                doctorActionResult = {saved: nightActions.gamedoctortarget};
+                doctorActionResult = {saved: doctorAction.target};
 
                 // Process Detective action (you will need to fetch the actual role from the database)
-                if (nightActions.gamedetectivetarget) {
-                    const detectiveTargetRole = await gameState.getRole(gameId, nightActions.gamedetectivetarget);
+                if (detectiveAction.target) {
+                    const detectiveTargetRole = await gameState.getRole(gameId, detectiveAction.target);
                     detectiveActionResult = {
-                        checked: nightActions.gamedetectivetarget, role: `${detectiveTargetRole}` || 'An error occurred'
+                        checked: detectiveAction.target, role: `${detectiveTargetRole}` || 'An error occurred'
                     };
                 }
 
@@ -596,7 +603,7 @@ export const processNightActions = async (gameId) => {
                     mafiaActionResult,
                     doctorActionResult,
                     detectiveActionResult,
-                    detectiveChannelId: nightActions.gamedetectivechid
+                    detectiveChannelId: gameState.getDetectiveChannel(gameId)
                 });
             });
         });

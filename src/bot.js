@@ -241,7 +241,9 @@ gameEvents.on('stageUpdate', async (data) => {
                 const gameInfo = {
                     roles: {},
                     id: gameId,
-                    dailyVotes: {}
+                    dailyVotes: {},
+                    nightVotes: {},
+                    channelIds: {}
                 };
 
                 // Initialize the game with no roles assigned yet
@@ -347,6 +349,10 @@ gameEvents.on('stageUpdate', async (data) => {
 
                         await sendChannelIdsToDatabase(gameId, mafiaChannelId, doctorChannelId, detectiveChannelId);
 
+                        await gameState.setMafiaChannel(gameId, mafiaChannelId);
+                        await gameState.setDoctorChannel(gameId, doctorChannelId);
+                        await gameState.setDetectiveChannel(gameId, detectiveChannelId);
+
                         console.log('goofy mafia voice line played -1');
                         await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '2');
                         console.log('goofy mafia voice line played');
@@ -409,7 +415,7 @@ gameEvents.on('dayUpdate', async (data) => {
         } else {
 
             // 60 seconds interval
-            await setTimeout(async () => {
+            setTimeout(async () => {
                 try {
                     const {
                         mafiaActionResult,
@@ -451,17 +457,20 @@ gameEvents.on('dayUpdate', async (data) => {
                     // Only construct the detective embed if there was a detective action
                     let detectiveActionEmbed;
                     if (detectiveActionResult) {
-                        detectiveActionEmbed= new EmbedBuilder()
+                        detectiveActionEmbed = new EmbedBuilder()
                             .setTitle('Detective Action')
                             .setColor('3a3a3a')
                             .setTitle('Mafia Game')
                             .setDescription(`The role of the checked target (${detectiveActionResult.checked}) is ${detectiveActionResult.role}.`)
                             .setTimestamp()
-                            .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969' });
+                            .setFooter({
+                                text: 'MafiaBot',
+                                iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+                            });
 
                         // Send the detective action embed to the detective channel
                         const detectiveChannel = await client.channels.fetch(detectiveChannelId);
-                        await detectiveChannel.send({ embeds: [detectiveActionEmbed] });
+                        await detectiveChannel.send({embeds: [detectiveActionEmbed]});
                     }
                 } catch (error) {
                     console.error('Error processing night actions:', error);

@@ -1,5 +1,4 @@
 // gameState.js
-import {getGameDay} from "../Commands/Handlers/DatabaseHandlers.js";
 
 class GameState {
     constructor() {
@@ -153,6 +152,76 @@ class GameState {
         const game = this.getGame(gameId);
 
         return game.dailyVotes[day];
+    }
+
+    async addNightVote(gameId, night, voter, target) {
+        const game = this.getGame(gameId);
+
+        if (!game.nightVotes[night]) {
+            // night does not exist
+            game.nightVotes[night] = [{
+                voter: voter, target: target
+            }]
+        } else {
+
+            // night exists
+
+            for (let i in game.nightVotes[night]) {
+                const vote = game.nightVotes[night][i];
+
+                if (vote.voter === voter) {
+                    game.nightVotes[night][i].target = target;
+                    return;
+                }
+            }
+
+            game.nightVotes[night].push({
+                voter,
+                target
+            })
+        }
+    }
+
+    async getNightVote(gameId, night) {
+        const game = this.getGame(gameId);
+
+        return game.dailyVotes[night];
+    }
+
+    async setMafiaChannel(gameId, channelId) {
+        const game = this.getGame(gameId);
+
+        game.channelIds.mafia = channelId;
+    }
+
+    async setDetectiveChannel(gameId, channelId) {
+        const game = this.getGame(gameId);
+
+        game.channelIds.detective = channelId;
+    }
+
+    async setDoctorChannel(gameId, channelId) {
+        const game = this.getGame(gameId);
+
+        game.channelIds.doctor = channelId;
+    }
+
+    async getMafiaChannel(gameId) {
+        const game = this.getGame(gameId);
+
+        return game.channelIds.mafia;
+    }
+
+    async getDetectiveChannel(gameId) {
+        const game = this.getGame(gameId);
+
+        return game.channelIds.detective;
+    }
+
+    async getDoctorChannel(gameId) {
+        const game = this.getGame(gameId);
+
+        return game.channelIds.doctor;
     }
 
     // get alive players (all dead users have a role of 'dead')
