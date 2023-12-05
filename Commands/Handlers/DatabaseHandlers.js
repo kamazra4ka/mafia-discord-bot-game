@@ -539,7 +539,7 @@ export const addTargetToDatabase = async (gameDay, gameId, targetColumn, targetU
 };
 
 // night actions table update
-export const processNightActions = async (gameId) => {
+export const processNightActions = async (gameId, day) => {
     return new Promise((resolve, reject) => {
         pool.getConnection(async (err, connection) => {
             if (err) {
