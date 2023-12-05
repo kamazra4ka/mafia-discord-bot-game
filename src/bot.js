@@ -360,7 +360,6 @@ gameEvents.on('stageUpdate', async (data) => {
                         // 60 seconds interval
                         await setTimeout(async () => {
                             try {
-
                                 await setTimeout(() => {
                                     nextStage(0, gameId, client, (error, message) => {
                                         if (error) {

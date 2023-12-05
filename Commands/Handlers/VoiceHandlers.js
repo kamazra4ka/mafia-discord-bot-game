@@ -42,6 +42,7 @@ export const joinVoice = async (interaction) => {
 
 // This function generates TTS and plays it in a voice channel
 export const narrateAndPlay = async (guildId, channelId, text) => {
+    try {
     // Assuming the bot is already in the voice channel, and you have the guildId and channelId
     const connection = getVoiceConnection(guildId);
 
@@ -60,11 +61,10 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
             slow: false,
             host: 'https://translate.google.com',
         });
-
-        // Fetch the TTS audio file
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
+            // Fetch the TTS audio file
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
 
         // Create a temporary file to store the TTS
         const tempFilePath = './temp-tts.mp3';
@@ -101,6 +101,9 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
         }
     } else {
         console.error(`The bot is not in the voice channel with ID: ${channelId}`);
+    }
+    } catch (error) {
+        console.log(error)
     }
 };
 // Usage example:
