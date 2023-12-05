@@ -185,7 +185,7 @@ class GameState {
     async getNightVote(gameId, night) {
         const game = this.getGame(gameId);
 
-        return game.dailyVotes[night];
+        return game.nightVotes[night];
     }
 
     async setMafiaChannel(gameId, channelId) {
