@@ -182,10 +182,61 @@ class GameState {
         }
     }
 
-    async getNightVote(gameId, night) {
+    async getNightVote(gameId) {
         const game = this.getGame(gameId);
+        const night = game.gameDay - 1;
+
+        console.log(`================================================`)
+        console.log(`=============DEBUG================`)
+        console.log(`================================================`)
+
+        console.log(game)
+        console.log(game.nightVotes)
+        console.log('night: ' + night)
+        console.log(game.nightVotes[night])
+
+        console.log(`================================================`)
+        console.log(`=============DEBUG================`)
+        console.log(`================================================`)
 
         return game.nightVotes[night];
+    }
+
+    async setGameDay(gameId, day) {
+        const game = this.getGame(gameId);
+
+        game.gameDay = day;
+    }
+
+    async getGameDay(gameId) {
+        const game = this.getGame(gameId);
+
+        console.log(game)
+        if (!game) {
+            return 0;
+        } else {
+            return game.gameDay;
+        }
+    }
+
+    // gameStage
+    async setGameStage(gameId, stage) {
+        const game = this.getGame(gameId);
+
+        if (!game) {
+            return 0;
+        } else {
+            game.gameStage = stage;
+        }
+
+
+
+    }
+
+    async getGameStage(gameId) {
+        const game = this.getGame(gameId);
+
+        return game.gameStage;
     }
 
     async setMafiaChannel(gameId, channelId) {

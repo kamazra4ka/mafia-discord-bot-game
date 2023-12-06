@@ -98,7 +98,7 @@ client.on('interactionCreate', async interaction => {
 
                         if (currentGame) {
                             const gameId = currentGame.id;
-                            const gameday = await getGameDay(interaction, gameId)
+                            const gameday = await gameState.getGameDay(gameId)
 
                             await addTargetToDatabase(gameday, gameId, 'gamemafiatarget', userId)
                         } else {
@@ -119,7 +119,7 @@ client.on('interactionCreate', async interaction => {
 
                         if (currentGame) {
                             const gameId = currentGame.id;
-                            const gameday = await getGameDay(interaction, gameId)
+                            const gameday = await gameState.getGameDay(interaction, gameId)
 
                             await addTargetToDatabase(gameday, gameId, 'gamedoctortarget', userId)
                         } else {
@@ -139,7 +139,7 @@ client.on('interactionCreate', async interaction => {
 
                         if (currentGame) {
                             const gameId = currentGame.id;
-                            const gameday = await getGameDay(interaction, gameId)
+                            const gameday = await gameState.getGameDay(interaction, gameId)
 
                             await addTargetToDatabase(gameday, gameId, 'gamedetectivetarget', userId)
                         } else {
@@ -168,7 +168,7 @@ client.on('interactionCreate', async interaction => {
                                 await interaction.reply({ content: `You are dead. You can't vote.`, ephemeral: true });
                             } else {
                                 const gameId = currentGame.id;
-                                const gameDay = await getGameDay(interaction, gameId)
+                                const gameDay = await gameState.getGameDay(interaction, gameId)
                                 addDailyVoteToDatabase(gameDay, gameId, voterId, userId)
 
                                 interaction.reply({ content: `You have voted for <@${userId}>! If you want to change your mind just click on somebody's else button.`, ephemeral: true }).then(message => {
@@ -243,14 +243,16 @@ gameEvents.on('stageUpdate', async (data) => {
                     id: gameId,
                     dailyVotes: {},
                     nightVotes: {},
-                    channelIds: {}
+                    channelIds: {},
+                    gameDay: 0,
+                    gameStage: 1
                 };
 
                 // Initialize the game with no roles assigned yet
                 await gameState.setGame(gameId, gameInfo);
                 await assignStartRoles(gameId);
 
-                // if there are 3 or less players, then don't start the game
+                // if there are 3 or fewer players, then don't start the game
                 const playersCount = await gameState.getAlivePlayersList(gameId);
                 if (false) {
                     const channel = await client.channels.fetch(cId);
@@ -402,7 +404,7 @@ gameEvents.on('dayUpdate', async (data) => {
         console.log(`Day updated for game ${data.gameId} to ${data.currentDay}`);
 
         const gameId = data.gameId;
-        const currentDay = data.currentDay;
+        const currentDay = data.currentDay
 
         // get amount of players left (role not dead)
         let playersLeft;
@@ -413,6 +415,11 @@ gameEvents.on('dayUpdate', async (data) => {
             // blah blah blah
         } else {
 
+            const channel = await client.channels.fetch('1180826418523942922');
+
+            const error = gameId + ' ' + currentDay;
+            channel.send('Something went wrong. Please, try again.\n\n' + error);
+
             // 60 seconds interval
             setTimeout(async () => {
                 try {
@@ -422,6 +429,9 @@ gameEvents.on('dayUpdate', async (data) => {
                         detectiveActionResult,
                         detectiveChannelId
                     } = await processNightActions(gameId, data.currentDay);
+
+                    const error = mafiaActionResult + 'doctor result: ' + doctorActionResult + detectiveActionResult + 'gameId: ' + gameId + 'currentDay: ' + currentDay + 'detectiveChannelId: ' + detectiveChannelId;
+                    channel.send('Something went wrong. Please, try again.\n\n' + error);
 
                     // get username from the mafiaActionResult.target (discord id)
                     let targetMafia

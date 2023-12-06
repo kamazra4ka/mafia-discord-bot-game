@@ -219,7 +219,7 @@ export const nextStage = (interaction, gameId, client, callback) => {
     const serverDiscordId = interaction.guildId;
 
     // Get the current stage of the game
-    pool.query('SELECT gamestage, gameday FROM games WHERE gameid = ?', [gameId], (error, results) => {
+    pool.query('SELECT gamestage, gameday FROM games WHERE gameid = ?', [gameId], async (error, results) => {
         if (error) {
             return callback(error, null);
         }
@@ -233,17 +233,22 @@ export const nextStage = (interaction, gameId, client, callback) => {
         let query = '';
         let queryParams = [];
 
+        const gameDay = await gameState.getGameDay(gameId);
+
         if (currentStage.gamestage === 0) {
             // It's currently day, switch to night
             query = 'UPDATE games SET gamestage = 1 WHERE gameid = ?';
             queryParams = [gameId];
-            gameEvents.emit('stageUpdate', {gameId, currentStage: 1, currentDay: currentStage.gameday});
+            await gameState.setGameStage(gameId, 1);
+            gameEvents.emit('stageUpdate', {gameId, currentStage: 1, currentDay: gameDay});
         } else {
             // It's currently night, increment day and switch to day
             query = 'UPDATE games SET gamestage = 0, gameday = gameday + 1 WHERE gameid = ?';
             queryParams = [gameId];
-            gameEvents.emit('stageUpdate', {gameId, currentStage: 0, currentDay: currentStage.gameday + 1});
-            gameEvents.emit('dayUpdate', {gameId, currentDay: currentStage.gameday + 1, client: client});
+            await gameState.setGameStage(gameId, 0);
+            await gameState.setGameDay(gameId, gameDay + 1);
+            gameEvents.emit('stageUpdate', {gameId, currentStage: 0, currentDay: gameDay + 1});
+            gameEvents.emit('dayUpdate', {gameId, currentDay: gameDay + 1, client: client});
         }
 
         // Update the game stage
@@ -258,30 +263,7 @@ export const nextStage = (interaction, gameId, client, callback) => {
 
 // get gameday
 export const getGameDay = async (interaction, gameId) => {
-    return new Promise((resolve, reject) => {
-        pool.getConnection((err, connection) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-                return;
-            }
-
-            connection.query('SELECT gameday FROM games WHERE gameid = ?', [gameId], (err, rows) => {
-                connection.release();
-                if (err) {
-                    console.error(err);
-                    reject(err);
-                    return;
-                }
-                if (rows.length === 0) {
-                    resolve(0);
-                } else {
-                    console.log(rows[0].gameday);
-                    resolve(rows[0].gameday);
-                }
-            });
-        });
-    });
+    return await gameState.getGameDay(gameId);
 };
 
 // get gameid from the servers table (sort by date the newest + limit 1)
@@ -519,6 +501,17 @@ export const addTargetToDatabase = async (gameDay, gameId, targetColumn, targetU
 
             gameState.addNightVote(gameId, gameDay, targetColumn, targetUserId);
 
+            console.log(`================================================`)
+            console.log(`=============DEBUG 2================`)
+            console.log(`================================================`)
+
+            console.log(gameDay)
+            console.log(targetColumn + ' ' + targetUserId)
+
+            console.log(`================================================`)
+            console.log(`=============DEBUG 2================`)
+            console.log(`================================================`)
+
             const query = `
                 INSERT INTO night_actions (gameid, gameday, ${connection.escapeId(targetColumn)}) 
                 VALUES (?, ?, ?) 
@@ -565,7 +558,8 @@ export const processNightActions = async (gameId, day) => {
                 }
 
                 //const nightActions = rows[0];
-                const nightActions = await gameState.getNightVote(gameId, day);
+                const gameDay = await gameState.getGameDay(gameId);
+                const nightActions = await gameState.getNightVote(gameId, gameDay);
                 connection.release();
 
                 // Initialize results variables
@@ -591,12 +585,17 @@ export const processNightActions = async (gameId, day) => {
                 doctorActionResult = {saved: doctorAction.target};
 
                 // Process Detective action (you will need to fetch the actual role from the database)
-                if (detectiveAction.target) {
-                    const detectiveTargetRole = await gameState.getRole(gameId, detectiveAction.target);
-                    detectiveActionResult = {
-                        checked: detectiveAction.target, role: `${detectiveTargetRole}` || 'An error occurred'
-                    };
+                try {
+                    if (detectiveAction.target) {
+                        const detectiveTargetRole = await gameState.getRole(gameId, detectiveAction.target);
+                        detectiveActionResult = {
+                            checked: detectiveAction.target, role: `${detectiveTargetRole}` || 'An error occurred'
+                        };
+                    }
+                } catch (error) {
+                    console.log('Something went wrong with the detective. Please, try again.\n\n' + error);
                 }
+
 
                 // Resolve the promise with the results
                 resolve({
