@@ -661,16 +661,6 @@ export const processDailyVote = async (gameId, gameday) => {
                     return;
                 }
 
-                if (rows.length === 0) {
-                    console.log('No daily votes found for gameId:', gameId);
-                    connection.release();
-                    resolve({});
-                    return;
-                }
-
-                const dailyVotes = rows;
-                connection.release();
-
                 // Initialize results variables
                 let mostVotedTargetId = null;
                 let mostVotes = 0;
