@@ -417,9 +417,6 @@ gameEvents.on('dayUpdate', async (data) => {
 
             const channel = await client.channels.fetch('1180826418523942922');
 
-            const error = gameId + ' ' + currentDay;
-            channel.send('Something went wrong. Please, try again.\n\n' + error);
-
             // 60 seconds interval
             setTimeout(async () => {
                 try {
@@ -429,9 +426,6 @@ gameEvents.on('dayUpdate', async (data) => {
                         detectiveActionResult,
                         detectiveChannelId
                     } = await processNightActions(gameId, data.currentDay);
-
-                    const error = mafiaActionResult + 'doctor result: ' + doctorActionResult + detectiveActionResult + 'gameId: ' + gameId + 'currentDay: ' + currentDay + 'detectiveChannelId: ' + detectiveChannelId;
-                    channel.send('Something went wrong. Please, try again.\n\n' + error);
 
                     // get username from the mafiaActionResult.target (discord id)
                     let targetMafia
