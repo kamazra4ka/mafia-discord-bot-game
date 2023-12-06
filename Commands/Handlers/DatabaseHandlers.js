@@ -667,7 +667,11 @@ export const processDailyVote = async (gameId, gameday) => {
 
                 let votedForIds = [];
 
-                const votes = await gameState.getVote(gameId, gameday)
+                const gameDay = await gameState.getGameDay(gameId);
+                const votes = await gameState.getVote(gameId, gameDay)
+                console.log('gameday votes: ' + gameday)
+                console.log('gameday votes: ' + gameday)
+                console.log('gameday votes: ' + gameday)
 
                 votes.forEach(vote => votedForIds.push(vote.target))
 

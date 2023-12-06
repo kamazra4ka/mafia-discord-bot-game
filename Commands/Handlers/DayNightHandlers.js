@@ -137,14 +137,10 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
 
     const executedPlayer = await processDailyVote(gameId, currentDay).then(async executedPlayer => {
         console.log('executedPlayer:', executedPlayer)
-        try {
             const executedPlayerNickname = client.users.cache.get(executedPlayer.mostVotedTargetId).username;
             console.log('executedPlayerNickname:', executedPlayerNickname)
             // changing executed player's role to dead
             await gameState.updateRole(gameId, executedPlayer.mostVotedTargetId, 'dead');
-        } catch (e) {
-            console.error('Error in endDailyVote:', e);
-        }
 
 
         const playersAfterVote = playersCount - 1;

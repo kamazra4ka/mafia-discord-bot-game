@@ -150,12 +150,24 @@ class GameState {
 
     async getVote(gameId, day) {
         const game = this.getGame(gameId);
+        let gameDay;
 
-        return game.dailyVotes[day];
+        gameDay = day - 1;
+
+        console.log(`===================get vote==================`)
+        console.log(game)
+        console.log(game.dailyVotes)
+        console.log('day: ' + day)
+        console.log(game.dailyVotes[day])
+        console.log(`===================get vote==================`)
+
+        return game.dailyVotes[gameDay];
     }
 
     async addNightVote(gameId, night, voter, target) {
         const game = this.getGame(gameId);
+
+        night = await this.getGameDay(gameId);
 
         if (!game.nightVotes[night]) {
             // night does not exist
@@ -174,6 +186,13 @@ class GameState {
                     return;
                 }
             }
+
+            console.log(`===================night vote get==================`)
+            console.log(game)
+            console.log(game.nightVotes)
+            console.log('day: ' + night)
+            console.log(game.nightVotes[night])
+            console.log(`===================night get vote==================`)
 
             game.nightVotes[night].push({
                 voter,
