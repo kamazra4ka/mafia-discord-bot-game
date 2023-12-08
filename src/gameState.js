@@ -122,6 +122,7 @@ class GameState {
 
     async addVote(gameId, day, voter, target) {
         const game = this.getGame(gameId);
+        day = await this.getGameDay(gameId);
 
         if (!game.dailyVotes[day]) {
             // day does not exist
@@ -150,9 +151,6 @@ class GameState {
 
     async getVote(gameId, day) {
         const game = this.getGame(gameId);
-        let gameDay;
-
-        gameDay = day - 1;
 
         console.log(`===================get vote==================`)
         console.log(game)
@@ -161,7 +159,7 @@ class GameState {
         console.log(game.dailyVotes[day])
         console.log(`===================get vote==================`)
 
-        return game.dailyVotes[gameDay];
+        return game.dailyVotes[day];
     }
 
     async addNightVote(gameId, night, voter, target) {
