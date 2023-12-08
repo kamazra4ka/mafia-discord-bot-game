@@ -355,9 +355,7 @@ gameEvents.on('stageUpdate', async (data) => {
                         await gameState.setDoctorChannel(gameId, doctorChannelId);
                         await gameState.setDetectiveChannel(gameId, detectiveChannelId);
 
-                        console.log('goofy mafia voice line played -1');
                         await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '2');
-                        console.log('goofy mafia voice line played');
 
                         // 60 seconds interval
                         await setTimeout(async () => {
@@ -371,13 +369,6 @@ gameEvents.on('stageUpdate', async (data) => {
                                         }
                                     });
                                 }, 2500);
-                                console.log('NEW DAY TEST TEST TEST')
-                                console.log('NEW DAY TEST TEST TEST')
-                                console.log('NEW DAY TEST TEST TEST')
-
-                                // stop the interval
-                                clearInterval(this);
-
                             } catch (error) {
                                 console.error('Error processing night actions:', error);
                             }
