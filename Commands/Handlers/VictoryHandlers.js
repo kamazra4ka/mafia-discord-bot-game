@@ -86,11 +86,8 @@ export const victoryHandler = async (gameId, type, client) => {
                 // get alive players
                 const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
-                // convert them into mentions
-                const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`).join(' ');
-
                 // convert them into mentions + their game roles (mention: role)
-                const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
+                const alivePlayersRolesMentionsPromises = alivePlayers.map(async player => {
                     let role = await gameState.getRole(gameId, player);
                     const earnedCoins = await calculateGameReward(gameId, 'civilian', player);
 
@@ -115,7 +112,10 @@ export const victoryHandler = async (gameId, type, client) => {
                     // Construct the entire string to be bolded
                     const roleWithCoins = `**${role} | +${earnedCoins} 🪙**`;
                     return `<@${player}> - ${roleWithCoins}\n`;
-                }));
+                });
+
+                // Resolve all promises and join the strings
+                const alivePlayersRolesMentions = (await Promise.all(alivePlayersRolesMentionsPromises)).join('');
 
                 const embed = new EmbedBuilder()
                     .setColor('006400')
@@ -123,7 +123,6 @@ export const victoryHandler = async (gameId, type, client) => {
                     .setDescription(`🎙 Bot: ${voiceLine}\n\n**🎖️ Alive players:** \n${alivePlayersRolesMentions}\n\n`)
                     .addFields(
                         {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                        {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
                     )
                     .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881557817409536/civ_won.png?ex=657f08a7&is=656c93a7&hm=24c0b1f6d5e78d590cbdd10a5fc3e1a3dabd6f03d9945e6f287d2358bc538a7b&=&format=webp&quality=lossless&width=1920&height=639')
                     .setTimestamp()
@@ -155,9 +154,10 @@ export const victoryHandler = async (gameId, type, client) => {
                 // convert them into mentions
                 const alivePlayersMentions = alivePlayers.map(player => `<@${player}>`).join(' ');
 
-                const alivePlayersRolesMentions = await Promise.all(alivePlayers.map(async player => {
+                // convert them into mentions + their game roles (mention: role)
+                const alivePlayersRolesMentionsPromises = alivePlayers.map(async player => {
                     let role = await gameState.getRole(gameId, player);
-                    const earnedCoins = await calculateGameReward(gameId, 'civilian', player);
+                    const earnedCoins = await calculateGameReward(gameId, 'mafia', player);
 
                     // Add emojis to the roles + capitalise the first letter
                     switch (role) {
@@ -180,8 +180,10 @@ export const victoryHandler = async (gameId, type, client) => {
                     // Construct the entire string to be bolded
                     const roleWithCoins = `**${role} | +${earnedCoins} 🪙**`;
                     return `<@${player}> - ${roleWithCoins}\n`;
-                }).join(' '));
+                });
 
+                // Resolve all promises and join the strings
+                const alivePlayersRolesMentions = (await Promise.all(alivePlayersRolesMentionsPromises)).join('');
 
                 const embed = new EmbedBuilder()
                     .setColor('8e0922')
@@ -189,7 +191,6 @@ export const victoryHandler = async (gameId, type, client) => {
                     .setDescription(`🎙 Bot: ${voiceLine}\n\n**🎖️ Alive players:** \n${alivePlayersRolesMentions}\n\n`)
                     .addFields(
                         {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                        {name: '🏆 Winners', value: `${alivePlayersMentions}`, inline: true},
                     )
                     .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881557569933452/mafia_won.png?ex=657f08a7&is=656c93a7&hm=3dd61104999476204664e3af0494cf19a8baa9b282cdec956f02b967d8be5db9&=&format=webp&quality=lossless&width=1920&height=639')
                     .setTimestamp()
