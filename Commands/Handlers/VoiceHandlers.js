@@ -331,7 +331,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
             }, 25000);
             break;
         case '3':
-            topic = `Player ${additionalData} has been killed by Mafia. Doctor didn't save him.`
+            topic = `Player ${additionalData} has been killed by Mafia. Doctor didn't come to him.`
 
             voiceLineText = await generateVoiceLine(topic)
             embed = new EmbedBuilder()
