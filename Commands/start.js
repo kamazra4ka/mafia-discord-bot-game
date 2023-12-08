@@ -1,8 +1,23 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
-import {createGame, gameStarts, nextStage} from './Handlers/DatabaseHandlers.js';
+import {
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    EmbedBuilder
+} from 'discord.js';
+import {
+    createGame,
+    gameStarts,
+    nextStage
+} from './Handlers/DatabaseHandlers.js';
 import mysql from 'mysql2';
-import { config } from 'dotenv';
-import {joinVoice, narrateAndPlay, narrateAndPlayVoiceLine} from "./Handlers/VoiceHandlers.js";
+import {
+    config
+} from 'dotenv';
+import {
+    joinVoice,
+    narrateAndPlay,
+    narrateAndPlayVoiceLine
+} from "./Handlers/VoiceHandlers.js";
 import gameState from "../src/gameState.js";
 
 await config();
@@ -33,21 +48,35 @@ export const start = async (interaction, client) => {
         .setColor('3a3a3a')
         .setTitle('Mafia Game')
         .setDescription('Hey! Somebody is looking for more players to start. Click the button below to join.')
-        .addFields(
-            { name: '❕ Limit', value: '0/32', inline: true },
-            { name: '👤 Players', value: 'None', inline: true },
-            { name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
-        )
+        .addFields({
+            name: '❕ Limit',
+            value: '0/32',
+            inline: true
+        }, {
+            name: '👤 Players',
+            value: 'None',
+            inline: true
+        }, {
+            name: '🎙 Voice Channel',
+            value: '<#1174753582193590312>',
+            inline: true
+        })
         .setImage('https://media.discordapp.net/attachments/978344813374083222/1174832681717071872/start.png?ex=65690732&is=65569232&hm=a03b9233f9b1e29f376630e9c3aff6aae8439b15ee50f32c7e956a510ea53cfe&=&width=1500&height=500')
         .setTimestamp()
-        .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969' });
+        .setFooter({
+            text: 'MafiaBot',
+            iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+        });
 
-    await interaction.reply({ content: '', components: [row], embeds: [startEmbed] });
+    await interaction.reply({
+        content: '',
+        components: [row],
+        embeds: [startEmbed]
+    });
 
     await createGame(interaction, gameId);
 
     await joinVoice(interaction);
-
 
 
 
@@ -74,15 +103,30 @@ export const start = async (interaction, client) => {
                     .setTitle('Mafia Game')
                     .setDescription('Hey! Somebody is looking for more players to start. Click the button below to join.')
                     .setImage('https://media.discordapp.net/attachments/978344813374083222/1174832681717071872/start.png?ex=65690732&is=65569232&hm=a03b9233f9b1e29f376630e9c3aff6aae8439b15ee50f32c7e956a510ea53cfe&=&width=1500&height=500')
-                    .addFields(
-                        { name: '❕ Limit', value: `${playersLimit}/32`, inline: true },
-                        { name: '👤 Players', value: playersList, inline: true },
-                        { name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true}
-                    )
+                    .addFields({
+                        name: '❕ Limit',
+                        value: `${playersLimit}/32`,
+                        inline: true
+                    }, {
+                        name: '👤 Players',
+                        value: playersList,
+                        inline: true
+                    }, {
+                        name: '🎙 Voice Channel',
+                        value: '<#1174753582193590312>',
+                        inline: true
+                    })
                     .setTimestamp()
-                    .setFooter({ text: 'MafiaBot', iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969' });
+                    .setFooter({
+                        text: 'MafiaBot',
+                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+                    });
 
-                await interaction.editReply({ content: '', components: [row], embeds: [newEmbed] });
+                await interaction.editReply({
+                    content: '',
+                    components: [row],
+                    embeds: [newEmbed]
+                });
             });
         });
     };
@@ -91,11 +135,14 @@ export const start = async (interaction, client) => {
 
     setTimeout(async () => {
 
-        await narrateAndPlayVoiceLine(client, interaction.guildId, '1174753582193590312', '1');
+        //  await narrateAndPlayVoiceLine(client, interaction.guildId, '1174753582193590312', '1');
         await clearInterval(intervalId);
         button.setDisabled(true);
         const newRow = new ActionRowBuilder().addComponents(button);
-        await interaction.editReply({content: 'Registration closed.', components: [newRow]});
+        await interaction.editReply({
+            content: 'Registration closed.',
+            components: [newRow]
+        });
         await gameStarts(interaction, gameId);
 
         // 95 seconds timeout
@@ -107,7 +154,7 @@ export const start = async (interaction, client) => {
                     console.log(message);
                 }
             });
-        }, 95000);
+        }, 1000); // usually 95000
 
     }, 25000);
 };
