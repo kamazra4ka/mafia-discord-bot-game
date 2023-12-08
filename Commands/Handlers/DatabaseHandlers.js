@@ -571,18 +571,28 @@ export const processNightActions = async (gameId, day) => {
                 const detectiveAction = nightActions.filter(action => action.voter === "gamedetectivetarget")[0];
                 const doctorAction = nightActions.filter(action => action.voter === "gamedoctortarget")[0];
 
-                // Process Mafia action
-                if (mafiaAction.target !== doctorAction.target) {
-                    // Mafia's target was not saved by the doctor
-                    mafiaActionResult = {success: true, target: mafiaAction.target};
+                if (mafiaAction) {
+                    if (doctorAction) {
+                        // Process Mafia action
+                        if (mafiaAction.target !== doctorAction.target) {
+                            // Mafia's target was not saved by the doctor
+                            mafiaActionResult = {success: true, target: mafiaAction.target};
 
-                } else {
-                    // Mafia's target was saved by the doctor
-                    mafiaActionResult = {success: false, target: mafiaAction.target};
+                        } else {
+                            // Mafia's target was saved by the doctor
+                            mafiaActionResult = {success: false, target: mafiaAction.target};
+                        }
+                    } else {
+                        mafiaActionResult = {success: true, target: mafiaAction.target};
+                    }
                 }
 
-                // Process Doctor action
-                doctorActionResult = {saved: doctorAction.target};
+                if (doctorAction) {
+                    // Process Doctor action
+                    doctorActionResult = {saved: doctorAction.target};
+                } else {
+                    doctorActionResult = {saved: null};
+                }
 
                 // Process Detective action (you will need to fetch the actual role from the database)
                 try {
