@@ -481,7 +481,6 @@ gameEvents.on('dayUpdate', async (data) => {
                         mafiaActionResult,
                         doctorActionResult,
                         detectiveActionResult,
-                        detectiveChannelId
                     } = await processNightActions(gameId, data.currentDay);
 
                     // get username from the mafiaActionResult.target (discord id)
@@ -516,6 +515,7 @@ gameEvents.on('dayUpdate', async (data) => {
 
                     // Only construct the detective embed if there was a detective action
                     let detectiveActionEmbed;
+                    const detectiveChannelId = await gameState.getDetectiveChannel(gameId);
                     if (detectiveActionResult) {
                         detectiveActionEmbed = new EmbedBuilder()
                             .setTitle('Detective Action')
