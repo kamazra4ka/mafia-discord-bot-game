@@ -1,13 +1,16 @@
-import {ChannelType, EmbedBuilder, PermissionFlagsBits} from 'discord.js';
+import {
+    ChannelType,
+    EmbedBuilder,
+    PermissionFlagsBits
+} from 'discord.js';
 import gameState from "../../src/gameState.js";
 
 export const createPrivateChannelForUsers = async (guild, channelName, userIds) => {
     try {
-        let permissionOverwrites = [
-            {
-                id: guild.id, // Default role (everyone)
-                deny: [PermissionFlagsBits.ViewChannel], // Deny view permission for everyone
-            },
+        let permissionOverwrites = [{
+            id: guild.id, // Default role (everyone)
+            deny: [PermissionFlagsBits.ViewChannel], // Deny view permission for everyone
+        },
             ...userIds.map(userId => ({
                 id: userId,
                 allow: [PermissionFlagsBits.ViewChannel] // Allow view permission for this user
@@ -82,23 +85,19 @@ export const sendMafiaVote = async (channel, gameId) => {
 
             const mafiaVoteMessage = {
                 embeds: [embed],
-                components: [
-                    {
-                        type: 1,
-                        components: [
-                            {
-                                type: 2,
-                                label: `🔪 ${user.nickname || user.user.username}`,
-                                // 1 is blue
-                                // 2 is gray
-                                // 3 is green
-                                // 4 is red
-                                style: 4,
-                                custom_id: `mafia_vote_${userId}`,
-                            },
-                        ],
-                    },
-                ],
+                components: [{
+                    type: 1,
+                    components: [{
+                        type: 2,
+                        label: `🔪 ${user.nickname || user.user.username}`,
+                        // 1 is blue
+                        // 2 is gray
+                        // 3 is green
+                        // 4 is red
+                        style: 4,
+                        custom_id: `mafia_vote_${userId}`,
+                    }, ],
+                }, ],
             };
 
             if (mafiaVoteMessage) {
@@ -166,23 +165,19 @@ export const sendDoctorVote = async (channel, gameId) => {
 
             const doctorVoteMessage = {
                 embeds: [embed],
-                components: [
-                    {
-                        type: 1,
-                        components: [
-                            {
-                                type: 2,
-                                label: `💊 ${user.nickname || user.user.username}`,
-                                // 1 is blue
-                                // 2 is gray
-                                // 3 is green
-                                // 4 is red
-                                style: 3,
-                                custom_id: `doctor_vote_${userId}`,
-                            },
-                        ],
-                    },
-                ],
+                components: [{
+                    type: 1,
+                    components: [{
+                        type: 2,
+                        label: `💊 ${user.nickname || user.user.username}`,
+                        // 1 is blue
+                        // 2 is gray
+                        // 3 is green
+                        // 4 is red
+                        style: 3,
+                        custom_id: `doctor_vote_${userId}`,
+                    }, ],
+                }, ],
             };
 
             if (doctorVoteMessage) {
@@ -203,8 +198,8 @@ export const sendDoctorVote = async (channel, gameId) => {
 
     } catch (error) {
         console.error('Error sending doctor vote message:', error);
-        }
- }
+    }
+}
 
 // send a detective's vote.
 export const sendDetectiveVote = async (channel, gameId) => {
@@ -240,23 +235,19 @@ export const sendDetectiveVote = async (channel, gameId) => {
 
             const doctorVoteMessage = {
                 embeds: [embed],
-                components: [
-                    {
-                        type: 1,
-                        components: [
-                            {
-                                type: 2,
-                                label: `🔎 ${user.nickname || user.user.username}`,
-                                // 1 is blue
-                                // 2 is gray
-                                // 3 is green
-                                // 4 is red
-                                style: 2,
-                                custom_id: `detective_vote_${userId}`,
-                            },
-                        ],
-                    },
-                ],
+                components: [{
+                    type: 1,
+                    components: [{
+                        type: 2,
+                        label: `🔎 ${user.nickname || user.user.username}`,
+                        // 1 is blue
+                        // 2 is gray
+                        // 3 is green
+                        // 4 is red
+                        style: 2,
+                        custom_id: `detective_vote_${userId}`,
+                    }, ],
+                }, ],
             };
 
             if (doctorVoteMessage) {

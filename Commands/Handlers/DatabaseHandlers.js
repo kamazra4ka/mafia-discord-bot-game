@@ -1,5 +1,7 @@
 import mysql from 'mysql2';
-import {config} from 'dotenv';
+import {
+    config
+} from 'dotenv';
 import gameEvents from "../Emitters/emitter.js";
 import gameState from "../../src/gameState.js";
 
@@ -204,7 +206,7 @@ export const assignStartRoles = async (gameId) => {
             });
 
 
-// Now call assignRoles to populate the roles
+            // Now call assignRoles to populate the roles
             gameState.assignRoles(gameId);
 
             const updatedGameInfo = gameState.getGame(gameId);
@@ -240,15 +242,27 @@ export const nextStage = (interaction, gameId, client, callback) => {
             query = 'UPDATE games SET gamestage = 1 WHERE gameid = ?';
             queryParams = [gameId];
             await gameState.setGameStage(gameId, 1);
-            gameEvents.emit('stageUpdate', {gameId, currentStage: 1, currentDay: gameDay});
+            gameEvents.emit('stageUpdate', {
+                gameId,
+                currentStage: 1,
+                currentDay: gameDay
+            });
         } else {
             // It's currently night, increment day and switch to day
             query = 'UPDATE games SET gamestage = 0, gameday = gameday + 1 WHERE gameid = ?';
             queryParams = [gameId];
             await gameState.setGameStage(gameId, 0);
             await gameState.setGameDay(gameId, gameDay + 1);
-            gameEvents.emit('stageUpdate', {gameId, currentStage: 0, currentDay: gameDay + 1});
-            gameEvents.emit('dayUpdate', {gameId, currentDay: gameDay + 1, client: client});
+            gameEvents.emit('stageUpdate', {
+                gameId,
+                currentStage: 0,
+                currentDay: gameDay + 1
+            });
+            gameEvents.emit('dayUpdate', {
+                gameId,
+                currentDay: gameDay + 1,
+                client: client
+            });
         }
 
         // Update the game stage
@@ -576,22 +590,35 @@ export const processNightActions = async (gameId, day) => {
                         // Process Mafia action
                         if (mafiaAction.target !== doctorAction.target) {
                             // Mafia's target was not saved by the doctor
-                            mafiaActionResult = {success: true, target: mafiaAction.target};
+                            mafiaActionResult = {
+                                success: true,
+                                target: mafiaAction.target
+                            };
 
                         } else {
                             // Mafia's target was saved by the doctor
-                            mafiaActionResult = {success: false, target: mafiaAction.target};
+                            mafiaActionResult = {
+                                success: false,
+                                target: mafiaAction.target
+                            };
                         }
                     } else {
-                        mafiaActionResult = {success: true, target: mafiaAction.target};
+                        mafiaActionResult = {
+                            success: true,
+                            target: mafiaAction.target
+                        };
                     }
                 }
 
                 if (doctorAction) {
                     // Process Doctor action
-                    doctorActionResult = {saved: doctorAction.target};
+                    doctorActionResult = {
+                        saved: doctorAction.target
+                    };
                 } else {
-                    doctorActionResult = {saved: null};
+                    doctorActionResult = {
+                        saved: null
+                    };
                 }
 
                 // Process Detective action (you will need to fetch the actual role from the database)
@@ -599,7 +626,8 @@ export const processNightActions = async (gameId, day) => {
                     if (detectiveAction.target) {
                         const detectiveTargetRole = await gameState.getRole(gameId, detectiveAction.target);
                         detectiveActionResult = {
-                            checked: detectiveAction.target, role: `${detectiveTargetRole}` || 'An error occurred'
+                            checked: detectiveAction.target,
+                            role: `${detectiveTargetRole}` || 'An error occurred'
                         };
                     }
                 } catch (error) {
@@ -685,25 +713,33 @@ export const processDailyVote = async (gameId, gameday) => {
 
                 if (!votes) {
                     resolve({
-                        mostVotedTargetId: "nobody", mostVotes: 0,
+                        mostVotedTargetId: "nobody",
+                        mostVotes: 0,
                     });
                 } else {
                     votes.forEach(vote => votedForIds.push(vote.target))
 
                     let maxVotesId = votedForIds.reduce((maxVotes, userId) => {
                         if (userId > maxVotes.userId) {
-                            return {userId, votes: 1};
+                            return {
+                                userId,
+                                votes: 1
+                            };
                         } else {
                             maxVotes.votes++;
                             return maxVotes;
                         }
-                    }, {userId: 0, votes: 0},);
+                    }, {
+                        userId: 0,
+                        votes: 0
+                    }, );
 
                     mostVotedTargetId = maxVotesId.userId;
 
                     // Resolve the promise with the results
                     resolve({
-                        mostVotedTargetId, mostVotes,
+                        mostVotedTargetId,
+                        mostVotes,
                     });
                 }
             });

@@ -1,4 +1,6 @@
-import { config } from 'dotenv';
+import {
+    config
+} from 'dotenv';
 import OpenAI from 'openai';
 
 await config();

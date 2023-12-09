@@ -1,4 +1,7 @@
-import {addCoinsToUser, getGameDay} from "../Handlers/DatabaseHandlers.js";
+import {
+    addCoinsToUser,
+    getGameDay
+} from "../Handlers/DatabaseHandlers.js";
 import gameState from "../../src/gameState.js";
 
 export const calculateGameReward = async (gameId, victorySide, userId) => {

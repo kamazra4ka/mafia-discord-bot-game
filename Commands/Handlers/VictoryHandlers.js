@@ -1,9 +1,19 @@
 import gameState from "../../src/gameState.js";
-import {getChannelIdsFromDatabase} from "./DatabaseHandlers.js";
-import {EmbedBuilder} from "discord.js";
-import {generateVoiceLine} from "./OpenaiHandlers.js";
-import {narrateAndPlay} from "./VoiceHandlers.js";
-import {calculateGameReward} from "../Shop/calculateGameReward.js";
+import {
+    getChannelIdsFromDatabase
+} from "./DatabaseHandlers.js";
+import {
+    EmbedBuilder
+} from "discord.js";
+import {
+    generateVoiceLine
+} from "./OpenaiHandlers.js";
+import {
+    narrateAndPlay
+} from "./VoiceHandlers.js";
+import {
+    calculateGameReward
+} from "../Shop/calculateGameReward.js";
 
 export const checkVictory = async (gameId, client) => {
     try {
@@ -121,9 +131,11 @@ export const victoryHandler = async (gameId, type, client) => {
                     .setColor('006400')
                     .setTitle('Mafia Game: Civilian Victory!')
                     .setDescription(`🎙 Bot: ${voiceLine}\n\n**🎖️ Alive players:** \n${alivePlayersRolesMentions}\n\n`)
-                    .addFields(
-                        {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                    )
+                    .addFields({
+                        name: '🎙 Voice Channel',
+                        value: '<#1174753582193590312>',
+                        inline: true
+                    }, )
                     .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881557817409536/civ_won.png?ex=657f08a7&is=656c93a7&hm=24c0b1f6d5e78d590cbdd10a5fc3e1a3dabd6f03d9945e6f287d2358bc538a7b&=&format=webp&quality=lossless&width=1920&height=639')
                     .setTimestamp()
                     .setFooter({
@@ -132,7 +144,9 @@ export const victoryHandler = async (gameId, type, client) => {
                     });
 
                 // sending the results
-                await channel.send({embeds: [embed]});
+                await channel.send({
+                    embeds: [embed]
+                });
 
                 // restart the bot
                 process.exit();
@@ -189,9 +203,11 @@ export const victoryHandler = async (gameId, type, client) => {
                     .setColor('8e0922')
                     .setTitle('Mafia Game: Mafia Victory!')
                     .setDescription(`🎙 Bot: ${voiceLine}\n\n**🎖️ Alive players:** \n${alivePlayersRolesMentions}\n\n`)
-                    .addFields(
-                        {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                    )
+                    .addFields({
+                        name: '🎙 Voice Channel',
+                        value: '<#1174753582193590312>',
+                        inline: true
+                    }, )
                     .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881557569933452/mafia_won.png?ex=657f08a7&is=656c93a7&hm=3dd61104999476204664e3af0494cf19a8baa9b282cdec956f02b967d8be5db9&=&format=webp&quality=lossless&width=1920&height=639')
                     .setTimestamp()
                     .setFooter({
@@ -200,7 +216,9 @@ export const victoryHandler = async (gameId, type, client) => {
                     });
 
                 // sending the results
-                await channel.send({embeds: [embed]});
+                await channel.send({
+                    embeds: [embed]
+                });
 
                 // restart the bot
                 process.exit();
