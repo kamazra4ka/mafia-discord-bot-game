@@ -205,6 +205,16 @@ export const sendDoctorVote = async (channel, gameId) => {
 export const sendDetectiveVote = async (channel, gameId) => {
     try {
 
+        // mention the detective
+        const detective = await gameState.getUsersByRole(gameId, 'detective');
+        let detectiveMention = detective.map(member => `<@${member}>`).join(' ');
+
+        if (!detectiveMention) {
+            detectiveMention = 'No alive doctors were found.';
+        } else {
+            channel.send(`${doctorMention}`)
+        }
+
         const players = await gameState.getUsersByRole(gameId, 'civilian');
 
         // add detectives and doctors to the list
