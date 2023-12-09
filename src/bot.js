@@ -513,15 +513,19 @@ gameEvents.on('dayUpdate', async (data) => {
                     playersLeft = await gameState.getPlayersList(gameId);
                     playersCount = playersLeft.length;
 
+
                     // Only construct the detective embed if there was a detective action
                     let detectiveActionEmbed;
                     const detectiveChannelId = await gameState.getDetectiveChannel(gameId);
                     if (detectiveActionResult) {
+                        // capitalize the role name of detective check
+                        detectiveActionResult.role = detectiveActionResult.role.charAt(0).toUpperCase() + detectiveActionResult.role.slice(1);
+
                         detectiveActionEmbed = new EmbedBuilder()
                             .setTitle('Detective Action')
                             .setColor('3a3a3a')
                             .setTitle('Mafia Game')
-                            .setDescription(`The role of the checked target <@${detectiveActionResult.checked}> is ${detectiveActionResult.role}.`)
+                            .setDescription(`🔎 The role of the checked target <@${detectiveActionResult.checked}> is **${detectiveActionResult.role}**.`)
                             .setTimestamp()
                             .setFooter({
                                 text: 'MafiaBot',
