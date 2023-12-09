@@ -212,7 +212,7 @@ export const sendDetectiveVote = async (channel, gameId) => {
         if (!detectiveMention) {
             detectiveMention = 'No alive doctors were found.';
         } else {
-            channel.send(`${doctorMention}`)
+            channel.send(`${detectiveMention}`)
         }
 
         const players = await gameState.getUsersByRole(gameId, 'civilian');
