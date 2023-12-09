@@ -406,7 +406,7 @@ gameEvents.on('stageUpdate', async (data) => {
                                 });
 
                             // mentioning user
-                            await channel.send(`Detective: ${detectiveUserId}`)
+                            await channel.send(`Detective: <@${detectiveUserId}>`)
 
                             await channel.send({
                                 embeds: [embed]
@@ -521,7 +521,7 @@ gameEvents.on('dayUpdate', async (data) => {
                             .setTitle('Detective Action')
                             .setColor('3a3a3a')
                             .setTitle('Mafia Game')
-                            .setDescription(`The role of the checked target (${detectiveActionResult.checked}) is ${detectiveActionResult.role}.`)
+                            .setDescription(`The role of the checked target <@${detectiveActionResult.checked}> is ${detectiveActionResult.role}.`)
                             .setTimestamp()
                             .setFooter({
                                 text: 'MafiaBot',
