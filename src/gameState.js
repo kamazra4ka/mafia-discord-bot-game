@@ -32,8 +32,8 @@ class GameState {
         const roles = {
             mafia: 1,
             doctor: 1,
-            detective: 0,
-            civilian: players.length - 2 // Rest are civilians by default
+            detective: 1,
+            civilian: players.length - 3 // Rest are civilians by default
         };
 
         if (players.length >= 7 && players.length <= 13) {
