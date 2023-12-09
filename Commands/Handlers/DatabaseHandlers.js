@@ -1,7 +1,5 @@
 import mysql from 'mysql2';
-import {
-    config
-} from 'dotenv';
+import {config} from 'dotenv';
 import gameEvents from "../Emitters/emitter.js";
 import gameState from "../../src/gameState.js";
 
@@ -17,6 +15,30 @@ const pool = mysql.createPool({
     connectionLimit: 10000,
     queueLimit: 0,
 });
+
+function mostElementInArray(arr) {
+    // Создаем объект для подсчета количества вхождений каждого элемента
+    let countMap = {};
+    for (let i = 0; i < arr.length; i++) {
+        countMap[arr[i]] = countMap[arr[i]] ? countMap[arr[i]] + 1 : 1;
+    }
+
+    // Находим элемент с максимальным количеством вхождений
+    let maxCount = 0;
+    let maxItem = null;
+    for (const item in countMap) {
+        if (countMap.hasOwnProperty(item)) {
+            const count = countMap[item];
+            if (maxCount < count) {
+                maxCount = count;
+                maxItem = item;
+            }
+        }
+    }
+
+
+    return maxItem;
+}
 
 export const createGame = async (interaction, gameId) => {
 
@@ -719,22 +741,7 @@ export const processDailyVote = async (gameId, gameday) => {
                 } else {
                     votes.forEach(vote => votedForIds.push(vote.target))
 
-                    let maxVotesId = votedForIds.reduce((maxVotes, userId) => {
-                        if (userId > maxVotes.userId) {
-                            return {
-                                userId,
-                                votes: 1
-                            };
-                        } else {
-                            maxVotes.votes++;
-                            return maxVotes;
-                        }
-                    }, {
-                        userId: 0,
-                        votes: 0
-                    }, );
-
-                    mostVotedTargetId = maxVotesId.userId;
+                    mostVotedTargetId = mostElementInArray(votedForIds);
 
                     // Resolve the promise with the results
                     resolve({
