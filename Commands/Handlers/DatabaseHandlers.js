@@ -683,23 +683,29 @@ export const processDailyVote = async (gameId, gameday) => {
                 console.log('gameday votes: ' + gameday)
                 console.log('gameday votes: ' + gameday)
 
-                votes.forEach(vote => votedForIds.push(vote.target))
+                if (!votes) {
+                    resolve({
+                        mostVotedTargetId: "nobody", mostVotes: 0,
+                    });
+                } else {
+                    votes.forEach(vote => votedForIds.push(vote.target))
 
-                let maxVotesId = votedForIds.reduce((maxVotes, userId) => {
-                    if (userId > maxVotes.userId) {
-                        return {userId, votes: 1};
-                    } else {
-                        maxVotes.votes++;
-                        return maxVotes;
-                    }
-                }, {userId: 0, votes: 0},);
+                    let maxVotesId = votedForIds.reduce((maxVotes, userId) => {
+                        if (userId > maxVotes.userId) {
+                            return {userId, votes: 1};
+                        } else {
+                            maxVotes.votes++;
+                            return maxVotes;
+                        }
+                    }, {userId: 0, votes: 0},);
 
-                mostVotedTargetId = maxVotesId.userId;
+                    mostVotedTargetId = maxVotesId.userId;
 
-                // Resolve the promise with the results
-                resolve({
-                    mostVotedTargetId, mostVotes,
-                });
+                    // Resolve the promise with the results
+                    resolve({
+                        mostVotedTargetId, mostVotes,
+                    });
+                }
             });
         });
     });

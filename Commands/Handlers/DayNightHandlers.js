@@ -137,52 +137,96 @@ export const endDailyVote = async (gameId, playersLeft, playersCount, currentDay
 
     const executedPlayer = await processDailyVote(gameId, currentDay).then(async executedPlayer => {
         console.log('executedPlayer:', executedPlayer)
+
+        if (executedPlayer.mostVotedTargetId === 'nobody') {
+            const topic = `Civilian daily vote has ended. Civilian players couldn't vote for a suspected mafia, nobody gets executed. Limit response: 180 characters.`
+            const voiceLine = generateVoiceLine(topic).then(voiceLine => {
+                // play the voice line
+                narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
+
+                // remove executed player from PlayersLeft
+                const playersLeftNow = playersLeft.filter(player => player !== executedPlayer.mostVotedTargetId);
+                const playersCount = playersLeftNow.length;
+
+                // put all player's mentions in a variable players
+                const players = playersLeftNow.map(player => `<@${player}>`).join(', ');
+
+                embed = new EmbedBuilder()
+                    .setColor('3a3a3a')
+                    .setTitle('Mafia Game: Vote results')
+                    .setDescription(`🎙 Bot: ${voiceLine}`)
+                    .addFields(
+                        {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
+                        {name: '👤 Alive players', value: `${players}`, inline: true},
+                        {name: '🔪 Executed player', value: `Nobody got executed`, inline: true}
+                    )
+                    .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881558048080025/daily_vote.png?ex=657f08a7&is=656c93a7&hm=394a74ed7bb9cc6bc279b9ae71cd6a3e05f35ad95b64398d64c7733d00eeed6e&=&format=webp&quality=lossless&width=1920&height=639')
+                    .setTimestamp()
+                    .setFooter({
+                        text: 'MafiaBot',
+                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+                    });
+
+                client.channels.fetch(cId)
+                    .then(channel => {
+                        // Send a message to the channel
+                        channel.send({embeds: [embed]})
+                        // timeout for 35 seconds
+                        setTimeout(async () => {
+                            await nightHandler(gameId, playersLeftNow, playersCount, currentDay, client);
+                        }, 35000);
+                    });
+            });
+        } else {
             const executedPlayerNickname = client.users.cache.get(executedPlayer.mostVotedTargetId).username;
             console.log('executedPlayerNickname:', executedPlayerNickname)
             // changing executed player's role to dead
             await gameState.updateRole(gameId, executedPlayer.mostVotedTargetId, 'dead');
 
 
-        const playersAfterVote = playersCount - 1;
+            const playersAfterVote = playersCount - 1;
 
-        const topic = `Civilian daily vote has ended. Civilian players think, that ${executedPlayerNickname} is a mafia and he will be executed right now, ${playersAfterVote} players are still alive. We don't know was he mafia or not. Limit response: 180 characters.`
-        const voiceLine = generateVoiceLine(topic).then(voiceLine => {
-            // play the voice line
-            narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
+            const topic = `Civilian daily vote has ended. Civilian players think, that ${executedPlayerNickname} is a mafia and he will be executed right now, ${playersAfterVote} players are still alive. We don't know was he mafia or not. Limit response: 180 characters.`
+            const voiceLine = generateVoiceLine(topic).then(voiceLine => {
+                // play the voice line
+                narrateAndPlay('1174666167227531345', '1174753582193590312', voiceLine);
 
-            // remove executed player from PlayersLeft
-            const playersLeftNow = playersLeft.filter(player => player !== executedPlayer.mostVotedTargetId);
-            const playersCount = playersLeftNow.length;
+                // remove executed player from PlayersLeft
+                const playersLeftNow = playersLeft.filter(player => player !== executedPlayer.mostVotedTargetId);
+                const playersCount = playersLeftNow.length;
 
-            // put all player's mentions in a variable players
-            const players = playersLeftNow.map(player => `<@${player}>`).join(', ');
+                // put all player's mentions in a variable players
+                const players = playersLeftNow.map(player => `<@${player}>`).join(', ');
 
-            embed = new EmbedBuilder()
-                .setColor('3a3a3a')
-                .setTitle('Mafia Game: Vote results')
-                .setDescription(`🎙 Bot: ${voiceLine}`)
-                .addFields(
-                    {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
-                    {name: '👤 Alive players', value: `${players}`, inline: true},
-                    {name: '🔪 Executed player', value: `${executedPlayerNickname}`, inline: true}
-                )
-                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881558048080025/daily_vote.png?ex=657f08a7&is=656c93a7&hm=394a74ed7bb9cc6bc279b9ae71cd6a3e05f35ad95b64398d64c7733d00eeed6e&=&format=webp&quality=lossless&width=1920&height=639')
-                .setTimestamp()
-                .setFooter({
-                    text: 'MafiaBot',
-                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
-                });
+                embed = new EmbedBuilder()
+                    .setColor('3a3a3a')
+                    .setTitle('Mafia Game: Vote results')
+                    .setDescription(`🎙 Bot: ${voiceLine}`)
+                    .addFields(
+                        {name: '🎙 Voice Channel', value: '<#1174753582193590312>', inline: true},
+                        {name: '👤 Alive players', value: `${players}`, inline: true},
+                        {name: '🔪 Executed player', value: `${executedPlayerNickname}`, inline: true}
+                    )
+                    .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881558048080025/daily_vote.png?ex=657f08a7&is=656c93a7&hm=394a74ed7bb9cc6bc279b9ae71cd6a3e05f35ad95b64398d64c7733d00eeed6e&=&format=webp&quality=lossless&width=1920&height=639')
+                    .setTimestamp()
+                    .setFooter({
+                        text: 'MafiaBot',
+                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+                    });
 
-            client.channels.fetch(cId)
-                .then(channel => {
-                    // Send a message to the channel
-                    channel.send({embeds: [embed]})
-                    // timeout for 35 seconds
-                    setTimeout(async () => {
-                        await nightHandler(gameId, playersLeftNow, playersCount, currentDay, client);
-                    }, 35000);
-                });
-        });
+                client.channels.fetch(cId)
+                    .then(channel => {
+                        // Send a message to the channel
+                        channel.send({embeds: [embed]})
+                        // timeout for 35 seconds
+                        setTimeout(async () => {
+                            await nightHandler(gameId, playersLeftNow, playersCount, currentDay, client);
+                        }, 35000);
+                    });
+            });
+        }
+
+
     });
     } catch (error) {
         console.error('Error in endDailyVote:', error);
