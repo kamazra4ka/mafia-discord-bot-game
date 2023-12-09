@@ -20,7 +20,6 @@ class GameState {
         }
     }
 
-
     async assignRoles(gameId) {
         const game = this.getGame(gameId);
         if (!game) {
@@ -152,13 +151,6 @@ class GameState {
     async getVote(gameId, day) {
         const game = this.getGame(gameId);
 
-        console.log(`===================get vote==================`)
-        console.log(game)
-        console.log(game.dailyVotes)
-        console.log('day: ' + day)
-        console.log(game.dailyVotes[day])
-        console.log(`===================get vote==================`)
-
         return game.dailyVotes[day];
     }
 
@@ -185,13 +177,6 @@ class GameState {
                 }
             }
 
-            console.log(`===================night vote get==================`)
-            console.log(game)
-            console.log(game.nightVotes)
-            console.log('day: ' + night)
-            console.log(game.nightVotes[night])
-            console.log(`===================night get vote==================`)
-
             game.nightVotes[night].push({
                 voter,
                 target
@@ -202,19 +187,6 @@ class GameState {
     async getNightVote(gameId) {
         const game = this.getGame(gameId);
         const night = game.gameDay - 1;
-
-        console.log(`================================================`)
-        console.log(`=============DEBUG================`)
-        console.log(`================================================`)
-
-        console.log(game)
-        console.log(game.nightVotes)
-        console.log('night: ' + night)
-        console.log(game.nightVotes[night])
-
-        console.log(`================================================`)
-        console.log(`=============DEBUG================`)
-        console.log(`================================================`)
 
         return game.nightVotes[night];
     }
