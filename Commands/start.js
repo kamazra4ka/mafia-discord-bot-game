@@ -35,6 +35,13 @@ const pool = mysql.createPool({
 
 export const start = async (interaction, client) => {
 
+    // get current game
+    const currentGame = await gameState.getCurrentGame();
+    if (currentGame) {
+        await interaction.reply('There is already a game in progress. Please wait until the end of the current match.');
+        return;
+    }
+
     const gameId = Math.floor(Math.random() * 10000);
 
     const button = new ButtonBuilder()

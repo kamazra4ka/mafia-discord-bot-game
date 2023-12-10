@@ -303,145 +303,152 @@ gameEvents.on('stageUpdate', async (data) => {
                 await gameState.setGame(gameId, gameInfo);
                 await assignStartRoles(gameId);
 
-                // get the amount of all players
-                const playersCount = await gameState.getPlayersList(gameId);
-                if (playersCount.length < 4) {
-                    const channel = await client.channels.fetch(cId);
-                    await channel.send({
-                        content: `There are not enough players to start the game.`
-                    });
-                } else {
+                setTimeout(async () => {
+                    // get the amount of all players
+                    const playersCount = await gameState.getPlayersList(gameId);
 
-                    let mafiaChannelId;
-                    let doctorChannelId;
-                    let detectiveChannelId;
-
-                    // create a row for actions
-                    await createNightActionsRow(data.gameId, data.currentDay);
-
-                    setTimeout(async () => {
-                        const mafiaUserIds = await gameState.getUsersByRole(gameId, 'mafia');
-                        console.log(`Mafia user ids is ${mafiaUserIds}`)
-                        console.log(`Mafia user ids is ${mafiaUserIds}`)
-                        console.log(`Mafia user ids is ${mafiaUserIds}`)
-                        const mafiaChannel = await createPrivateChannelForUsers(guild, '🔪⡇mafia-only-' + gameId, mafiaUserIds).then(async channel => {
-                            const embed = new EmbedBuilder()
-                                .setColor('3a3a3a')
-                                .setTitle('Mafia Channel')
-                                .setDescription('Welcome to the Mafia Channel! You can talk with your fellow mafia members here.\n\n In matches with multiple mafias every mafia can choose a target, but only one target will be killed. Please, discuss your target with other mafia members. Have fun!')
-                                .addFields({
-                                    name: '🎙 Voice Channel',
-                                    value: '<#1174753582193590312>',
-                                    inline: true
-                                })
-                                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881502582607942/mafia.png?ex=657f0899&is=656c9399&hm=a1bc47a1cfe1279e4d710e256fc3e38d5654646ce674c589fabcbcb3fed51e51&=&format=webp&quality=lossless&width=1406&height=1053')
-                                .setTimestamp()
-                                .setFooter({
-                                    text: 'MafiaBot',
-                                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
-                                });
-
-                            // mentioning all mafias (multiple possible)
-                            for (let i = 0; i < mafiaUserIds.length; i++) {
-                                mafiaUserIds[i] = '<@' + mafiaUserIds[i] + '>';
-                                channel.send(`# In this match there are ${mafiaUserIds.length} mafias.`)
-                                channel.send(`# Mafia members: ${mafiaUserIds[i]}`)
-                            }
-
-                            await channel.send({
-                                embeds: [embed]
-                            });
-                            await sendMafiaVote(channel, gameId);
-
-                            // save the id for later votes in the gamestate
-                            mafiaChannelId = channel.id;
-                        })
-
-                        const doctorUserId = await gameState.getUsersByRole(gameId, 'doctor');
-                        const doctorChannel = await createPrivateChannelForUsers(guild, '💊⡇doctor-only-' + gameId, doctorUserId).then(async channel => {
-                            const embed = new EmbedBuilder()
-                                .setColor('3a3a3a')
-                                .setTitle('Doctor Channel')
-                                .setDescription('Welcome to your personal channel! You are a Doctor and your goal is to prevent Mafia members from killing civilians. Every night from this channel you can choose who do you want to visit this night. Your visit prevents person from being killed.')
-                                .addFields({
-                                    name: '🎙 Voice Channel',
-                                    value: '<#1174753582193590312>',
-                                    inline: true
-                                })
-                                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881503404691498/doctor.png?ex=657f089a&is=656c939a&hm=fd6c12e54b0b6037999dbbce5529528186c4cbd1fbf6252de620af72058605f8&=&format=webp&quality=lossless&width=1293&height=969')
-                                .setTimestamp()
-                                .setFooter({
-                                    text: 'MafiaBot',
-                                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
-                                });
-
-                            // mentioning user
-                            await channel.send(`# Doctor: <@${doctorUserId}>`)
-
-                            await channel.send({
-                                embeds: [embed]
-                            });
-                            await sendDoctorVote(channel, gameId);
-
-                            doctorChannelId = channel.id;
+                    if (playersCount.length < 4) {
+                        const channel = await client.channels.fetch(cId);
+                        await channel.send({
+                            content: `There are not enough players to start the game.`
                         });
+                    } else {
 
-                        const detectiveUserId = await gameState.getUsersByRole(gameId, 'detective');
-                        const detectiveChannel = await createPrivateChannelForUsers(guild, '👮⡇detective-only-' + gameId, detectiveUserId).then(async channel => {
-                            const embed = new EmbedBuilder()
-                                .setColor('3a3a3a')
-                                .setTitle('Detective Channel')
-                                .setDescription('Welcome to your personal channel! You are a Detective and your goal is to find out who is the Mafia. Every night from this channel you can choose who do you investigate. This action will disclose their role to you, so if your target is Mafia - you will know this. But you still have to convince the majority to kick the Mafia out of the game.')
-                                .addFields({
-                                    name: '🎙 Voice Channel',
-                                    value: '<#1174753582193590312>',
-                                    inline: true
-                                })
-                                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881504541347950/detective.png?ex=657f089a&is=656c939a&hm=21e69af569052248bdaf0add3c232cdd823570910d13dc0208bef689a179cd85&=&format=webp&quality=lossless&width=1293&height=969')
-                                .setTimestamp()
-                                .setFooter({
-                                    text: 'MafiaBot',
-                                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
-                                });
+                        let mafiaChannelId;
+                        let doctorChannelId;
+                        let detectiveChannelId;
 
-                            // mentioning user
-                            await channel.send(`Detective: <@${detectiveUserId}>`)
+                        // create a row for actions
+                        await createNightActionsRow(data.gameId, data.currentDay);
 
-                            await channel.send({
-                                embeds: [embed]
-                            });
-                            await sendDetectiveVote(channel, gameId);
-                            detectiveChannelId = channel.id;
-                        });
-
-                        await sendChannelIdsToDatabase(gameId, mafiaChannelId, doctorChannelId, detectiveChannelId);
-
-                        await gameState.setMafiaChannel(gameId, mafiaChannelId);
-                        await gameState.setDoctorChannel(gameId, doctorChannelId);
-                        await gameState.setDetectiveChannel(gameId, detectiveChannelId);
-
-                        await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '2');
-
-                        // 60 seconds interval
-                        await setTimeout(async () => {
-                            try {
-                                await setTimeout(() => {
-                                    nextStage(0, gameId, client, (error, message) => {
-                                        if (error) {
-                                            console.error(error);
-                                        } else {
-                                            console.log(message);
-                                        }
+                        setTimeout(async () => {
+                            const mafiaUserIds = await gameState.getUsersByRole(gameId, 'mafia');
+                            console.log(`Mafia user ids is ${mafiaUserIds}`)
+                            console.log(`Mafia user ids is ${mafiaUserIds}`)
+                            console.log(`Mafia user ids is ${mafiaUserIds}`)
+                            const mafiaChannel = await createPrivateChannelForUsers(guild, '🔪⡇mafia-only-' + gameId, mafiaUserIds).then(async channel => {
+                                const embed = new EmbedBuilder()
+                                    .setColor('3a3a3a')
+                                    .setTitle('Mafia Channel')
+                                    .setDescription('Welcome to the Mafia Channel! You can talk with your fellow mafia members here.\n\n In matches with multiple mafias every mafia can choose a target, but only one target will be killed. Please, discuss your target with other mafia members. Have fun!')
+                                    .addFields({
+                                        name: '🎙 Voice Channel',
+                                        value: '<#1174753582193590312>',
+                                        inline: true
+                                    })
+                                    .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881502582607942/mafia.png?ex=657f0899&is=656c9399&hm=a1bc47a1cfe1279e4d710e256fc3e38d5654646ce674c589fabcbcb3fed51e51&=&format=webp&quality=lossless&width=1406&height=1053')
+                                    .setTimestamp()
+                                    .setFooter({
+                                        text: 'MafiaBot',
+                                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                                     });
-                                }, 2500);
-                            } catch (error) {
-                                console.error('Error processing night actions:', error);
-                            }
-                        }, 60000);
 
-                    }, 5000);
+                                // mentioning all mafias (multiple possible)
+                                for (let i = 0; i < mafiaUserIds.length; i++) {
+                                    mafiaUserIds[i] = '<@' + mafiaUserIds[i] + '>';
+                                    channel.send(`# In this match there are ${mafiaUserIds.length} mafias.`)
+                                    channel.send(`# Mafia members: ${mafiaUserIds[i]}`)
+                                }
 
-                }
+                                await channel.send({
+                                    embeds: [embed]
+                                });
+                                await sendMafiaVote(channel, gameId);
+
+                                // save the id for later votes in the gamestate
+                                mafiaChannelId = channel.id;
+                            })
+
+                            const doctorUserId = await gameState.getUsersByRole(gameId, 'doctor');
+                            const doctorChannel = await createPrivateChannelForUsers(guild, '💊⡇doctor-only-' + gameId, doctorUserId).then(async channel => {
+                                const embed = new EmbedBuilder()
+                                    .setColor('3a3a3a')
+                                    .setTitle('Doctor Channel')
+                                    .setDescription('Welcome to your personal channel! You are a Doctor and your goal is to prevent Mafia members from killing civilians. Every night from this channel you can choose who do you want to visit this night. Your visit prevents person from being killed.')
+                                    .addFields({
+                                        name: '🎙 Voice Channel',
+                                        value: '<#1174753582193590312>',
+                                        inline: true
+                                    })
+                                    .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881503404691498/doctor.png?ex=657f089a&is=656c939a&hm=fd6c12e54b0b6037999dbbce5529528186c4cbd1fbf6252de620af72058605f8&=&format=webp&quality=lossless&width=1293&height=969')
+                                    .setTimestamp()
+                                    .setFooter({
+                                        text: 'MafiaBot',
+                                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+                                    });
+
+                                // mentioning user
+                                await channel.send(`# Doctor: <@${doctorUserId}>`)
+
+                                await channel.send({
+                                    embeds: [embed]
+                                });
+                                await sendDoctorVote(channel, gameId);
+
+                                doctorChannelId = channel.id;
+                            });
+
+                            const detectiveUserId = await gameState.getUsersByRole(gameId, 'detective');
+                            const detectiveChannel = await createPrivateChannelForUsers(guild, '👮⡇detective-only-' + gameId, detectiveUserId).then(async channel => {
+                                const embed = new EmbedBuilder()
+                                    .setColor('3a3a3a')
+                                    .setTitle('Detective Channel')
+                                    .setDescription('Welcome to your personal channel! You are a Detective and your goal is to find out who is the Mafia. Every night from this channel you can choose who do you investigate. This action will disclose their role to you, so if your target is Mafia - you will know this. But you still have to convince the majority to kick the Mafia out of the game.')
+                                    .addFields({
+                                        name: '🎙 Voice Channel',
+                                        value: '<#1174753582193590312>',
+                                        inline: true
+                                    })
+                                    .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881504541347950/detective.png?ex=657f089a&is=656c939a&hm=21e69af569052248bdaf0add3c232cdd823570910d13dc0208bef689a179cd85&=&format=webp&quality=lossless&width=1293&height=969')
+                                    .setTimestamp()
+                                    .setFooter({
+                                        text: 'MafiaBot',
+                                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+                                    });
+
+                                // mentioning user
+                                await channel.send(`Detective: <@${detectiveUserId}>`)
+
+                                await channel.send({
+                                    embeds: [embed]
+                                });
+                                await sendDetectiveVote(channel, gameId);
+                                detectiveChannelId = channel.id;
+                            });
+
+                            await sendChannelIdsToDatabase(gameId, mafiaChannelId, doctorChannelId, detectiveChannelId);
+
+                            await gameState.setMafiaChannel(gameId, mafiaChannelId);
+                            await gameState.setDoctorChannel(gameId, doctorChannelId);
+                            await gameState.setDetectiveChannel(gameId, detectiveChannelId);
+
+                            await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '2');
+
+                            // 60 seconds interval
+                            await setTimeout(async () => {
+                                try {
+                                    await setTimeout(() => {
+                                        nextStage(0, gameId, client, (error, message) => {
+                                            if (error) {
+                                                console.error(error);
+                                            } else {
+                                                console.log(message);
+                                            }
+                                        });
+                                    }, 2500);
+                                } catch (error) {
+                                    console.error('Error processing night actions:', error);
+                                }
+                            }, 60000);
+
+                        }, 5000);
+
+                    }
+
+                }, 1500);
+
+
+
             }
         }
     } catch (error) {
