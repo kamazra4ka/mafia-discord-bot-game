@@ -364,7 +364,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                 })
             break;
         case '4':
-            topic = `Mafia tried to kill the player ${additionalData}. Doctor saved him.`
+            topic = `Mafia or the Maniac tried to kill the player ${additionalData}. Doctor saved him.`
 
             voiceLineText = await generateVoiceLine(topic)
             embed = new EmbedBuilder()
@@ -395,6 +395,41 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         embeds: [embed]
                     })
                 })
+            break;
+        case '5':
+            topic = `Player ${additionalData} has been killed by the Maniac. Doctor didn't come to him.`
+
+            voiceLineText = await generateVoiceLine(topic)
+            embed = new EmbedBuilder()
+                .setColor('8e0922')
+                .setTitle('Mafia Game: A player has been found dead.')
+                .setDescription(`🎙 Bot: ${voiceLineText}`)
+                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881557062434826/mafia_success.png?ex=657f08a6&is=656c93a6&hm=bf74e271f0f483e29db540d223043cda8b77c5d2c5090b327ec400878d46054d&=&format=webp&quality=lossless&width=1920&height=639')
+                .setTimestamp()
+                .addFields({
+                    name: '🎙 Voice Channel',
+                    value: '<#1174753582193590312>',
+                    inline: true
+                }, {
+                    name: '👤 Dead player',
+                    value: `${additionalData}`,
+                    inline: true
+                })
+                .setFooter({
+                    text: 'MafiaBot',
+                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+                });
+
+            setTimeout(() => {
+                narrateAndPlay(guildId, channelId, voiceLineText);
+                client.channels.fetch(cId)
+                    .then(channel => {
+                        // Send a message to the channel
+                        channel.send({
+                            embeds: [embed]
+                        })
+                    })
+            }, 10000);
             break;
     }
 }
