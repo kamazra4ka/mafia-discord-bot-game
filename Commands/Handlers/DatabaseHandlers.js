@@ -587,11 +587,13 @@ export const processNightActions = async (gameId, day) => {
 
                 // Initialize results variables
                 let mafiaActionResult = null;
+                let maniacActionResult = null;
                 let doctorActionResult = null;
                 let detectiveActionResult = null;
 
                 if (nightActions) {
                     const mafiaAction = nightActions.filter(action => action.voter === "gamemafiatarget")[0];
+                    const maniacAction = nightActions.filter(action => action.voter === "gamemaniactarget")[0];
                     const detectiveAction = nightActions.filter(action => action.voter === "gamedetectivetarget")[0];
                     const doctorAction = nightActions.filter(action => action.voter === "gamedoctortarget")[0];
 
@@ -620,6 +622,32 @@ export const processNightActions = async (gameId, day) => {
                         }
                     }
 
+                    // maniac
+                    if (maniacAction) {
+                        if (doctorAction) {
+                            // Process Mafia action
+                            if (maniacAction.target !== doctorAction.target) {
+                                // Mafia's target was not saved by the doctor
+                                maniacActionResult = {
+                                    success: true,
+                                    target: maniacAction.target
+                                };
+
+                            } else {
+                                // Mafia's target was saved by the doctor
+                                maniacActionResult = {
+                                    success: false,
+                                    target: maniacAction.target
+                                };
+                            }
+                        } else {
+                            maniacActionResult = {
+                                success: true,
+                                target: maniacAction.target
+                            };
+                        }
+                    }
+
                     if (doctorAction) {
                         // Process Doctor action
                         doctorActionResult = {
@@ -631,7 +659,7 @@ export const processNightActions = async (gameId, day) => {
                         };
                     }
 
-                    // Process Detective action (you will need to fetch the actual role from the database)
+                    // Process Detective action
                     try {
                         if (detectiveAction.target) {
                             const detectiveTargetRole = await gameState.getRole(gameId, detectiveAction.target);
@@ -644,12 +672,12 @@ export const processNightActions = async (gameId, day) => {
                         console.log('Something went wrong with the detective. Please, try again.\n\n' + error);
                     }
 
-
                     // Resolve the promise with the results
                     resolve({
                         mafiaActionResult,
                         doctorActionResult,
                         detectiveActionResult,
+                        maniacActionResult,
                         detectiveChannelId: gameState.getDetectiveChannel(gameId)
                     });
                 } else {

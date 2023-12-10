@@ -539,6 +539,7 @@ gameEvents.on('dayUpdate', async (data) => {
                 try {
                     const {
                         mafiaActionResult,
+                        maniacActionResult,
                         doctorActionResult,
                         detectiveActionResult,
                     } = await processNightActions(gameId, data.currentDay);
@@ -551,6 +552,12 @@ gameEvents.on('dayUpdate', async (data) => {
                         targetMafia = await client.users.fetch('1175134258482917518')
                     }
 
+                    let targetManiac;
+                    if (maniacActionResult.target) {
+                        targetManiac = await client.users.fetch(maniacActionResult.target);
+                    } else {
+                        targetManiac = await client.users.fetch('1175134258482917518')
+                    }
 
                     // get username from the doctorActionResult.saved (discord id)
                     let targetDoctor
@@ -566,6 +573,15 @@ gameEvents.on('dayUpdate', async (data) => {
 
                         // changing the role of the target to dead
                         await gameState.updateRole(gameId, mafiaActionResult.target, 'dead');
+                    } else {
+                        await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '4', targetDoctor.username);
+                    }
+
+                    if (maniacActionResult.success) {
+                        await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '5', targetManiac.username);
+
+                        // changing the role of the target to dead
+                        await gameState.updateRole(gameId, maniacActionResult.target, 'dead');
                     } else {
                         await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '4', targetDoctor.username);
                     }
