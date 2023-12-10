@@ -60,7 +60,7 @@ class GameState {
         for (let i = 0; i < roles.doctor; i++) {
             updatePromises.push(this.updateRole(gameId, shuffledPlayers.pop(), 'doctor'));
         }
-        if (roles.detective > 0) {
+        for (let i = 0; i < roles.detective; i++) {
             updatePromises.push(this.updateRole(gameId, shuffledPlayers.pop(), 'detective'));
         }
 
