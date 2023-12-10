@@ -470,7 +470,7 @@ gameEvents.on('stageUpdate', async (data) => {
                                 detectiveChannelId = channel.id;
                             });
 
-                            await sendChannelIdsToDatabase(gameId, mafiaChannelId, doctorChannelId, detectiveChannelId);
+                            await sendChannelIdsToDatabase(gameId, mafiaChannelId, doctorChannelId, detectiveChannelId, maniacChannelId);
 
                             await gameState.setMafiaChannel(gameId, mafiaChannelId);
                             await gameState.setDoctorChannel(gameId, doctorChannelId);

@@ -18,8 +18,9 @@ import {
 } from "./DatabaseHandlers.js";
 import gameState from "../../src/gameState.js";
 import {
+    sendDetectiveVote,
     sendDoctorVote,
-    sendMafiaVote
+    sendMafiaVote, sendManiacVote
 } from "./PrivateChannelsHandlers.js";
 import {
     checkVictory
@@ -348,6 +349,7 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
         const mafiaChannel = await client.channels.fetch(channelIds.gamemafiachid);
         const doctorChannel = await client.channels.fetch(channelIds.gamedoctorchid);
         const detectiveChannel = await client.channels.fetch(channelIds.gamedetectivechid);
+        const maniacChannel = await client.channels.fetch(channelIds.gamemaniacchid);
 
 
         if (!mafiaChannel) {
@@ -375,6 +377,16 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
         } else {
             try {
                 setTimeout(async () => await sendDetectiveVote(detectiveChannel, gameId), 5000);
+            } catch (e) {
+                console.error('Detective channel not found!\n' + e);
+            }
+        }
+
+        if (!maniacChannel) {
+            console.error('Detective channel not found!');
+        } else {
+            try {
+                setTimeout(async () => await sendManiacVote(maniacChannel, gameId), 5000);
             } catch (e) {
                 console.error('Detective channel not found!\n' + e);
             }

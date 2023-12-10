@@ -323,7 +323,7 @@ export const getGameId = async (interaction) => {
 }
 
 // send doctorChannelId and other channel ids to the database to tables games
-export const sendChannelIdsToDatabase = async (gameId, mafiaChannelId, doctorChannelId, detectiveChannelId) => {
+export const sendChannelIdsToDatabase = async (gameId, mafiaChannelId, doctorChannelId, detectiveChannelId, maniacChannelId) => {
     pool.getConnection((err, connection) => {
         if (err) {
             console.error(err);
@@ -332,7 +332,7 @@ export const sendChannelIdsToDatabase = async (gameId, mafiaChannelId, doctorCha
 
         console.log('blah blah blah')
 
-        connection.query('UPDATE games SET gamedoctorchid = ?, gamedetectivechid = ?, gamemafiachid = ? WHERE gameid = ?', [doctorChannelId, detectiveChannelId, mafiaChannelId, gameId], async (err, rows) => {
+        connection.query('UPDATE games SET gamedoctorchid = ?, gamedetectivechid = ?, gamemafiachid = ?, gamemaniacchid = ? WHERE gameid = ?', [doctorChannelId, detectiveChannelId, mafiaChannelId, maniacChannelId, gameId], async (err, rows) => {
             connection.release();
             if (err) {
                 console.error(err);
