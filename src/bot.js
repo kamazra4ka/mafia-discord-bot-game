@@ -33,7 +33,7 @@ import {
     createPrivateChannelForUsers,
     sendDetectiveVote,
     sendDoctorVote,
-    sendMafiaVote
+    sendMafiaVote, sendManiacVote
 } from "../Commands/Handlers/PrivateChannelsHandlers.js";
 import {
     narrateAndPlayVoiceLine
@@ -339,6 +339,7 @@ gameEvents.on('stageUpdate', async (data) => {
                     } else {
 
                         let mafiaChannelId;
+                        let maniacChannelId;
                         let doctorChannelId;
                         let detectiveChannelId;
 
@@ -382,6 +383,35 @@ gameEvents.on('stageUpdate', async (data) => {
                                 // save the id for later votes in the gamestate
                                 mafiaChannelId = channel.id;
                             })
+
+                            const maniacUserId = await gameState.getUsersByRole(gameId, 'maniac');
+                            const maniacChannel = await createPrivateChannelForUsers(guild, '🩸⡇maniac-only-' + gameId, maniacUserId).then(async channel => {
+                                const embed = new EmbedBuilder()
+                                    .setColor('3a3a3a')
+                                    .setTitle('Maniac Channel')
+                                    .setDescription('Welcome to your personal channel! You are a Maniac and your goal is to kill everyone (including the Mafia). Every night from this channel you can choose who do you want to visit this night. Your visit kills the person. You can kill only one person per night.')
+                                    .addFields({
+                                        name: '🎙 Voice Channel',
+                                        value: '<#1174753582193590312>',
+                                        inline: true
+                                    })
+                                    .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881503404691498/doctor.png?ex=657f089a&is=656c939a&hm=fd6c12e54b0b6037999dbbce5529528186c4cbd1fbf6252de620af72058605f8&=&format=webp&quality=lossless&width=1293&height=969')
+                                    .setTimestamp()
+                                    .setFooter({
+                                        text: 'MafiaBot',
+                                        iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+                                    });
+
+                                // mentioning user
+                                await channel.send(`# Maniac: <@${maniacUserId}>`)
+
+                                await channel.send({
+                                    embeds: [embed]
+                                });
+                                await sendManiacVote(channel, gameId);
+
+                                maniacChannelId = channel.id;
+                            });
 
                             const doctorUserId = await gameState.getUsersByRole(gameId, 'doctor');
                             const doctorChannel = await createPrivateChannelForUsers(guild, '💊⡇doctor-only-' + gameId, doctorUserId).then(async channel => {
@@ -431,7 +461,7 @@ gameEvents.on('stageUpdate', async (data) => {
                                     });
 
                                 // mentioning user
-                                await channel.send(`Detective: <@${detectiveUserId}>`)
+                                await channel.send(`# Detective: <@${detectiveUserId}>`)
 
                                 await channel.send({
                                     embeds: [embed]

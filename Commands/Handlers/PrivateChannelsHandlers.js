@@ -121,6 +121,90 @@ export const sendMafiaVote = async (channel, gameId) => {
     }
 }
 
+// send a maniac's vote.
+export const sendManiacVote = async (channel, gameId) => {
+    try {
+
+        // mention the maniac
+        const maniac = await gameState.getUsersByRole(gameId, 'maniac');
+        let maniacMention = maniac.map(member => `<@${member}>`).join(' ');
+
+        if (!maniacMention) {
+            maniacMention = 'No alive maniacs were found.';
+        } else {
+            channel.send(`${maniacMention}`)
+        }
+
+        const players = await gameState.getUsersByRole(gameId, 'civilian');
+
+        // add detectives and doctors to the list
+        const detectives = await gameState.getUsersByRole(gameId, 'detective');
+        players.push(...detectives);
+
+        // add mafias to the list
+        const mafias = await gameState.getUsersByRole(gameId, 'mafia');
+        players.push(...mafias);
+
+        // add doctors to the list
+        const doctors = await gameState.getUsersByRole(gameId, 'doctor');
+        players.push(...doctors);
+
+        // get users nicknames by userid
+        const messages = await Promise.all(players.map(async userId => {
+            const user = await channel.guild.members.fetch(userId);
+
+            // get user's avatar
+            const avatar = user.user.avatarURL();
+
+            const embed = new EmbedBuilder()
+                .setColor('3a3a3a')
+                .setTitle(`${user.nickname || user.user.username}`)
+                .setDescription('Do you want to visit and kill this person? Click the button below to confirm.')
+                .setImage(avatar)
+                .setTimestamp()
+                .setFooter({
+                    text: 'MafiaBot',
+                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
+                });
+
+            const maniacVoteMessage = {
+                embeds: [embed],
+                components: [{
+                    type: 1,
+                    components: [{
+                        type: 2,
+                        label: `🗡️ ${user.nickname || user.user.username}`,
+                        // 1 is blue
+                        // 2 is gray
+                        // 3 is green
+                        // 4 is red
+                        style: 4,
+                        custom_id: `maniac_vote_${userId}`,
+                    }, ],
+                }, ],
+            };
+
+            if (maniacVoteMessage) {
+                try {
+                    const message = await channel.send(maniacVoteMessage).then(message => {
+                        // delete after 30 seconds
+                        setTimeout(() => {
+                            message.delete();
+                        }, 60000);
+                    });
+
+                    return message;
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+        }));
+
+    } catch (error) {
+        console.error('Error sending doctor vote message:', error);
+    }
+}
+
 // send a doctor's vote.
 export const sendDoctorVote = async (channel, gameId) => {
     try {
