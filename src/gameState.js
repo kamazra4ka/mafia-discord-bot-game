@@ -33,22 +33,47 @@ class GameState {
             mafia: 1,
             doctor: 1,
             detective: 1,
+            maniac: 0,
             civilian: players.length - 3 // Rest are civilians by default
         };
 
         if (players.length >= 7 && players.length <= 13) {
-            roles.mafia = 2;
-            roles.detective = 1;
+            roles.mafia = 1;
+            roles.maniac = 1;
             roles.civilian = players.length - 4;
         } else if (players.length >= 14 && players.length <= 20) {
             roles.mafia = 3;
-            roles.detective = 1;
-            roles.civilian = players.length - 5;
+            roles.maniac = 1;
+            roles.civilian = players.length - 6;
         } else if (players.length >= 21 && players.length <= 32) {
             roles.mafia = 4;
-            roles.detective = 1;
-            roles.civilian = players.length - 6;
+            roles.maniac = 1;
+            roles.civilian = players.length - 7;
         }
+
+    // how it should be after testing is done
+
+    //    const roles = {
+    //        mafia: 1,
+    //        doctor: 1,
+    //        detective: 1,
+    //        maniac: 0,
+    //        civilian: players.length - 3 // Rest are civilians by default
+    //    };
+    //
+    //    if (players.length >= 7 && players.length <= 13) {
+    //        roles.mafia = 1;
+    //        roles.maniac = 1;
+    //        roles.civilian = players.length - 4;
+    //    } else if (players.length >= 14 && players.length <= 20) {
+    //        roles.mafia = 3;
+    //        roles.maniac = 1;
+    //        roles.civilian = players.length - 6;
+    //    } else if (players.length >= 21 && players.length <= 32) {
+    //        roles.mafia = 4;
+    //        roles.maniac = 1;
+    //        roles.civilian = players.length - 7;
+    //    }
 
         const shuffledPlayers = players.sort(() => 0.5 - Math.random());
         const updatePromises = [];
@@ -62,6 +87,9 @@ class GameState {
         }
         for (let i = 0; i < roles.detective; i++) {
             updatePromises.push(this.updateRole(gameId, shuffledPlayers.pop(), 'detective'));
+        }
+        for (let i = 0; i < roles.maniac; i++) {
+            updatePromises.push(this.updateRole(gameId, shuffledPlayers.pop(), 'maniac'));
         }
 
         // Assign civilian roles to the rest and store promises
