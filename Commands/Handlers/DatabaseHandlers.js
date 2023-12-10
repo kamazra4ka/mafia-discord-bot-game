@@ -166,7 +166,6 @@ export const getUsersInGame = async (interaction, gameId) => {
 export const gameStarts = async (interaction, gameId) => {
 
     const serverDiscordId = interaction.guildId;
-    console.log(`${serverDiscordId} 123 discord server id createGame`);
     const serverName = interaction.guild.name;
     const serverStartGameId = gameId;
 
@@ -181,7 +180,6 @@ export const gameStarts = async (interaction, gameId) => {
 
         connection.query('INSERT games SET gameid = ?, gameday = 0, gamestage = 0, gameserverid = ?, gameended = 0, gamedate = ?', [gameId, serverDiscordId, gamedate], (err, rows, fields) => {
             connection.release();
-            console.log(12346788989999)
             if (err) {
                 throw err;
             }

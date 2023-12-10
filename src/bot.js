@@ -303,13 +303,12 @@ gameEvents.on('stageUpdate', async (data) => {
                 await gameState.setGame(gameId, gameInfo);
                 await assignStartRoles(gameId);
 
-                // if there are 3 or fewer players, then don't start the game
-                const playersCount = await gameState.getAlivePlayersList(gameId);
-                if (false) {
+                // get the amount of all players
+                const playersCount = await gameState.getPlayersList(gameId);
+                if (playersCount.length < 4) {
                     const channel = await client.channels.fetch(cId);
                     await channel.send({
-                        content: `There are not enough players to start the game.`,
-                        ephemeral: true
+                        content: `There are not enough players to start the game.`
                     });
                 } else {
 
@@ -525,7 +524,7 @@ gameEvents.on('dayUpdate', async (data) => {
                             .setTitle('Detective Action')
                             .setColor('3a3a3a')
                             .setTitle('Mafia Game')
-                            .setDescription(`🔎 The role of the checked target <@${detectiveActionResult.checked}> is **${detectiveActionResult.role}**.`)
+                            .setDescription(`🔎  The role of the checked target <@${detectiveActionResult.checked}> is **${detectiveActionResult.role}**.`)
                             .setTimestamp()
                             .setFooter({
                                 text: 'MafiaBot',

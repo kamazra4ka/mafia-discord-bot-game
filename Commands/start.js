@@ -143,6 +143,7 @@ export const start = async (interaction, client) => {
             content: 'Registration closed.',
             components: [newRow]
         });
+
         await gameStarts(interaction, gameId);
 
         // 95 seconds timeout
