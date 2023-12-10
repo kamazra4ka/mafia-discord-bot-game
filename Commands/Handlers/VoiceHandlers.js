@@ -404,7 +404,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                 .setColor('480512')
                 .setTitle('Mafia Game: A player has been found dead.')
                 .setDescription(`🎙 Bot: ${voiceLineText}`)
-                .setImage('https://media.discordapp.net/attachments/669834222051262465/1180881557062434826/mafia_success.png?ex=657f08a6&is=656c93a6&hm=bf74e271f0f483e29db540d223043cda8b77c5d2c5090b327ec400878d46054d&=&format=webp&quality=lossless&width=1920&height=639')
+                .setImage('https://media.discordapp.net/attachments/669834222051262465/1183429916344189058/maniacsuccess.png?ex=65884dff&is=6575d8ff&hm=0340113661749ead522abf1e24ef4567c19a73c89c61138561bc81825467c14e&=&format=webp&quality=lossless&width=1500&height=500')
                 .setTimestamp()
                 .addFields({
                     name: '🎙 Voice Channel',
@@ -417,7 +417,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                 })
                 .setFooter({
                     text: 'MafiaBot',
-                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1183429916344189058/maniacsuccess.png?ex=65884dff&is=6575d8ff&hm=0340113661749ead522abf1e24ef4567c19a73c89c61138561bc81825467c14e&=&format=webp&quality=lossless&width=1500&height=500'
+                    iconURL: 'https://media.discordapp.net/attachments/669834222051262465/1180881505329873066/Mafia-PP.png?ex=657f089a&is=656c939a&hm=bef4f23be7eba86978e602cd098a55534f069e32d7dbad07c997b1b17221a738&=&format=webp&quality=lossless&width=969&height=969'
                 });
 
             setTimeout(() => {
