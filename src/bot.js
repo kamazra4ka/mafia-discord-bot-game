@@ -146,6 +146,30 @@ client.on('interactionCreate', async interaction => {
                         }
                     }
 
+                    // if starts from mafia_vote_(userid) get the userid from the name
+                    if (interaction.customId.startsWith('maniac_vote_')) {
+                        try {
+                            const userId = interaction.customId.split('_')[2];
+                            console.log(`User ID: ${interaction.user.id} voted for ${userId}.`);
+                            await interaction.reply({
+                                content: `Maniac ${interaction.user.username} has voted for <@${userId}>!`,
+                                ephemeral: false
+                            });
+
+                            if (currentGame) {
+                                const gameId = currentGame.id;
+                                const gameDay = await gameState.getGameDay(gameId)
+
+                                await addTargetToDatabase(gameDay, gameId, 'gamemaniactarget', userId)
+                            } else {
+                                // send message to the interaction channel
+                                await interaction.channel.send('Something went wrong. Please, try again.');
+                            }
+                        } catch (error) {
+                            interaction.channel.send('Something went wrong. Please, try again.\n\n' + error);
+                        }
+                    }
+
                     // if starts from doctor_vote_(userid) get the userid from the name
                     if (interaction.customId.startsWith('doctor_vote_')) {
                         try {
