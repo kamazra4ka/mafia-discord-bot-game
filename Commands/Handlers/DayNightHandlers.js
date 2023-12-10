@@ -374,7 +374,7 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
             console.error('Detective channel not found!');
         } else {
             try {
-                setTimeout(async () => await sendDoctorVote(detectiveChannel, gameId), 5000);
+                setTimeout(async () => await sendDetectiveVote(detectiveChannel, gameId), 5000);
             } catch (e) {
                 console.error('Detective channel not found!\n' + e);
             }
