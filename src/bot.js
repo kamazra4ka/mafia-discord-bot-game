@@ -348,9 +348,6 @@ gameEvents.on('stageUpdate', async (data) => {
 
                         setTimeout(async () => {
                             const mafiaUserIds = await gameState.getUsersByRole(gameId, 'mafia');
-                            console.log(`Mafia user ids is ${mafiaUserIds}`)
-                            console.log(`Mafia user ids is ${mafiaUserIds}`)
-                            console.log(`Mafia user ids is ${mafiaUserIds}`)
                             const mafiaChannel = await createPrivateChannelForUsers(guild, '🔪⡇mafia-only-' + gameId, mafiaUserIds).then(async channel => {
                                 const embed = new EmbedBuilder()
                                     .setColor('3a3a3a')

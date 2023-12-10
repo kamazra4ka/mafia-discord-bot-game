@@ -142,7 +142,7 @@ export const start = async (interaction, client) => {
 
     setTimeout(async () => {
 
-        //  await narrateAndPlayVoiceLine(client, interaction.guildId, '1174753582193590312', '1');
+        await narrateAndPlayVoiceLine(client, interaction.guildId, '1174753582193590312', '1');
         await clearInterval(intervalId);
         button.setDisabled(true);
         const newRow = new ActionRowBuilder().addComponents(button);
@@ -162,7 +162,7 @@ export const start = async (interaction, client) => {
                     console.log(message);
                 }
             });
-        }, 1000); // usually 95000
+        }, 95000); // usually 95000
 
     }, 25000);
 };
