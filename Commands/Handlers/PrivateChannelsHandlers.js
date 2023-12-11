@@ -364,16 +364,6 @@ export const sendDetectiveVote = async (channel, gameId) => {
 }
 
 
-// disable all mafia vote buttons
-export const disableMafiaVoteButtons = async (interaction) => {
-    try {
-        const channel = interaction.channel;
-        const messages = await channel.messages.fetch();
-    } catch (error) {
-        console.error('Error disabling mafia vote buttons:', error);
-    }
-}
-
 export const checkIfDead = async (userId, gameId) => {
     try {
         // if user's role is dead then return true

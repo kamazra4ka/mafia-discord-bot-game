@@ -76,11 +76,13 @@ export const victoryHandler = async (gameId, type, client) => {
             const mafiaChannel = await client.channels.fetch(channelIds.gamemafiachid);
             const doctorChannel = await client.channels.fetch(channelIds.gamedoctorchid);
             const detectiveChannel = await client.channels.fetch(channelIds.gamedetectivechid);
+            const maniacChannel = await client.channels.fetch(channelIds.gamemaniacchid);
 
             // delete channels
             await mafiaChannel.delete();
             await doctorChannel.delete();
             await detectiveChannel.delete();
+            await maniacChannel.delete();
         });
 
         if (type === 'civilian') {
