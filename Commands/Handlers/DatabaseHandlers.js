@@ -18,12 +18,14 @@ const pool = mysql.createPool({
 
 function mostElementInArray(arr) {
     // Создаем объект для подсчета количества вхождений каждого элемента
+    // Creating element count object
     let countMap = {};
     for (let i = 0; i < arr.length; i++) {
         countMap[arr[i]] = countMap[arr[i]] ? countMap[arr[i]] + 1 : 1;
     }
 
     // Находим элемент с максимальным количеством вхождений
+    // Finding element with max count
     let maxCount = 0;
     let maxItem = null;
     for (const item in countMap) {
@@ -139,28 +141,6 @@ export const addUserToGame = async (interaction) => {
             });
         });
     });
-}
-
-export const getUsersInGame = async (interaction, gameId) => {
-    // get users of a game with a gameid and put them into an array and return it
-    const serverDiscordId = interaction.guildId;
-    console.log(`${serverDiscordId} 123 discord server id getUsersInGame`);
-    let participants = [];
-
-    await pool.getConnection((err, connection) => {
-        if (err) {
-            throw err;
-        }
-
-        connection.query('SELECT userdiscordid FROM users WHERE usercurrentgame = ?', [gameId], async (err, rows, fields) => {
-            connection.release();
-            if (err) {
-                throw err;
-            }
-            participants = rows;
-        });
-    });
-
 }
 
 export const gameStarts = async (interaction, gameId) => {
@@ -329,8 +309,6 @@ export const sendChannelIdsToDatabase = async (gameId, mafiaChannelId, doctorCha
             console.error(err);
             return;
         }
-
-        console.log('blah blah blah')
 
         connection.query('UPDATE games SET gamedoctorchid = ?, gamedetectivechid = ?, gamemafiachid = ?, gamemaniacchid = ? WHERE gameid = ?', [doctorChannelId, detectiveChannelId, mafiaChannelId, maniacChannelId, gameId], async (err, rows) => {
             connection.release();
