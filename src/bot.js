@@ -12,15 +12,10 @@ import {
     addUserToGame,
     assignStartRoles,
     createNightActionsRow,
-    getGameDay,
     nextStage,
     processNightActions,
     sendChannelIdsToDatabase
 } from "../Commands/Handlers/DatabaseHandlers.js";
-
-import {
-    ping
-} from '../Commands/ping.js';
 
 import {
     start
@@ -69,6 +64,10 @@ client.on('ready', () => {
 
 client.on('interactionCreate', async interaction => {
     try {
+
+       // switch (interaction.commandName) {
+       //     case 'start':
+      //  }
 
         if (interaction.commandName === 'start') {
             await start(interaction, client);
@@ -299,8 +298,7 @@ client.on('interactionCreate', async interaction => {
 gameEvents.on('stageUpdate', async (data) => {
     try {
         const guild = client.guilds.cache.get('1174666167227531345');
-        const guildId = 1174666167227531345,
-            cId = '1180826418523942922';
+        const cId = '1180826418523942922';
 
         const gameId = data.gameId;
         const stage = data.currentStage;

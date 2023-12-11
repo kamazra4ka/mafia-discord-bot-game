@@ -68,10 +68,6 @@ export const victoryHandler = async (gameId, type, client) => {
         // delete private channels
         await getChannelIdsFromDatabase(gameId).then(async channelIds => {
 
-            console.log('channelIds:', channelIds)
-            console.log('channelIds.gamemafiachid:', channelIds.gamemafiachid)
-            console.log('channelIds.gamedoctorchid:', channelIds.gamedoctorchid)
-
             // fetch channels from channelids
             const mafiaChannel = await client.channels.fetch(channelIds.gamemafiachid);
             const doctorChannel = await client.channels.fetch(channelIds.gamedoctorchid);
