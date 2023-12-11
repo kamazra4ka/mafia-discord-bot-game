@@ -331,7 +331,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
             }, 25000);
             break;
         case '3':
-            topic = `Player ${additionalData} has been killed by Mafia. Doctor didn't come to him.`
+            topic = `Player ${additionalData} has been killed by Mafia. Doctor didn't come to him and didn't save him.`
 
             voiceLineText = await generateVoiceLine(topic)
             embed = new EmbedBuilder()
@@ -397,7 +397,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                 })
             break;
         case '5':
-            topic = `Player ${additionalData} has been killed by the Maniac (not the Mafia, Maniac is playing against everybody). Doctor didn't come to him.`
+            topic = `Player ${additionalData} has been killed by the Maniac (not the Mafia, Maniac is playing against everybody). Doctor didn't come to him and didn't save him.`
 
             voiceLineText = await generateVoiceLine(topic)
             embed = new EmbedBuilder()
