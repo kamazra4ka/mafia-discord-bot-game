@@ -11,10 +11,6 @@ const commands = [
         description: 'Starts the game!',
     },
     {
-        name: 'ping',
-        description: 'Replies with Pong!',
-    },
-    {
         name: 'shop',
         description: 'Opens the shop where you can buy additional power-ups!',
     },

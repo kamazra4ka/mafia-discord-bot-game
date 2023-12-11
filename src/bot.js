@@ -69,9 +69,6 @@ client.on('ready', () => {
 
 client.on('interactionCreate', async interaction => {
     try {
-        if (interaction.commandName === 'ping') {
-            await ping(interaction);
-        }
 
         if (interaction.commandName === 'start') {
             await start(interaction, client);
