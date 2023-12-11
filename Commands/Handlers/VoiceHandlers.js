@@ -50,8 +50,6 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
         // Assuming the bot is already in the voice channel, and you have the guildId and channelId
         const connection = getVoiceConnection(guildId);
 
-        console.log('goofy ' + channelId)
-
         if (connection && connection.joinConfig.channelId === channelId) {
             // Generate TTS
 
@@ -113,6 +111,53 @@ export const narrateAndPlay = async (guildId, channelId, text) => {
 // Usage example:
 // narrateAndPlay('1174666167227531345', '1174753582193590312', 'Hello, this is a test message.');
 
+// function to play mp3 files from the folder sounds
+export const playSound = async (guildId, channelId, fileName) => {
+    try {
+        // Assuming the bot is already in the voice channel, and you have the guildId and channelId
+        const connection = getVoiceConnection(guildId);
+
+        if (connection && connection.joinConfig.channelId === channelId) {
+            // get the file path
+            const tempFilePath = `./Sounds/${fileName}.mp3`;
+
+            if (connection.state.status === VoiceConnectionStatus.Ready) {
+                console.log('The connection is ready to play TTS audio!');
+
+                // Creating audio resource from the TTS file
+                const audioResource = createAudioResource(fs.createReadStream(tempFilePath));
+
+                // Creating an audio player
+                const player = new AudioPlayer();
+
+                // Subscribing the connection to the audio player (will play audio on the voice connection)
+                connection.subscribe(player);
+
+                // Playing the audio
+                player.play(audioResource);
+
+                player.on('error', error => {
+                    console.error(`Error: ${error.message}`);
+                    player.stop();
+                });
+
+                player.on('stateChange', (oldState, newState) => {
+                    console.log(`Audio player transitioned from ${oldState.status} to ${newState.status}`);
+                    if (newState.status === 'idle') {
+                        fs.unlinkSync(tempFilePath); // Delete the temporary file
+                    }
+                });
+            } else {
+                console.error('Voice connection is not ready to play audio.');
+            }
+        } else {
+            console.error(`The bot is not in the voice channel with ID: ${channelId}`);
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+}
 
 // voice lines for the game + ai
 export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceLine, additionalData) => {
