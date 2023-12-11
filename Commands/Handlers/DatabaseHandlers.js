@@ -469,7 +469,7 @@ export const getChannelIdsFromDatabase = async (gameId) => {
                 return;
             }
 
-            connection.query('SELECT gamedoctorchid, gamedetectivechid, gamemafiachid FROM games WHERE gameid = ?', [gameId], (err, rows) => {
+            connection.query('SELECT gamedoctorchid, gamedetectivechid, gamemafiachid, gamemaniacchid FROM games WHERE gameid = ?', [gameId], (err, rows) => {
                 connection.release();
                 if (err) {
                     console.error(err);
