@@ -2,7 +2,7 @@ import {
     generateVoiceLine
 } from "./OpenaiHandlers.js";
 import {
-    narrateAndPlay
+    narrateAndPlay, playSound
 } from "./VoiceHandlers.js";
 import {
     ActionRowBuilder,
@@ -393,6 +393,11 @@ export const nightHandler = async (gameId, playersLeft, playersCount, currentDay
         }
 
     });
+
+
+    setTimeout(async () => {
+        playSound('1174666167227531345', '1174753582193590312', 'decide')
+    }, 15000);
 
     setTimeout(async () => {
         const voiceLine = 'The mafia, doctor and detective can now choose their targets using buttons in their private channels.\n\nThe night will end in 60 seconds.';
