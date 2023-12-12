@@ -201,7 +201,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                         // delete after 30 seconds
                         setTimeout(() => {
                             message.delete();
-                        }, 30000);
+                        }, 90000);
                     });
                 })
 
@@ -230,7 +230,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                             // delete after 30 seconds
                             setTimeout(() => {
                                 message.delete();
-                            }, 30000);
+                            }, 90000);
                         });
                     })
             }, 15000);
@@ -258,7 +258,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                             // delete after 30 seconds
                             setTimeout(() => {
                                 message.delete();
-                            }, 30000);
+                            }, 90000);
                         });
                     })
             }, 38000);
@@ -286,7 +286,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                             // delete after 30 seconds
                             setTimeout(() => {
                                 message.delete();
-                            }, 30000);
+                            }, 90000);
                         });
                     })
             }, 67000);
@@ -313,7 +313,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                             // delete after 30 seconds
                             setTimeout(() => {
                                 message.delete();
-                            }, 30000);
+                            }, 90000);
                         });
                     })
             }, 85000);
