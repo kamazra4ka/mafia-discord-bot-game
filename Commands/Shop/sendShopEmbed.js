@@ -16,11 +16,6 @@ export const sendShopEmbed = async (interaction) => {
             .setLabel('🔎 Fake documents')
             .setStyle(ButtonStyle.Secondary);
 
-        const item_3 = new ButtonBuilder()
-            .setCustomId('buy_item_knife')
-            .setLabel('🔪 Knife')
-            .setStyle(ButtonStyle.Secondary);
-
         if (userCoins <= 1000) {
             item_1.setDisabled(true);
         }
@@ -29,11 +24,7 @@ export const sendShopEmbed = async (interaction) => {
             item_2.setDisabled(true);
         }
 
-        if (userCoins <= 6450) {
-            item_3.setDisabled(true);
-        }
-
-        const row = new ActionRowBuilder().addComponents(item_1).addComponents(item_2).addComponents(item_3);
+        const row = new ActionRowBuilder().addComponents(item_1).addComponents(item_2);
 
         const startEmbed = new EmbedBuilder()
             .setColor('3a3a3a')
@@ -48,11 +39,6 @@ export const sendShopEmbed = async (interaction) => {
                 {
                     name: '🔎 Fake documents',
                     value: 'This item prevents detective from knowing your real role during a night check.\n  **250 🪙**',
-                    inline: true
-                },
-                {
-                    name: '🔪 Knife',
-                    value: 'This item allows you to kill any person at night even if you are not the mafia.\n  **6450 🪙**',
                     inline: true
                 }
             )
