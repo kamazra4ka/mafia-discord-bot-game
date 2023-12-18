@@ -280,28 +280,6 @@ export const getGameDay = async (interaction, gameId) => {
     return await gameState.getGameDay(gameId);
 };
 
-// get gameid from the servers table (sort by date the newest + limit 1)
-export const getGameId = async (interaction) => {
-    const serverDiscordId = interaction.guildId;
-    console.log(`${serverDiscordId} 123 discord server id getGameId`);
-    pool.getConnection((err, connection) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-
-        connection.query('SELECT serverstartgameid FROM servers WHERE serverdiscordid = ? ORDER BY servers.serverstartdate DESC LIMIT 1;', [serverDiscordId], async (err, rows) => {
-            connection.release();
-            if (err) {
-                console.error(err);
-                return;
-            }
-            console.log(rows);
-            return rows;
-        });
-    });
-}
-
 // send doctorChannelId and other channel ids to the database to tables games
 export const sendChannelIdsToDatabase = async (gameId, mafiaChannelId, doctorChannelId, detectiveChannelId, maniacChannelId) => {
     pool.getConnection((err, connection) => {
@@ -755,13 +733,3 @@ export const processDailyVote = async (gameId, gameday) => {
         });
     });
 }
-
-
-// Usage:
-// nextStage(interaction, gameId, (error, message) => {
-//     if (error) {
-//         console.error(error);
-//     } else {
-//         console.log(message);
-//     }
-// });
