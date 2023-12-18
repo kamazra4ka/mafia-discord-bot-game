@@ -1,5 +1,7 @@
 // gameState.js
 
+import {checkUserItems, subtractItemFromUser} from "../Commands/Handlers/DatabaseHandlers.js";
+
 class GameState {
     constructor() {
         this.games = new Map(); // Maps gameId to game info
@@ -77,6 +79,26 @@ class GameState {
 
         const shuffledPlayers = players.sort(() => 0.5 - Math.random());
         const updatePromises = [];
+
+        // handling a guaranteed active role item from the shop
+        shuffledPlayers.forEach(playerId => {
+            checkUserItems(playerId).then((items) => {
+                if (items) {
+                    if (items.activerole) {
+                        updatePromises.push(this.updateRole(gameId, playerId, 'mafia'));
+                        subtractItemFromUser(playerId, 'activerole');
+                        console.log('active role item used')
+                        console.log('active role item used')
+                        console.log('active role item used')
+                        console.log('active role item used')
+                        console.log('active role item used')
+                        console.log('active role item used')
+                        console.log('active role item used')
+                        console.log('active role item used')
+                    }
+                }
+            })
+        });
 
         // Assign special roles using for loop and store promises
         for (let i = 0; i < roles.mafia; i++) {

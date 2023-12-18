@@ -371,6 +371,31 @@ export const takeCoinsFromDatabase = async (userDiscordId, item) => {
     });
 }
 
+// check user's items
+export const checkUserItems = async (userDiscordId) => {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+                return;
+            }
+
+            connection.query('SELECT * FROM user_items WHERE userid = ?', [userDiscordId], (err, rows) => {
+                connection.release();
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                    return;
+                }
+                console.log(rows[0]);
+                resolve(rows[0]);
+            });
+        });
+    });
+
+}
+
 // add items to the user (user_items table)
 export const addItemToUser = async (userDiscordId, item) => {
     pool.getConnection((err, connection) => {
@@ -387,6 +412,25 @@ export const addItemToUser = async (userDiscordId, item) => {
             }
         });
     });
+}
+
+// subsctract items from the user (user_items table)
+export const subtractItemFromUser = async (userDiscordId, item) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        connection.query(`UPDATE user_items SET ${item} = ${item} - 1 WHERE userid = ?`, [userDiscordId], async (err, rows) => {
+            connection.release();
+            if (err) {
+                console.error(err);
+
+            }
+        });
+    });
+
 }
 
 // add coins to the user (user_items table)
