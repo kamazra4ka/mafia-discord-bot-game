@@ -177,7 +177,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
     // make a switch case for each voice line id
     switch (voiceLine) {
         case '1':
-            topic = 'Greeting in the beginning of the game.'
+            topic = 'Greet everyone and say: "The game is starting! Introduction is coming". Don\'t explain the rules yet, the bot will do everything.'
 
             voiceLineText = await generateVoiceLine(topic)
             embed = new EmbedBuilder()
@@ -289,7 +289,7 @@ export const narrateAndPlayVoiceLine = async (client, guildId, channelId, voiceL
                             }, 90000);
                         });
                     })
-            }, 67000);
+            }, 60000);
             await setTimeout(async () => {
                 const voiceLineText = ' A better instruction can be found in the chat. Good luck!';
                 narrateAndPlay(guildId, channelId, voiceLineText);
