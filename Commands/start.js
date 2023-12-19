@@ -102,8 +102,11 @@ export const start = async (interaction, client) => {
                     return;
                 }
 
-                const playersList = rows.map(player => `<@${player.userdiscordid.toString()}>`).join(', ') || 'None';
-                const playersLimit = rows.length;
+                let playersList = rows.map(player => `<@${player.userdiscordid.toString()}>`).join(', ') || 'None';
+
+                // removing duplicate entries
+                playersList = [...new Set(playersList.split(', '))].join(', ');
+                const playersLimit = playersList.split(', ').length;
 
                 const newEmbed = new EmbedBuilder()
                     .setColor('3a3a3a')
