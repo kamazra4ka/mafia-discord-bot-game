@@ -20,9 +20,6 @@ export const checkVictory = async (gameId, client) => {
         console.log('checking victory')
 
         if (gameId) {
-
-            console.log('bruh')
-
             // get alive players
             const alivePlayers = await gameState.getAlivePlayersList(gameId);
 
