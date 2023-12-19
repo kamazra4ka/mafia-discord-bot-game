@@ -471,10 +471,12 @@ export const getPlayerCoinsFromDatabase = async (userDiscordId) => {
 
                 console.log(rows)
 
-                if (rows[0].coins === null) {
-                    resolve(1);
-                } else {
-                    resolve(rows[0].coins);
+                if (rows[0].length !== 0) {
+                    if (rows[0].coins === null) {
+                        resolve(1);
+                    } else {
+                        resolve(rows[0].coins);
+                    }
                 }
             });
         });

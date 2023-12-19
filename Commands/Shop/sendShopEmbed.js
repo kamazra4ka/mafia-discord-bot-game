@@ -100,6 +100,10 @@ export const editShopEmbed = async (interaction) => {
             .setTimestamp()
             .setFooter({text: `You have ${userCoins} coins`, iconURL: 'https://pngimg.com/d/coin_PNG36871.png'});
 
-        await interaction.editReply({ components: [row], embeds: [startEmbed], ephemeral: true });
+        try {
+            await interaction.editReply({ components: [row], embeds: [startEmbed], ephemeral: true });
+        } catch (error) {
+            console.log(error);
+        }
     }, 200);
 }

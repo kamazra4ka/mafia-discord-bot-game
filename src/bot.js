@@ -541,13 +541,6 @@ gameEvents.on('dayUpdate', async (data) => {
 
                     let targetManiac;
                     if (maniacActionResult) {
-                        console.log(maniacActionResult);
-                        console.log(maniacActionResult);
-                        console.log(maniacActionResult);
-                        console.log(maniacActionResult);
-                        console.log(maniacActionResult);
-                        console.log(maniacActionResult);
-                        console.log('test 353534534534534535')
                         if (maniacActionResult.target) {
                             targetManiac = await client.users.fetch(maniacActionResult.target);
                         } else {
@@ -566,7 +559,7 @@ gameEvents.on('dayUpdate', async (data) => {
                         }
                     }
 
-                    // if mafiaActionResult.success is true, then the target was killed and call the voice line 3 with additional data being player's nickname
+                    // checking if the doctor saved mafia's target (if true = mafia's target is dead)
                     if (mafiaActionResult.success) {
                         await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '3', targetMafia.username);
 
@@ -576,6 +569,7 @@ gameEvents.on('dayUpdate', async (data) => {
                         await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '4', targetDoctor.username);
                     }
 
+                    // checking if the doctor saved maniac's target (if true = maniac's target is dead)
                     if (maniacActionResult) {
                         if (maniacActionResult.success) {
                             await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '5', targetManiac.username);
