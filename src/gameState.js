@@ -84,17 +84,9 @@ class GameState {
         shuffledPlayers.forEach(playerId => {
             checkUserItems(playerId).then((items) => {
                 if (items) {
-                    if (items.activerole) {
+                    if (items.activerole > 0) {
                         updatePromises.push(this.updateRole(gameId, playerId, 'mafia'));
                         subtractItemFromUser(playerId, 'activerole');
-                        console.log('active role item used')
-                        console.log('active role item used')
-                        console.log('active role item used')
-                        console.log('active role item used')
-                        console.log('active role item used')
-                        console.log('active role item used')
-                        console.log('active role item used')
-                        console.log('active role item used')
                     }
                 }
             })
