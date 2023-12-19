@@ -529,27 +529,41 @@ gameEvents.on('dayUpdate', async (data) => {
                         detectiveActionResult,
                     } = await processNightActions(gameId, data.currentDay);
 
-                    // get username from the mafiaActionResult.target (discord id)
-                    let targetMafia
-                    if (mafiaActionResult.target) {
-                        targetMafia = await client.users.fetch(mafiaActionResult.target);
-                    } else {
-                        targetMafia = await client.users.fetch('1175134258482917518')
+                    if (mafiaActionResult) {
+                        // get username from the mafiaActionResult.target (discord id)
+                        let targetMafia
+                        if (mafiaActionResult.target) {
+                            targetMafia = await client.users.fetch(mafiaActionResult.target);
+                        } else {
+                            targetMafia = await client.users.fetch('1175134258482917518')
+                        }
                     }
 
                     let targetManiac;
-                    if (maniacActionResult.target) {
-                        targetManiac = await client.users.fetch(maniacActionResult.target);
-                    } else {
-                        targetManiac = await client.users.fetch('1175134258482917518')
+                    if (maniacActionResult) {
+                        console.log(maniacActionResult);
+                        console.log(maniacActionResult);
+                        console.log(maniacActionResult);
+                        console.log(maniacActionResult);
+                        console.log(maniacActionResult);
+                        console.log(maniacActionResult);
+                        console.log('test 353534534534534535')
+                        if (maniacActionResult.target) {
+                            targetManiac = await client.users.fetch(maniacActionResult.target);
+                        } else {
+                            targetManiac = await client.users.fetch('1175134258482917518')
+                        }
                     }
 
-                    // get username from the doctorActionResult.saved (discord id)
-                    let targetDoctor
-                    if (doctorActionResult.saved) {
-                        targetDoctor = await client.users.fetch(doctorActionResult.saved);
-                    } else {
-                        targetDoctor = await client.users.fetch('1175134258482917518')
+                    let targetDoctor;
+                    if (doctorActionResult) {
+                        // get username from the doctorActionResult.saved (discord id)
+
+                        if (doctorActionResult.saved) {
+                            targetDoctor = await client.users.fetch(doctorActionResult.saved);
+                        } else {
+                            targetDoctor = await client.users.fetch('1175134258482917518')
+                        }
                     }
 
                     // if mafiaActionResult.success is true, then the target was killed and call the voice line 3 with additional data being player's nickname
@@ -562,13 +576,15 @@ gameEvents.on('dayUpdate', async (data) => {
                         await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '4', targetDoctor.username);
                     }
 
-                    if (maniacActionResult.success) {
-                        await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '5', targetManiac.username);
+                    if (maniacActionResult) {
+                        if (maniacActionResult.success) {
+                            await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '5', targetManiac.username);
 
-                        // changing the role of the target to dead
-                        await gameState.updateRole(gameId, maniacActionResult.target, 'dead');
-                    } else {
-                        await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '4', targetDoctor.username);
+                            // changing the role of the target to dead
+                            await gameState.updateRole(gameId, maniacActionResult.target, 'dead');
+                        } else {
+                            await narrateAndPlayVoiceLine(client, '1174666167227531345', '1174753582193590312', '4', targetDoctor.username);
+                        }
                     }
 
                     playersLeft = await gameState.getPlayersList(gameId);
