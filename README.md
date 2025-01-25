@@ -8,6 +8,3 @@ This is a school project. A few months prior to starting it, I wanted to build a
 ![mafiabotpreview2](https://github.com/kamazra4ka/mafia-discord-bot-game/assets/83513498/65e58e80-27cd-41ec-afaa-8ac06f4122ce)
 
 Almost all in-game messages are generated on the go, with the AI being aware of the game situation. This means that messages will almost never repeat.
-
-## I want to play it! How can I do this?
-And here lies the problem with the "AI-powered" part of this project. Because I needed to pay for the use of the bot, it remains just another school project. If you have a strong will to "revive" this project, contact me on Telegram (@thera4ok), and I will provide the database structure to you. Be aware that the database was not properly normalized, and the bot's code itself is of rather poor overall quality.
